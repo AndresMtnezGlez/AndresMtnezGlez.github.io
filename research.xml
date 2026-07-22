@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Andrés Martínez Glez</title>
+<link>https://andresmtnezglez.github.io/research.html</link>
+<atom:link href="https://andresmtnezglez.github.io/research.xml" rel="self" type="application/rss+xml"/>
+<description>Technical notes and code on VAR models, time-series econometrics, and applied macroeconomics by Andrés Martínez Glez.</description>
+<generator>quarto-1.7.32</generator>
+<lastBuildDate>Tue, 21 Jul 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Estimating a VAR model in R</title>
+  <dc:creator>Andrés Martínez Glez</dc:creator>
+  <link>https://andresmtnezglez.github.io/posts/example-var/</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>[Text]</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(vars)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'vars' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'strucchange' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'zoo' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'sandwich' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'urca' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lmtest' was built under R version 4.5.3</code></pre>
+</div>
+</div>
+<p>[Your existing R chunks paste in unchanged from the .Rmd]</p>
+
+
+</section>
+
+ ]]></description>
+  <category>VAR</category>
+  <category>time series</category>
+  <category>R</category>
+  <guid>https://andresmtnezglez.github.io/posts/example-var/</guid>
+  <pubDate>Tue, 21 Jul 2026 22:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>
