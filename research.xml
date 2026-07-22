@@ -58,5 +58,770 @@ font-style: inherit;">library</span>(vars)</span></code></pre></div>
   <guid>https://andresmtnezglez.github.io/posts/example-var/</guid>
   <pubDate>Tue, 21 Jul 2026 22:00:00 GMT</pubDate>
 </item>
+<item>
+  <title>A Notebook on VAR Models: Wold Representation, Impulse Response Functions and Identification</title>
+  <dc:creator>Andrés Martínez González</dc:creator>
+  <link>https://andresmtnezglez.github.io/posts/var-notebook/</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>opts_chunk<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">echo =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>Consider the following bivariate VAR representation</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Ay_t%20=%20%5Cmu%20+%20%5CGamma%20y_%7Bt-1%7D%20+%20%5Cepsilon_t%0A"></p>
+<p>where yt = [y1,t , y2,t] , µ = [µ1, µ2] , Γ is a 2-by-2 matrix with generic element γij , and ε = [ε1, ε2] with εt ∼ N(0, Σ),that is, ε1 and ε2 are potentially correlated. • For simplicity, we have assumed the existence of only one lag in (16). • The system is also assumed to be covariance stationary.</p>
+<p>The vector moving average (VMA) representation (or Wold representation) of the VAR in builds on an infinite moving average of innovations <img src="https://latex.codecogs.com/png.latex?%5Cvarepsilon_t"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0Ay_t%20&amp;=%20%5Cmu%20+%20%5CGamma%20y_%7Bt-1%7D%20+%20%5Cvarepsilon_t%20%5C%5C%0A(1-%5CGamma%20L)y_t%20&amp;=%20%5Cmu%20%20+%20%5Cvarepsilon_t%20%5C%5C%0Ay_t%20&amp;=%20(1-%5CGamma%20L)%5E%7B-1%7D%20+%20(1-%5CGamma%20L)%5E%7B-1%7D%5Cvarepsilon_t%5C%5C%0Ay_t%20&amp;=%20%5Ctilde%7B%5Cmu%7D%20+%20%5CPhi(L)%20%5Cvarepsilon_t%0A%5Cend%7Baligned%7D%0A"> Notice we have expressed <img src="https://latex.codecogs.com/png.latex?(1-%5CGamma%20L)%5E%7B-1%7D%20%5Crightarrow%20%5CPhi(L)"></p>
+<dl>
+<dt>Why is it? Geometric sums with matrices</dt>
+<dd>
+<p>Consider the following sum <img src="https://latex.codecogs.com/png.latex?%5Csum_%7Bj=0%7D%5EJ%20Y%5Ej"> , if we can assume <img src="https://latex.codecogs.com/png.latex?J%20%5Crightarrow%20%5Cinfty"> we could say:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0AS_j%20&amp;=%20%5Csum_%7Bj=0%7D%5EJ%20Y%5Ej%20=%201%20+%20Y%20+%20Y%5E2%20+%20Y%5E3%20...%20+%20Y%5EJ%20%5Cquad(1)%20%5C%5C%0AYS_j%20&amp;=%20Y%20+%20Y%5E2%20+%20Y%5E3%20...%20+%20Y%5E%7BJ+1%7D%20%5Cquad(2)%20%5C%5C%0A(1)%20-%20(2)%20%5Crightarrow%20(1-Y)S_j&amp;=(1%20+%20Y%20+%20Y%5E2%20+%20Y%5E3%20...%20+%20Y%5EJ%20)%20-(%20Y%20+%20Y%5E2%20+%20Y%5E3%20...%20+%20Y%5E%7BJ+1%7D)%20%5C%5C%0AS_j%20&amp;=%20%5Cfrac%7B1-Y%5E%7BJ+1%7D%7D%7B1-Y%7D%20%5Cquad%20if%20%5Cquad%20Y%20%5Cin%20(-1,1)%20%5Cquad%20S_%5Cinfty%20=%20%5Cfrac%7B1%7D%7B1-Y%7D%0A%5Cend%7Baligned%7D%0A"></p>
+<p>Notice the trick we have used to get ride of <img src="https://latex.codecogs.com/png.latex?Y%5E%7BJ+1%7D"> is because we have conditional <img src="https://latex.codecogs.com/png.latex?-1%3CY%3C1"> so the term tends to zero. When we are dealing with matrices this is the same as saying <img src="https://latex.codecogs.com/png.latex?%5Cvert%20eig(Y)%5Cvert%3C1"> and the solution to the geometric sum of matrices would be <img src="https://latex.codecogs.com/png.latex?S_%5Cinfty%20=%20(I-Y)%5E%7B-1%7D">. In other words, If all eigenvalues of Y have modulus less than 1, the sequence is absolutely summable.</p>
+</dd>
+</dl>
+<p>Now is easier to understand why:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5CPhi(L)%20=%20%5Csum_%7Bk=0%7D%5E%5Cinfty%20%5CPhi_kL%5Ek=%20%5CPhi_o%20+%5CPhi_1%20L+%5CPhi_2%20L%5E2%20+%5CPhi_3%20L%5E3%20+...%20=I+%20%5CGamma%20L+%5CGamma%5E2%20L%5E2%20+%20%5CGamma%5E3%20L%5E3%20+%20...%20=%20(I-%5CGamma%20L)%5E%7B-1%7D%20%20%0A"></p>
+<p>This result can be also obtained following a slight different approach.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0Ay_1%20&amp;=%20%5Cmu%20+%20%5CGamma_1%20y_%7B0%7D%20+%20%5Cvarepsilon_1%20%5C%5C%0Ay_2%20&amp;=%20%5Cmu%20+%20%5CGamma_1%20y_%7B1%7D%20+%20%5Cvarepsilon_2%20=%20%5Cmu%20+%20%5CGamma_1(%5Cmu%20+%20%5CGamma_1%20y_%7B0%7D%20+%20%5Cvarepsilon_1)%20%20+%20%20%5Cvarepsilon_2%5C%5C%0A&amp;=(I_k+%5CGamma_1)%5Cmu%20+%20%5CGamma_1%5E2y_0+%20%5CGamma_1%5Cvarepsilon_1%20+%5Cvarepsilon_2%20%5C%5C%0Ay_3&amp;=%5Cmu%20+%20%5CGamma_1%20y_%7B2%7D%20+%20%5Cvarepsilon_3%20=%20%20%5Cmu%20+%20%5CGamma_1%20%5B(I_k+%5CGamma_1)%5Cmu%20+%20%5CGamma_1%5E2y_0+%20%5CGamma_1%5Cvarepsilon_1%20+%5Cvarepsilon_2%5D%20+%20%5Cvarepsilon_3%20%5C%5C%0A&amp;=%20%5Cmu%20+%20%5CGamma_1%5Cmu%20+%20%5CGamma1%5E2%5Cmu%20+%20%5CGamma_1%5E3yo%20+%20%5CGamma_1%5E2%5Cvarepsilon_1%20+%5CGamma_1%5Cvarepsilon_2%20%20+%20%5Cvarepsilon_3%5C%5C%0A...%20%5C%5C%0Ay_t%20&amp;=%20(I_k%20+%20%5CGamma_1%20+%20%20%5CGamma_1%5E2%20+%20...+%5CGamma_1%5E%7Bt-1%7D)%5Cmu%20+%20%5CGamma_1%5Ety_0%20+%5Csum_%7Bi=o%7D%5E%7Bt-1%7D%5CGamma_1%5Ei%20%5Cvarepsilon_%7Bt-i%7D%0A%5Cend%7Baligned%7D%0A"></p>
+<p>Again, if all eigenvalues of <img src="https://latex.codecogs.com/png.latex?%5CGamma_1"> have modulus less than 1 the sequence is is absolutely summable and the infinite sum exists in mean square. Furthermore, we can express the process above as:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Ay_t%20=%20%5Ctilde%7B%5Cmu%7D%20+%20%5Csum_%7Bi=o%7D%5E%7B%5Cinfty%7D%5CGamma_1%5Ei%20%5Cvarepsilon_%7Bt-i%7D%20=%20%5Ctilde%7B%5Cmu%7D%20+%20%5CPhi(L)%20%5Cvarepsilon_t%0A"></p>
+<p>This form of the process is called the moving average (MA) representation, where Yt is expressed in terms of past and present error or innovation vectors Ut and the mean term</p>
+<p>It is also worth to dig a little bit further to know if the process we are representing is an stable one. If we figure a VAR(1) process, the stability condition for the eigenvalues can be expressed as:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Adet(I_k%20-%20%5CGamma%20z)%20%5Cneq%200%20%5Cquad%20for%20%5Cquad%20%5Cvert%20z%20%5Cvert%20%3C1%0A"></p>
+<p>If we have a VAR(1) model such as:</p>
+<p>We can show that this model is stable/ stationary with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Find roots of equation: 1 - 0.9 * z + 0.18 * z^2 = 0</span></span>
+<span id="cb2-2">roots <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">polyroot</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.9</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.18</span>))</span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Absolute: |z_i| = "</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(roots), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Absolute: |z_i| = 1.67" "Absolute: |z_i| = 3.33"</code></pre>
+</div>
+</div>
+<p>Because the roots are greater than one in absolute value (lie outside the unit root circle), the VAR(1) process is stationary.</p>
+<p>Nevertheless we can also perform and eyeballing test to make sure the process described above looks stationary/stable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">123</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Reset random number generator for reasons of reproducability</span></span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate sample</span></span>
+<span id="cb4-4">t <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">200</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Number of time series observations</span></span>
+<span id="cb4-5">k <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Number of endogenous variables</span></span>
+<span id="cb4-6">p <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Number of lags</span></span>
+<span id="cb4-7"></span>
+<span id="cb4-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate coefficient matrices</span></span>
+<span id="cb4-9">A<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">05</span>), k) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Coefficient matrix of lag 1</span></span>
+<span id="cb4-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#A.2 &lt;- matrix(c(-.1, -.2, .1, .05), k) # Coefficient matrix of lag 2</span></span>
+<span id="cb4-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#A &lt;- cbind(A.1, A.2) # Companion form of the coefficient matrices</span></span>
+<span id="cb4-12"></span>
+<span id="cb4-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate series</span></span>
+<span id="cb4-14">series <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, k, t <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>p) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Raw series with zeros</span></span>
+<span id="cb4-15"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> (p <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>(t <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>p)){ <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate series with e ~ N(0,0.5)</span></span>
+<span id="cb4-16">  series[, i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> A<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span>series[, i<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">-1</span>] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(k, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>)</span>
+<span id="cb4-17">}</span>
+<span id="cb4-18"></span>
+<span id="cb4-19">series <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ts</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(series[, <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>p)])) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Convert to time series format</span></span>
+<span id="cb4-20"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot.ts</span>(series, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Plot the series</span></span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/var-notebook/index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="structural-innovations" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="structural-innovations"><span class="header-section-number">1</span> Structural Innovations</h2>
+<p>We have defined <img src="https://latex.codecogs.com/png.latex?%5Cvarepsilon_t"> as the vector of structural innovations. We would like them to be un correlated with each other in each period of time. In other words we would like them to be:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cvarepsilon_t%20%20%5Csim%20N(0,%20I)%0A"></p>
+<p>What is <img src="https://latex.codecogs.com/png.latex?I"> in this context? The formula for the variance of a univariate time series</p>
+<p><img src="https://latex.codecogs.com/png.latex?x%20=%20%5Bx_1,%20x_2,..,x_T%5D"> is</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AVAR%20=%20%5Csum_%7Bt=0%7D%5ET%20%5Cfrac%7B(x_t-%20%5Cbar%7Bx%7D)%5E2%7D%7BN%7D%20=%20%5Csum_%7Bt=0%7D%5ET%20%5Cfrac%7B(x_t-%20%5Cbar%7Bx%7D)(x_t-%20%5Cbar%7Bx%7D)%7D%7BN%7D%0A"></p>
+<p>If we have a bivariate time series:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Az%20=%20%5Cbegin%7Bbmatrix%7D%20x_1%20&amp;%20x_2%20&amp;%20...%20x_T%5C%5Cy_1%20&amp;%20y_2%20&amp;%20...%20y_T%5Cend%7Bbmatrix%7D%0A"></p>
+<p>Then the formula becomes:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AVCV%20=%20%5Cbegin%7Bbmatrix%7D%20%5Csum_%7Bt=0%7D%5ET%20%5Cfrac%7B(x_t-%20%5Cbar%7Bx%7D)(x_t-%20%5Cbar%7Bx%7D)%7D%7BN%7D%0A&amp;%0A%5Csum_%7Bt=0%7D%5ET%20%5Cfrac%7B(x_t-%20%5Cbar%7Bx%7D)(y_t-%20%5Cbar%7By%7D)%7D%7BN%7D%20%5C%5C%0A%5Csum_%7Bt=0%7D%5ET%20%5Cfrac%7B(y_t-%20%5Cbar%7By%7D)(x_t-%20%5Cbar%7Bx%7D)%7D%7BN%7D%0A&amp;%0A%5Csum_%7Bt=0%7D%5ET%20%5Cfrac%7B(y_t-%20%5Cbar%7By%7D)(y_t-%20%5Cbar%7By%7D)%7D%7BN%7D%0A%5Cend%7Bbmatrix%7D%20=%0A%5Cbegin%7Bbmatrix%7D%0AVAR(x)%20&amp;COV(x,y)%20%5C%5C%20COV(y,x)%20%20&amp;%20VAR(y)%0A%5Cend%7Bbmatrix%7D%0A"></p>
+<p>Therefore we would like <img src="https://latex.codecogs.com/png.latex?I"> to be in the bivariate VAR example <img src="https://latex.codecogs.com/png.latex?%5Cbegin%7Bbmatrix%7D%201%20&amp;0%5C%5C0&amp;1%5Cend%7Bbmatrix%7D"></p>
+<p>Nevertheless, this would not be often the case. If the variance covariance matrix (VCV) has elements different to zero off the diagonal it would mean that there is a contemporaneous correlation between innovations. It means that we would not be able to disentangle the effect of a shock to one variable since it affects to both vaiables.</p>
+<p>We would like to transform <img src="https://latex.codecogs.com/png.latex?%5Cvarepsilon_t%20%5Csim%20(0,%20%5CSigma)"> to a set of uncorrelated$$ components <img src="https://latex.codecogs.com/png.latex?u_t"> according to: <img src="https://latex.codecogs.com/png.latex?%0A%5Cvarepsilon_t%20=%20%5COmega%20u_t%20%5Cquad%20where%20%5Cquad%20u_t%20%5Csim%20N(0,%20I)%0A"></p>
+<p>Where <img src="https://latex.codecogs.com/png.latex?%5COmega"> is an invertible square matrix with generic elements <img src="https://latex.codecogs.com/png.latex?%5Comega_%7Bi,j%7D"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5CSigma%20=%20%5Cfrac%7B1%7D%7Bn%7D%5Csum_t%20%5Cvarepsilon_t%20%5Cvarepsilon_t'%20=%20%5COmega(%5Cfrac%7B1%7D%7Bn%7D%5Csum_t%20u_t%20u_t')%5COmega'%20=%20%5COmega%5COmega'%0A"></p>
+<p>The problem is that while <img src="https://latex.codecogs.com/png.latex?%5CSigma"> has three parameter, the matrix <img src="https://latex.codecogs.com/png.latex?%5COmega"> has four, naturally there are many such a matrices. Note:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5CSigma%20=%20%5Cbegin%7Bbmatrix%7D%20%5Csigma_%7B1,1%7D%20&amp;%5Csigma_%7B1,2%7D%5C%5C%5Csigma_%7B2,1%7D&amp;%5Csigma_%7B2,2%7D%5Cend%7Bbmatrix%7D%0A"></p>
+<p>Where by symetry we could express:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5CSigma%20=%20%5Cbegin%7Bbmatrix%7D%20%5Csigma_%7B1,1%7D%20&amp;%5Ctau%5C%5C%20%5Ctau&amp;%5Csigma_%7B2,2%7D%5Cend%7Bbmatrix%7D%0A"></p>
+<p>While our matrix</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5COmega%20=%20%5Cbegin%7Bbmatrix%7D%20%5Comega_%7B1,1%7D%20&amp;%5Comega_%7B1,2%7D%5C%5C%5Comega_%7B2,1%7D&amp;%5Comega_%7B2,2%7D%5Cend%7Bbmatrix%7D%20%20%5Cquad%20%5COmega'=%5Cbegin%7Bbmatrix%7D%20%5Comega_%7B1,1%7D%20&amp;%5Comega_%7B2,1%7D%5C%5C%5Comega_%7B1,2%7D&amp;%5Comega_%7B2,2%7D%5Cend%7Bbmatrix%7D%0A"></p>
+<p>Therefore, <img src="https://latex.codecogs.com/png.latex?%5CSigma%20=%20%5COmega%5COmega'"> becomes a system of thee (different) equations and four unknowns because the second and third equation are the same.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Csigma_%7B1,1%7D%20&amp;=%20%5Comega%7B1,2%7D%5E2%20+%5Comega_%7B2,1%7D%5E2%20%5C%5C%0A%5Ctau%20&amp;=%20%5Comega_%7B1,1%7D%5Comega_%7B2,1%7D%20+%20%5Comega_%7B1,2%7D%5Comega_%7B2,2%7D%20%5C%5C%0A%5Ctau%20&amp;=%20%5Comega_%7B1,1%7D%5Comega_%7B2,1%7D%20+%20%5Comega_%7B1,2%7D%5Comega_%7B2,2%7D%20%5C%5C%0A%5Csigma_%7B2,2%7D%20&amp;=%20%5Comega%7B2,1%7D%5E2%20+%5Comega_%7B2,2%7D%5E2%20%5C%5C%0A%5Cend%7Baligned%7D%0A"></p>
+<p>So we have four unknowns: <img src="https://latex.codecogs.com/png.latex?%5Comega_%7B1,1%7D,%20%5Comega_%7B1,2%7D,%20%5Comega_%7B2,1%7D">,<img src="https://latex.codecogs.com/png.latex?%5Comega_%7B2,2%7D"> and it implies that there are infinite solutions to the problem. Therefore an <strong>identification strategy</strong> is needed to fin a solution. For the moment let’s assume we have find a viable identification strategy and our error is:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cvarepsilon_t%20=%20%5COmega%20u_t%20%5Cquad%20where%20%5Cquad%20u_t%20%5Csim%20N(0,%20I)%0A"></p>
+</section>
+<section id="structural-vma-representation" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="structural-vma-representation"><span class="header-section-number">2</span> Structural VMA representation</h2>
+<p>The structural VMA representation is:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Ay_t%20=%20%5Ctilde%7B%5Cmu%7D%20+%20%5CTheta(L)u_t%0A"></p>
+<p>Where: <img src="https://latex.codecogs.com/png.latex?%5CTheta%20=%20%5CPhi(L)%20%5COmega"> and</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5CTheta(L)%20=%20%5Csum_%7Bk=0%7D%5E%5Cinfty%20%5CTheta_kL%5Ek=%20%5CTheta_o%20+%5CTheta_1%20L+%5CTheta_2%20L%5E2%20+%5CTheta_3%20L%5E3%20+...%0A"></p>
+<p>With <img src="https://latex.codecogs.com/png.latex?%5CTheta_k%20=%20%5CPhi_k%5COmega"> for all k. Note then that <img src="https://latex.codecogs.com/png.latex?%5CTheta_0%20=%20%5CPhi_o%5COmega=I%5COmega%20=%20%5COmega"></p>
+<p>Why is it called <em>structural</em> VMA. The equation of a structural VAR or VMA define the structure of the economy. This is because is we have that <img src="https://latex.codecogs.com/png.latex?u_t%20%5Csim%20N(0,%20I)"> we can interpretet <img src="https://latex.codecogs.com/png.latex?u_t"> as structural shocks.</p>
+<p>Explicitly for the bivariate VAR case the VMA representation is</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%5Cbegin%7Bbmatrix%7D%20y_%7B1,t%7D%5C%5Cy_%7B1,t%7D%5Cend%7Bbmatrix%7D%20=%20%5Cbegin%7Bbmatrix%7D%20%5Ctilde%7B%5Cmu%7D_%7B1%7D%5C%5C%5Ctilde%7B%5Cmu%7D_%7B1%7D%20%5Cend%7Bbmatrix%7D+%5CTheta_0%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B1,t%7D%5Cend%7Bbmatrix%7D%20=%20%5Cbegin%7Bbmatrix%7D%20%5Ctilde%7B%5Cmu%7D_%7B1%7D%5C%5C%5Ctilde%7B%5Cmu%7D_%7B1%7D%20%5Cend%7Bbmatrix%7D+%5Csum_%7Bs=0%7D%5E%7B%5Cinfty%7D%5Cbegin%7Bbmatrix%7D%20%5Ctheta_%7B1,1%7D%5E%7B(0)%7D%20&amp;%5Ctheta_%7B1,2%7D%5E%7B(0)%7D%5C%5C%20%5Ctheta_%7B2,1%7D%5E%7B(0)%7D%20&amp;%20%5Ctheta_%7B2,2%7D%5E%7B(0)%7D%20%5Cend%7Bbmatrix%7D%5Et%5Cbegin%7Bbmatrix%7D%20u_%7B1,t-s%7D%5C%5Cu_%7B1,t-s%7D%5Cend%7Bbmatrix%7D%20%5Cend%7Baligned%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Cbegin%7Bbmatrix%7D%20y_%7B1,t%7D%5C%5Cy_%7B1,t%7D%5Cend%7Bbmatrix%7D%20=%0A%5Cbegin%7Bbmatrix%7D%20%5Ctilde%7B%5Cmu%7D_%7B1%7D%5C%5C%5Ctilde%7B%5Cmu%7D_%7B1%7D%20%5Cend%7Bbmatrix%7D+%0A%5CTheta_0%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B1,t%7D%5Cend%7Bbmatrix%7D%20+%0A%5CTheta_1L%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B1,t%7D%5Cend%7Bbmatrix%7D+%0A%5CTheta_2L%5E2%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B1,t%7D%5Cend%7Bbmatrix%7D+...%20%5C%5C%0A=%5Cbegin%7Bbmatrix%7D%20%5Ctilde%7B%5Cmu%7D_%7B1%7D%5C%5C%5Ctilde%7B%5Cmu%7D_%7B1%7D%20%5Cend%7Bbmatrix%7D+%0A%5CTheta_0%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B1,t%7D%5Cend%7Bbmatrix%7D%20+%0A%5CTheta_1%5Cbegin%7Bbmatrix%7D%20u_%7B1,t-1%7D%5C%5Cu_%7B1,t-1%7D%5Cend%7Bbmatrix%7D+%0A%5CTheta_2%5Cbegin%7Bbmatrix%7D%20u_%7B1,t-2%7D%5C%5Cu_%7B1,t-2%7D%5Cend%7Bbmatrix%7D+...%0A%5Cend%7Baligned%7D%0A"></p>
+<p>That is:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%5Cbegin%7Bbmatrix%7D%20y_%7B1,t%7D%5C%5Cy_%7B1,t%7D%5Cend%7Bbmatrix%7D%20=%5Cbegin%7Bbmatrix%7D%20%5Ctilde%7B%5Cmu%7D_%7B1%7D%5C%5C%5Ctilde%7B%5Cmu%7D_%7B1%7D%20%5Cend%7Bbmatrix%7D+%5Cbegin%7Bbmatrix%7D%20%5Ctheta_%7B1,1%7D%5E%7B(0)%7D%20&amp;%5Ctheta_%7B1,2%7D%5E%7B(0)%7D%5C%5C%20%5Ctheta_%7B2,1%7D%5E%7B(0)%7D%20&amp;%20%5Ctheta_%7B2,2%7D%5E%7B(0)%7D%20%5Cend%7Bbmatrix%7D%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B1,t%7D%5Cend%7Bbmatrix%7D%20+%5Cbegin%7Bbmatrix%7D%20%5Ctheta_%7B1,1%7D%5E%7B(1)%7D%20&amp;%5Ctheta_%7B1,2%7D%5E%7B(1)%7D%5C%5C%20%5Ctheta_%7B2,1%7D%5E%7B(1)%7D%20&amp;%20%5Ctheta_%7B2,2%7D%5E%7B(1)%7D%20%5Cend%7Bbmatrix%7D%5Cbegin%7Bbmatrix%7D%20u_%7B1,t-1%7D%5C%5Cu_%7B1,t-1%7D%5Cend%7Bbmatrix%7D+%20%E2%80%A6.%5Cend%7Baligned%7D%0A"></p>
+<p>Note that the <img src="https://latex.codecogs.com/png.latex?%5CTheta">’s do not depend on time t. The <img src="https://latex.codecogs.com/png.latex?%5CTheta">’s depend on the distance between t and a corresponding lagged period</p>
+<p>Then, at any time t + s the structural VMA representation is</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5Cbegin%7Baligned%7D%0A%5Cbegin%7Bbmatrix%7D%20y_%7B1,t+s%7D%5C%5Cy_%7B1,t+s%7D%5Cend%7Bbmatrix%7D%20&amp;=%0A%5Cbegin%7Bbmatrix%7D%20%5Ctilde%7B%5Cmu%7D_%7B1%7D%5C%5C%5Ctilde%7B%5Cmu%7D_%7B1%7D%20%5Cend%7Bbmatrix%7D+%0A%5CTheta_0%5Cbegin%7Bbmatrix%7D%20u_%7B1,t+s%7D%5C%5Cu_%7B1,t+s%7D%5Cend%7Bbmatrix%7D%20+%0A%5CTheta_1L%5Cbegin%7Bbmatrix%7D%20u_%7B1,t+s%7D%5C%5Cu_%7B1,t+s%7D%5Cend%7Bbmatrix%7D+%0A%5CTheta_2L%5E2%5Cbegin%7Bbmatrix%7D%20u_%7B1,t+s%7D%5C%5Cu_%7B1,t+s%7D%5Cend%7Bbmatrix%7D+...%20%5C%5C%0A&amp;=%5Cbegin%7Bbmatrix%7D%20%5Ctilde%7B%5Cmu%7D_%7B1%7D%5C%5C%5Ctilde%7B%5Cmu%7D_%7B1%7D%20%5Cend%7Bbmatrix%7D+%0A%5CTheta_0%5Cbegin%7Bbmatrix%7D%20u_%7B1,t+s%7D%5C%5Cu_%7B1,t+s%7D%5Cend%7Bbmatrix%7D%20+%0A...+%0A%5CTheta_s%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B1,t%7D%5Cend%7Bbmatrix%7D+...%0A%5Cend%7Baligned%7D"></p>
+<p>That is:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%5Cbegin%7Bbmatrix%7D%20y_%7B2,t%7D%5C%5Cy_%7B2,t+S%7D%5Cend%7Bbmatrix%7D%20=%5Cbegin%7Bbmatrix%7D%20%5Ctilde%7B%5Cmu%7D_%7B1%7D%5C%5C%5Ctilde%7B%5Cmu%7D_%7B2%7D%20%5Cend%7Bbmatrix%7D+%5Cbegin%7Bbmatrix%7D%20%5Ctheta_%7B1,1%7D%5E%7B(0)%7D%20&amp;%5Ctheta_%7B1,2%7D%5E%7B(0)%7D%5C%5C%20%5Ctheta_%7B2,1%7D%5E%7B(0)%7D%20&amp;%20%5Ctheta_%7B2,2%7D%5E%7B(0)%7D%20%5Cend%7Bbmatrix%7D%5Cbegin%7Bbmatrix%7D%20u_%7B1,t+s%7D%5C%5Cu_%7B1,t+s%7D%5Cend%7Bbmatrix%7D%20+%E2%80%A6+%5Cbegin%7Bbmatrix%7D%20%5Ctheta_%7B1,1%7D%5E%7B(s)%7D%20&amp;%5Ctheta_%7B1,2%7D%5E%7B(s)%7D%5C%5C%20%5Ctheta_%7B2,1%7D%5E%7B(s)%7D%20&amp;%20%5Ctheta_%7B2,2%7D%5E%7B(s)%7D%20%5Cend%7Bbmatrix%7D%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B1,t%7D%5Cend%7Bbmatrix%7D+%20%E2%80%A6.%5Cend%7Baligned%7D%0A"></p>
+<ul>
+<li><p>Remark 1. The effect of any current innovation <img src="https://latex.codecogs.com/png.latex?u_t"> on any future <img src="https://latex.codecogs.com/png.latex?y_t"> at period <img src="https://latex.codecogs.com/png.latex?t+s"> is given by <img src="https://latex.codecogs.com/png.latex?%5CTheta_s"></p></li>
+<li><p>Remark 2. The contemporaneous effect of any current innovation <img src="https://latex.codecogs.com/png.latex?u_t"> on any current <img src="https://latex.codecogs.com/png.latex?y_t"> is given by <img src="https://latex.codecogs.com/png.latex?%5CTheta_s">.</p></li>
+</ul>
+<p>We define the <strong>dynamic multipliers</strong> as the response at <img src="https://latex.codecogs.com/png.latex?t+s"> of a variable <img src="https://latex.codecogs.com/png.latex?y_i"> (i.e.,<img src="https://latex.codecogs.com/png.latex?y_%7Bi,%20t+s%7D">) to a shock <img src="https://latex.codecogs.com/png.latex?u_j">that happened at time <img src="https://latex.codecogs.com/png.latex?t">, <img src="https://latex.codecogs.com/png.latex?u_%7Bj,t%7D"> . • The dynamic multipliers are</p>
+</section>
+<section id="impulse-response-functions" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="impulse-response-functions"><span class="header-section-number">3</span> Impulse response functions</h2>
+<p>Impulse response functions (IR) answer the question <em>What is the response of current and future values of each of the variables to a one-unit increase in the current value of one of the structural errors, assuming that this error returns to zero in subsequent periods and that all other errors are equal to zero</em> The implied thought experiment of changing one error while holding the others constant makes sense only when the errors are uncorrelated across equations</p>
+<p>• IRFs describe the response at each period t + s, for all s &gt; 0, of variable yit+s to a shock ujt that happens at time t. • That is, IRFs are defined by the sequence of dynamic multipliers n θ (s) ij o .</p>
+<p>Let’s see it with an example. We assume we have two variables and we are interested to analyze the effect of on a variable in a bivariate system. To isolate such an effect, suppose that both variables assume their mean value prior to time t=0, <img src="https://latex.codecogs.com/png.latex?y_t%20=%20%5Cmu"> and the first variable increases by one unit in period t = 0, that is, <img src="https://latex.codecogs.com/png.latex?%5Cvarepsilon_%7B1,0%7D=1">. Now we can can trace out what happens to the system during periods t = 1, 2,… if no further shocks occur. Because we are not interested in the mean of the system in such an exercise but just in the variations of the variables around their means, we assume that all three variables have mean zero and set <img src="https://latex.codecogs.com/png.latex?%5Cmu=0">. Hence, <img src="https://latex.codecogs.com/png.latex?y_t%20=%20%5CGamma%20y_t%20+%20%5Cvarepsilon_t"> or, in matrix form:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Cbegin%7Bbmatrix%7D%20y_%7B1,t%7D%5C%5Cy_%7B2,t%7D%5Cend%7Bbmatrix%7D%20=%0A%5Cbegin%7Bbmatrix%7D.5%20&amp;0%20%5C%5C%20.1%20&amp;%20.1%20%5Cend%7Bbmatrix%7D%0A%5Cbegin%7Bbmatrix%7D%20y_%7B1,t-1%7D%5C%5Cy_%7B2,t-1%7D%5Cend%7Bbmatrix%7D%0A+%0A%5Cbegin%7Bbmatrix%7D%20u_%7B1,t%7D%5C%5Cu_%7B2,t%7D%5Cend%7Bbmatrix%7D%0A%5Cend%7Baligned%7D%0A"> Tracing a unit shock in the first variable in period t = 0 in this system we get</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0Ay_0=%0A%5Cbegin%7Bbmatrix%7D%20y_%7B1,0%7D%5C%5Cy_%7B2,0%7D%5Cend%7Bbmatrix%7D%20=%0A%5Cbegin%7Bbmatrix%7D%20u_%7B1,0%7D%5C%5Cu_%7B2,0%7D%5Cend%7Bbmatrix%7D%20=%0A%5Cbegin%7Bbmatrix%7D%201%5C%5C0%5Cend%7Bbmatrix%7D%0A%5Cend%7Baligned%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7Dy_1=%5Cbegin%7Bbmatrix%7D%20y_%7B1,1%7D%5C%5Cy_%7B2,1%7D%5Cend%7Bbmatrix%7D%20=%20%5CGamma_1y_0%20=%5Cbegin%7Bbmatrix%7D%20.5%5C%5C.1%5Cend%7Bbmatrix%7D%5Cend%7Baligned%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7Dy_2=%5Cbegin%7Bbmatrix%7D%20y_%7B1,2%7D%5C%5Cy_%7B2,2%7D%5Cend%7Bbmatrix%7D%20=%20%5CGamma_1y_1%20=%20%5CGamma_1%5E2y_0=%5Cbegin%7Bbmatrix%7D%20.25%5C%5C.6%5Cend%7Bbmatrix%7D%5Cend%7Baligned%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7Dy_3=%5Cbegin%7Bbmatrix%7D%20y_%7B1,3%7D%5C%5Cy_%7B2,3%7D%5Cend%7Bbmatrix%7D%20=%20%5CGamma_1y_2%20=%20%5CGamma_1%5E3y_0=%5Cbegin%7Bbmatrix%7D%20.125%20%5C%5C.031%5Cend%7Bbmatrix%7D%5Cend%7Baligned%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7Dy_4=%5Cbegin%7Bbmatrix%7D%20y_%7B1,4%7D%5C%5Cy_%7B2,4%7D%5Cend%7Bbmatrix%7D%20=%20%5CGamma_1y_3%20=%20%5CGamma_1%5E4y_0=%5Cbegin%7Bbmatrix%7D%20.062%20%5C%5C.015%5Cend%7Bbmatrix%7D%5Cend%7Baligned%7D%0A"></p>
+<p>Continuing the procedure, it turns out that <img src="https://latex.codecogs.com/png.latex?y_i=%20(y_%7B1,i%7D,%20y_%7B2,i%7D)'"> is just the power of the matrix of coefficients times the unit shock. As it it is the effect of these unit shocks in the the variables of the system after i periods they are called impulse responses or dynamic multipliers. Following the above series we can see that the impact of the unit shock to the first variable is a decay following the sequence 1, 0.5, 0.25, 0.12, 0.06 meanwhile the second variable has a hump shaped trajectory following the sequence 0, 0.1, 0.06, 0.03, 0.01 and so on. Let’s see how these results compare when we feed the machine with some numbers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">suppressMessages</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(vars)) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Load package</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'vars' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'strucchange' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'zoo' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'sandwich' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'urca' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lmtest' was built under R version 4.5.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb12-2">A<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>), k) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Coefficient matrix of lag 1</span></span>
+<span id="cb12-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate series</span></span>
+<span id="cb12-4">series <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, k, t <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>p) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Raw series with zeros</span></span>
+<span id="cb12-5"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> (p <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>(t <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>p)){ <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate series with e ~ N(0,0.5)</span></span>
+<span id="cb12-6">  series[, i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> A<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span>series[, i<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">-1</span>] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(k, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.001</span>)</span>
+<span id="cb12-7">}</span>
+<span id="cb12-8">series <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ts</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(series[, <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>p)])) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Convert to time series format</span></span>
+<span id="cb12-9">var<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">VAR</span>(series, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">p =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">type =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"none"</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Estimate the model</span></span>
+<span id="cb12-10">ir<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.2</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">irf</span>(var<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">impulse =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Series.1"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">response =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Series.2"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n.ahead =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ortho =</span> F)</span>
+<span id="cb12-11">ir<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">irf</span>(var<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">impulse =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Series.1"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">response =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Series.1"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n.ahead =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ortho =</span> F)</span>
+<span id="cb12-12"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(ir<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/var-notebook/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(ir<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.2</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/var-notebook/index_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A problematic assumption in this type of impulse response analysis is that a shock occurs only in one variable at a time. Such an assumption may be reasonable if the shocks in different variables are independent. If they are not independent one may argue that the error terms consist of all the influences and variables that are not directly included in the set of y variables. Thus, in addition to forces that affect all the variables, there may be forces that affect variable 1, say, only.</p>
+<p>On the other hand, correlation of the error terms may indicate that a shock in one variable is likely to be accompanied by a shock in another variable. In that case, setting all other residuals to zero may provide a misleading picture of the actual dynamic relationships between the variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">var<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">VAR</span>(series, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">p =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">type =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"none"</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Estimate the model</span></span>
+<span id="cb14-2">model_summary <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(var<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span>)</span>
+<span id="cb14-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Obtain variance-covariance matrix</span></span>
+<span id="cb14-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(model_summary<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>covres,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Series.1    Series.2
+Series.1  9.577e-07 -1.0310e-07
+Series.2 -1.031e-07  1.0813e-06</code></pre>
+</div>
+</div>
+<p>Since the off-diagonal elements of the estimated variance-covariance matrix are not zero, we can assume that there is contemporaneous correlation between the variables in the VAR model. This is confirmed by the correlation matrix, which corresponds to <img src="https://latex.codecogs.com/png.latex?%5CSigma"></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(model_summary<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>corres,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Series.1 Series.2
+Series.1   1.0000  -0.1014
+Series.2  -0.1014   1.0000</code></pre>
+</div>
+</div>
+<p>However, those matrices only describe the correlation between the errors, but it remains unclear in which direction the causalities go. <em>Identifying</em> these causal relationships is one of the main challenges of any VAR analysis.</p>
+</section>
+<section id="what-is-the-impact-in-the-long-run" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="what-is-the-impact-in-the-long-run"><span class="header-section-number">4</span> What is the impact in the long run?</h2>
+<p>Since yt is assumed covariance stationary, then the limiting dynamic multiplier is</p>
+<p>That is, shocks to uj have no long-run impact on the level of yi . In other terms, the response of yit+s in the long-run to shocks ujt at time t is zero. The reason is that yt (we have assumed) is covariance stationary.</p>
+<section id="what-is-the-cumulative-impact-in-the-long-run" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="what-is-the-cumulative-impact-in-the-long-run"><span class="header-section-number">4.1</span> What is the <em>cumulative</em> impact in the long run?</h3>
+<p>Now, there is a legit question. He have seen the impact of one variable on another variable at a moment t+s. However, what is the cumulative impact in the long run? Apparently the answer to this questions is just to add all the all these impulses over time.</p>
+<p>The cumulative impact of <img src="https://latex.codecogs.com/png.latex?u_j"> on <img src="https://latex.codecogs.com/png.latex?y_i"> in the long-run is given by</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%20%5CTheta(1)=%5Cbegin%7Bbmatrix%7D%20%5Ctheta_%7B1,1%7D%7B(1)%7D%20&amp;%5Ctheta_%7B1,2%7D%7B(1)%7D%5C%5C%20%5Ctheta_%7B2,1%7D%7B(1)%7D%20&amp;%20%5Ctheta_%7B2,2%7D%7B(1)%7D%20%5Cend%7Bbmatrix%7D%20=%20%5Cbegin%7Bbmatrix%7D%20%5Csum_%7Bs=0%7D%5E%5Cinfty%20%5Ctheta_%7B1,1%7D%5E%7B(s)%7D%20&amp;%20%5Csum_%7Bs=0%7D%5E%5Cinfty%20%5Ctheta_%7B1,2%7D%5E%7B(s)%7D%5C%5C%20%5Csum_%7Bs=0%7D%5E%5Cinfty%20%20%5Ctheta_%7B2,1%7D%5E%7B(s)%7D%20&amp;%5Csum_%7Bs=0%7D%5E%5Cinfty%20%20%5Ctheta_%7B2,2%7D%5E%7B(s)%7D%20%5Cend%7Bbmatrix%7D%5Cend%7Baligned%7D%0A"></p>
+<p>Where we not that:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5CTheta(1)%20=%20%5Csum_%7Bk=0%7D%5E%5Cinfty%5CTheta_k(L=1)%5Ek=%20%5CTheta_0%20+%20%5CTheta_1%20+%20%5CTheta_2%0A+%20%5CTheta_3%20..."></p>
+<p>That is, the cumulative impact of <img src="https://latex.codecogs.com/png.latex?u_j"> on <img src="https://latex.codecogs.com/png.latex?y_i"> in the long-run is the infinite sum of dynamic multipliers.</p>
+<p>In our example when we add up the IR from the first variable we add a sequence like <img src="https://latex.codecogs.com/png.latex?0,%200.1,%200.06,0.03,%200.0015%20..."> adding up this sequence we have that it converges to a value close to 0.22. Again, this can be expressed with the trick we learned summing up the terms of the <img src="https://latex.codecogs.com/png.latex?%5CGamma%5Eiu_o"></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(expm) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#To use matrix exponents </span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'expm' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Cargando paquete requerido: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Adjuntando el paquete: 'expm'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:Matrix':
+
+    expm</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">Gamma <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> ), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nrow=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ncol =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>) </span>
+<span id="cb23-2">u <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nrow=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ncol =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) </span>
+<span id="cb23-3">CRF <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb23-4"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>) </span>
+<span id="cb23-5">    {</span>
+<span id="cb23-6">    CRF <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> CRF <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> Gamma<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%^%</span>i  <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> u </span>
+<span id="cb23-7">    }</span>
+<span id="cb23-8"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(CRF,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]
+[1,] 2.00
+[2,] 0.22</code></pre>
+</div>
+</div>
+<p>Just to make ourselves sure, we can plot the cumulative IRF as it is defined by default in the VARs pacakge using cumulative = TRUE</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Calculate impulse response</span></span>
+<span id="cb25-2">ir<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.2</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">irf</span>(var<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.1</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">impulse=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Series.1"</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">response=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Series.2"</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n.ahead =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ortho =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cumulative =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb25-3"></span>
+<span id="cb25-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Plot</span></span>
+<span id="cb25-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(ir<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.2</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/var-notebook/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="forecast-error" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="forecast-error"><span class="header-section-number">5</span> Forecast Error</h2>
+<p>Forecast error is the difference between the actual value of</p>
+</section>
+<section id="forecast-error-variance-decomposition" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="forecast-error-variance-decomposition"><span class="header-section-number">6</span> Forecast Error Variance Decomposition</h2>
+</section>
+<section id="identification-strategy" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="identification-strategy"><span class="header-section-number">7</span> Identification Strategy</h2>
+<ul>
+<li><p>Short-run restrictions are associated with contemporaneous effects and, therefore, are implemented on <img src="https://latex.codecogs.com/png.latex?%5CTheta_0">. A famous example is Stock &amp; Watson (2001). “Vector Autoregressions,” Journal of Economic Perspectives. For instance, the restriction imposed below implies that <img src="https://latex.codecogs.com/png.latex?u_%7B2,t%7D"> has no contemporaneous effect on <img src="https://latex.codecogs.com/png.latex?y_%7B1,t%7D"> that is:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%20%5CTheta(1)=%5Cbegin%7Bbmatrix%7D%20%5Ctheta_%7B1,1%7D%5E%7B(0)%7D%20&amp;0%5C%5C%20%5Ctheta_%7B2,1%7D%5E%7B(0)%7D%20&amp;%20%5Ctheta_%7B2,2%7D%5E%7B(0)%7D%20%5Cend%7Bbmatrix%7D%20%20%5Cend%7Baligned%7D%0A"></p></li>
+<li><p>Long-run restrictions are associated with the cumulative long-run effects and, therefore, are implemented on <img src="https://latex.codecogs.com/png.latex?%5CTheta(1)">. A famous example is Blanchard &amp; Quah (1989). “The Dynamic Effects of Aggregate Demand and Supply Disturbances”, American Economic Review. For example, the restriction imposed below implies that <img src="https://latex.codecogs.com/png.latex?u_%7B2,t%7D"> has no cumulative effect on <img src="https://latex.codecogs.com/png.latex?y_%7B1,t%7D"> that is the upper triangular has a zero in its entry.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%20%5CTheta(1)=%5Cbegin%7Bbmatrix%7D%20%5Ctheta_%7B1,1%7D%7B(1)%7D%20&amp;0%5C%5C%20%5Ctheta_%7B2,1%7D%7B(1)%7D%20&amp;%20%5Ctheta_%7B2,2%7D%7B(1)%7D%20%5Cend%7Bbmatrix%7D%20=%20%5Cbegin%7Bbmatrix%7D%20%5Csum_%7Bs=0%7D%5E%5Cinfty%20%5Ctheta_%7B1,1%7D%5E%7B(s)%7D%20&amp;%200%5C%5C%20%5Csum_%7Bs=0%7D%5E%5Cinfty%20%20%5Ctheta_%7B2,1%7D%5E%7B(s)%7D%20&amp;%5Csum_%7Bs=0%7D%5E%5Cinfty%20%20%5Ctheta_%7B2,2%7D%5E%7B(s)%7D%20%5Cend%7Bbmatrix%7D%5Cend%7Baligned%7D%0A"></p></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>VAR</category>
+  <category>time series</category>
+  <category>macroeconometrics</category>
+  <category>impulse response</category>
+  <category>R</category>
+  <guid>https://andresmtnezglez.github.io/posts/var-notebook/</guid>
+  <pubDate>Thu, 12 Nov 2020 23:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>
