@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andrés Martínez González">
+<meta name="dcterms.date" content="2021-03-06">
+<meta name="description" content="A step-by-step replication in R of Christiano, Eichenbaum and Evans (1998), estimating a three-variable VAR in output growth, inflation and the Federal Funds Rate, with reduced-form SUR estimation, recursive identification and impulse response functions to a monetary policy shock.">
+
+<title>Replicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR – Andrés Martínez Glez</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="application/ld+json">
+
+{
+
+  "@context": "https://schema.org",
+
+  "@type": "Person",
+
+  "name": "Andrés Martínez Glez",
+
+  "givenName": "Andrés",
+
+  "familyName": "Martínez Glez",
+
+  "jobTitle": "Economist",
+
+  "worksFor": {
+
+    "@type": "Organization",
+
+    "name": "Autoridad Independiente de Responsabilidad Fiscal (AIReF)",
+
+    "alternateName": "Spanish Independent Authority for Fiscal Responsibility",
+
+    "url": "https://www.airef.es"
+
+  },
+
+  "address": {
+
+    "@type": "PostalAddress",
+
+    "addressLocality": "Madrid",
+
+    "addressCountry": "ES"
+
+  },
+
+  "url": "https://andresmtnezglez.github.io",
+
+  "knowsAbout": [
+
+    "Fiscal policy",
+
+    "EU fiscal governance",
+
+    "Macroeconometrics",
+
+    "Vector autoregression (VAR) models",
+
+    "Long-term growth modelling",
+
+    "Labour economics",
+
+    "R programming"
+
+  ],
+
+  "sameAs": [
+
+    "https://github.com/AndresMtnezGlez",
+
+    "https://rpubs.com/andresmtnezglez",
+
+    "https://orcid.org/YOUR-ORCID-ID",
+
+    "https://scholar.google.com/citations?user=YOUR-SCHOLAR-ID",
+
+    "https://www.linkedin.com/in/YOUR-LINKEDIN"
+
+  ]
+
+}
+
+</script>
+
+<meta name="robots" content="index, follow">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Replicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR – Andrés Martínez Glez">
+<meta property="og:description" content="A step-by-step replication in R of Christiano, Eichenbaum and Evans (1998), estimating a three-variable VAR in output growth, inflation and the Federal Funds Rate, with reduced-form SUR estimation, recursive identification and impulse response functions to a monetary policy shock.">
+<meta property="og:image" content="https://andresmtnezglez.github.io/posts/cee-var-monetary-shocks/index_files/figure-html/unnamed-chunk-7-1.png">
+<meta property="og:site_name" content="Andrés Martínez Glez">
+<meta property="og:image:height" content="960">
+<meta property="og:image:width" content="1344">
+<meta name="twitter:title" content="Replicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR – Andrés Martínez Glez">
+<meta name="twitter:description" content="A step-by-step replication in R of Christiano, Eichenbaum and Evans (1998), estimating a three-variable VAR in output growth, inflation and the Federal Funds Rate, with reduced-form SUR estimation, recursive identification and impulse response functions to a monetary policy shock.">
+<meta name="twitter:image" content="https://andresmtnezglez.github.io/posts/cee-var-monetary-shocks/index_files/figure-html/unnamed-chunk-7-1.png">
+<meta name="twitter:image-height" content="960">
+<meta name="twitter:image-width" content="1344">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Andrés Martínez Glez</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research &amp; Notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/AndresMtnezGlez"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/YOUR-LINKEDIN"> <i class="bi bi-linkedin" role="img" aria-label="LinkedIn">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:YOUR@EMAIL"> <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#reduced-form-in-sur-specification" id="toc-reduced-form-in-sur-specification" class="nav-link active" data-scroll-target="#reduced-form-in-sur-specification"><span class="header-section-number">1</span> Reduced form in SUR specification</a></li>
+  <li><a href="#varp-estimation-using-ols" id="toc-varp-estimation-using-ols" class="nav-link" data-scroll-target="#varp-estimation-using-ols"><span class="header-section-number">2</span> VAR(p) estimation using OLS</a></li>
+  <li><a href="#from-varp-to-var1-the-companion-form" id="toc-from-varp-to-var1-the-companion-form" class="nav-link" data-scroll-target="#from-varp-to-var1-the-companion-form"><span class="header-section-number">3</span> From VAR(p) to VAR(1): the Companion Form</a></li>
+  <li><a href="#from-var1-to-the-ma-representation" id="toc-from-var1-to-the-ma-representation" class="nav-link" data-scroll-target="#from-var1-to-the-ma-representation"><span class="header-section-number">4</span> From VAR(1) to the MA representation</a></li>
+  <li><a href="#from-var-to-svar-cholesky-identification" id="toc-from-var-to-svar-cholesky-identification" class="nav-link" data-scroll-target="#from-var-to-svar-cholesky-identification"><span class="header-section-number">5</span> From VAR to SVAR: Cholesky identification</a></li>
+  <li><a href="#bootstrapping-the-residuals" id="toc-bootstrapping-the-residuals" class="nav-link" data-scroll-target="#bootstrapping-the-residuals"><span class="header-section-number">6</span> Bootstrapping the residuals</a></li>
+  <li><a href="#the-price-puzzle" id="toc-the-price-puzzle" class="nav-link" data-scroll-target="#the-price-puzzle"><span class="header-section-number">7</span> The price puzzle</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Replicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">VAR</div>
+    <div class="quarto-category">SVAR</div>
+    <div class="quarto-category">monetary policy</div>
+    <div class="quarto-category">macroeconometrics</div>
+    <div class="quarto-category">impulse response</div>
+    <div class="quarto-category">replication</div>
+    <div class="quarto-category">R</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    A step-by-step replication in R of Christiano, Eichenbaum and Evans (1998), estimating a three-variable VAR in output growth, inflation and the Federal Funds Rate, with reduced-form SUR estimation, recursive identification and impulse response functions to a monetary policy shock.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andrés Martínez González </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 6, 2021</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this project we will replicate the results obtained by CEE (1998). This paper starts with neat question: <em>What happens after an exogenous shock to monetary policy?</em></p>
+<p>To so we will run a simplified VAR(p) with three variables as GDP growth, inflation, Federal Funds Rate.</p>
+<p>This project borrows heavily on code from Nicolo Maffei and Konstantin Boss. In addition, the conceptual framework is based on the work of Luca Gambetti, Konstantin Boss, Kevin Kotzé and Helmut Lütkepohl.</p>
+<p>First, we will need to load the libraries and the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vars)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(svars)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsutils)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xts)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(expm)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(matrixStats)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>dta<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://github.com/AndresMtnezGlez/heptaomicron/raw/main/ex1data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="reduced-form-in-sur-specification" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="reduced-form-in-sur-specification"><span class="header-section-number">1</span> Reduced form in SUR specification</h2>
+<p>We start by estimating what is called the reduced form of the VAR. SUR stands for seemingly unrelated regression model with lagged variables and deterministic terms (the constant) as common regressors. For instance, the VAR(1) model with two variables can be expressed as:</p>
+<p><span class="math display">\[
+\begin{eqnarray}\nonumber
+{\bf{y}}_{t}= A_{1} {\bf{y}}_{t-1} + {\bf{u}}_{t}
+\end{eqnarray}
+\]</span> Which in matrix form cam be shown as:</p>
+<p><span class="math display">\[
+\begin{eqnarray}
+{\bf{y}}_{t}=\left[
+\begin{array}{c}
+y_{1,t} \\
+y_{2,t}
+\end{array}
+\right] , A_{1}=\left[
+\begin{array}{cc}
+\alpha_{11} &amp; \alpha_{12} \\
+\alpha_{21} &amp; \alpha_{22}
+\end{array}
+\right] \;,   {\bf{u}}_{t}=\left[
+\begin{array}{c}
+u_{1,t} \\
+u_{2,t}
+\end{array}
+\right]
+\tag{1.2}
+\end{eqnarray}
+\]</span> We can imagine we have estimated the parameters of matrix A as:</p>
+<p><span class="math display">\[
+\begin{eqnarray}
+\left[
+\begin{array}{c}
+y_{1,t} \\
+y_{2,t}
+\end{array}
+\right] = \left[
+\begin{array}{cc}
+0.5 &amp; 0.3 \\
+1 &amp; 0.2
+\end{array}
+\right] \left[
+\begin{array}{c}
+y_{1,t-1} \\
+y_{2,t-1}
+\end{array}
+\right] +\left[
+\begin{array}{c}
+u_{1,t} \\
+u_{2,t}
+\end{array}
+\right]
+\tag{1.3}
+\end{eqnarray}
+\]</span> This can be expressed asseemingly unrelated regression model just by multiplicating the matrices as:</p>
+<p><span class="math display">\[
+\begin{eqnarray}\nonumber
+y_{1,t} &amp;=&amp;  0.5y_{1,t-1}+0.3y_{2,t-1}+u_{1,t} \\
+y_{2,t} &amp;=&amp; y_{1,t-1}+0.2y_{2,t-1}+u_{2,t} \nonumber
+\end{eqnarray}
+\]</span> This set up attractive for two reasons. First, it is easy to see the relationships among the variables and other variables’s lags. Second, it offers us a clear idea of why a VAR(p) can be estimated using plain matrix OLS. It is important to notice that the OLS estimation of the RHS parameters is fine as long as each equation contains the same RHS variables. If not, we would have to opt for numerical methods.</p>
+<p>Therefore, the next step is to create a function to lay the data contained in the vector of time series in a SUR fashion. In our mock VAR(1) example with two variables this will look as:</p>
+<p><span class="math display">\[
+\begin{eqnarray}
+Y=\left[
+\begin{array}{cc}
+Serie1_{p+1} &amp; Serie2_{p+1}  \\
+Serie1_{p+2} &amp; Serie2_{p+2}  \\
+\vdots &amp; \vdots              \\
+Serie1_{T} &amp; Serie2_{T}  
+\end{array}
+\right] \;, X=\left[
+\begin{array}{cc}
+1 &amp; Serie1_{p} &amp; Serie2_{p} &amp; Serie1_{p-1} &amp; Serie2_{p-1}&amp; \cdots &amp; Serie1_{1} &amp; Serie2_{1}  \\
+1 &amp; Serie1_{p+1} &amp; Serie2_{p+1} &amp; Serie1_{p} &amp; Serie2_{p}&amp; \cdots &amp; Serie1_{2} &amp; Serie2_{2}  \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \cdots &amp; \vdots &amp; \vdots \\
+1 &amp; Serie1_{T-1} &amp; Serie2_{T-1} &amp; Serie1_{T-2} &amp; Serie2_{T-2}&amp;\cdots &amp; Serie1_{T-p} &amp; Serie2_{T-p}  \\
+\end{array}
+\right] \;
+\end{eqnarray}
+\]</span></p>
+<p>We can wrap this in a small function named SUR that will make the job. To implement it we will use the data set for CEE (1998) where the variables are GDP growth, inflation, Federal Funds Rate.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>SUR <span class="ot">&lt;-</span> <span class="cf">function</span>(data_var, p, <span class="at">const=</span><span class="cn">TRUE</span>){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  data_var <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data_var)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  T <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">nrow</span>(data_var)) <span class="co">#Define the sample size</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  p_1 <span class="ot">&lt;-</span> p <span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  Y_initial<span class="ot">=</span><span class="fu">as.matrix</span>(<span class="fu">slice</span>(data_var, <span class="dv">1</span><span class="sc">:</span>p))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">as.matrix</span>(<span class="fu">slice</span>(data_var, p_1<span class="sc">:</span>T)) <span class="co">#Create Y matrix</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(const <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    data_var_X <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="dv">1</span>) <span class="co">#Create vector with the constant</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(data_var_X) <span class="ot">&lt;-</span> <span class="st">"const"</span>    </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> { </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    data_var_X <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>() <span class="co">#In case there is no constnat</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p) { <span class="co">#This loop lags and concatenates the matrix</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    T <span class="ot">&lt;-</span> T<span class="dv">-1</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    data_var_X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data_var_X, <span class="fu">slice</span>(data_var, p<span class="sc">:</span>T))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p<span class="dv">-1</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">=</span> <span class="fu">as.matrix</span>(data_var_X) </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a> <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X, <span class="at">Y_initial=</span>Y_initial))</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="varp-estimation-using-ols" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="varp-estimation-using-ols"><span class="header-section-number">2</span> VAR(p) estimation using OLS</h2>
+<p>Once we have the data properly structured in SUR fashion, it is fairly easy to implement the OLS estimator in matrix form. To do so, we will use a small function. This function will return us the estimated coefficients (K*P+K = Number of Variables * Number of lags + Number of variables (to account the constant)) .</p>
+<p>The OLS estimator can be defined as:</p>
+<p><span class="math display">\[
+\hat{\Phi} = (X'X)^{-1}X'Y
+\]</span></p>
+<p>And the covariance matrix as:</p>
+<p><span class="math display">\[
+\hat{\Omega} = \frac{\hat{e}\hat{e'}}{n-Kp-1}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>f_VAR <span class="ot">&lt;-</span> <span class="cf">function</span>(data_var, p, <span class="at">const=</span><span class="cn">TRUE</span>){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  SUR_ouptut <span class="ot">&lt;-</span> <span class="fu">SUR</span>(data_var,<span class="at">p=</span><span class="dv">3</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> SUR_ouptut<span class="sc">$</span>X</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">&lt;-</span> SUR_ouptut<span class="sc">$</span>Y</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  pi_hat <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">solve</span>(<span class="fu">t</span>(X)<span class="sc">%*%</span>X)<span class="sc">%*%</span><span class="fu">t</span>(X)<span class="sc">%*%</span>Y, <span class="at">digits =</span> <span class="dv">5</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  Yfit<span class="ot">=</span>X <span class="sc">%*%</span> pi_hat <span class="co">#Fitted value of Y</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  err<span class="ot">=</span>Y<span class="sc">-</span>Yfit    <span class="co">#Residuals</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X, <span class="at">pi_hat=</span> pi_hat, <span class="at">Yfit =</span> Yfit, <span class="at">err=</span>err, <span class="at">Y_initial =</span> SUR_ouptut<span class="sc">$</span>Y_initial))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>f_VAR_output <span class="ot">&lt;-</span><span class="fu">f_VAR</span>(dta, <span class="at">p=</span><span class="dv">12</span>, <span class="at">const =</span>T)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>pi_hat <span class="ot">&lt;-</span> f_VAR_output<span class="sc">$</span>pi_hat</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pi_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          IPgr     infl      FFR
+const  0.39783  0.03081 -0.00396
+IPgr   0.19098 -0.00001  0.12092
+infl   0.05852  0.38199  0.25718
+FFR    0.06717  0.06941  1.37621
+IPgr   0.12705 -0.00934  0.08087
+infl  -0.23339  0.07854 -0.13509
+FFR   -0.06531 -0.01286 -0.60829
+IPgr   0.10444  0.01127 -0.01005
+infl  -0.02853  0.10894  0.16599
+FFR   -0.03153 -0.03726  0.20864</code></pre>
+</div>
+</div>
+</section>
+<section id="from-varp-to-var1-the-companion-form" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="from-varp-to-var1-the-companion-form"><span class="header-section-number">3</span> From VAR(p) to VAR(1): the Companion Form</h2>
+<p>It is possible to express a VAR(p) model in a VAR(1) form, which turns out to be very useful in many practical situations (and for some technical derivations). This reformulation is done by expressing the VAR(p) model in the companion-form, which is accomplished as follows.</p>
+<p><span class="math display">\[
+\begin{eqnarray}\nonumber
+\left[
+\begin{array}{c}
+{\bf{y}}_{t} \\
+{\bf{y}}_{t-1} \\
+{\bf{y}}_{t-2} \\
+\vdots \\
+{\bf{y}}_{t-p+1}
+\end{array}
+\right] =\left[
+\begin{array}{c}
+\mu  \\
+0 \\
+0 \\
+\vdots \\
+0
+\end{array}
+\right] +\left[
+\begin{array}{ccccccc}
+A_{1} &amp; A_{2} &amp; \cdots &amp; A_{p-1} &amp; A_{p} \\
+I &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\
+0 &amp; I &amp; \cdots &amp; 0 &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; I &amp; 0
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+{\bf{y}}_{t-1} \\
+{\bf{y}}_{t-2} \\
+{\bf{y}}_{t-3} \\
+\vdots \\
+{\bf{y}}_{t-p}
+\end{array}
+\right] +
+\left[
+\begin{array}{c}
+{\bf{u}}_{t} \\
+0 \\
+0 \\
+\vdots \\
+0
+\end{array}
+\right]
+\end{eqnarray}
+\]</span></p>
+<p>Which can be translated into code as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">ncol</span>(dta)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">t</span>(pi_hat[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(pi_hat),])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>Aux <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">diag</span>(k<span class="sc">*</span>p<span class="sc">-</span>k), <span class="fu">matrix</span>(<span class="dv">0</span>, k<span class="sc">*</span>p<span class="sc">-</span>k,k)) <span class="co">#BigA companion form, np x np matrix</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>BigA <span class="ot">&lt;-</span> <span class="fu">rbind</span>(A, Aux)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(BigA, <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         IPgr    infl     FFR     IPgr     infl      FFR     IPgr     infl
+IPgr  0.19098 0.05852 0.06717  0.12705 -0.23339 -0.06531  0.10444 -0.02853
+infl -0.00001 0.38199 0.06941 -0.00934  0.07854 -0.01286  0.01127  0.10894
+FFR   0.12092 0.25718 1.37621  0.08087 -0.13509 -0.60829 -0.01005  0.16599
+      1.00000 0.00000 0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+      0.00000 1.00000 0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+      0.00000 0.00000 1.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+      0.00000 0.00000 0.00000  1.00000  0.00000  0.00000  0.00000  0.00000
+      0.00000 0.00000 0.00000  0.00000  1.00000  0.00000  0.00000  0.00000
+          FFR
+IPgr -0.03153
+infl -0.03726
+FFR   0.20864
+      0.00000
+      0.00000
+      0.00000
+      0.00000
+      0.00000</code></pre>
+</div>
+</div>
+</section>
+<section id="from-var1-to-the-ma-representation" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="from-var1-to-the-ma-representation"><span class="header-section-number">4</span> From VAR(1) to the MA representation</h2>
+<p>If we start from:</p>
+<p><span class="math display">\[
+{\bf{y}}_{t}=\mu +A_{1}{\bf{y}}_{t-1}+{\bf{u}}_{t}
+\]</span></p>
+<p>We can use the lag operator to derive:</p>
+<p><span class="math display">\[
+(I-A_{1}L){\bf{y}}_{t}=\mu +{\bf{u}}_{t}
+\]</span></p>
+<p>Which making use of the matrix of polynomials can be expressed neatly as:</p>
+<p><span class="math display">\[
+A(L) {\bf{y}}_{t}= \mu + {\bf{u}}_{t}
+\]</span></p>
+<p>Now, it is important to keep in mind the geometric rule to express:</p>
+<p><span class="math display">\[
+A(L)^{-1}  = (I-A_{1}L)^{-1}=\sum_{j=0}^{p}A_{1}^{j}L^{j} \\
+A(L)^{-1}  :=B(L)=\sum_{j=0}^{\infty }B_{j}L^{j}
+\]</span></p>
+<p>So we can express the VAR(1) as MA as:</p>
+<p><span class="math display">\[
+{\bf{y}}_{t} =A(L)^{-1}\mu +A(L)^{-1} {\bf{u}}_{t} \\
+=B(L)\mu + B(L) {\bf{u}}_t   \\
+=\varphi+\sum_{j=0}^{\infty }B_{j} {\bf{u}}_{t-j}
+\]</span></p>
+<p>This can be translated into code in a simple for loop.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>hor <span class="ot">&lt;-</span> <span class="dv">40</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(hor, k, k)) </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>hor) { <span class="co">#This loop lags and concatenates the matrix</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  BigC  <span class="ot">&lt;-</span> BigA <span class="sc">%^%</span>(i<span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  C[i, ,]<span class="ot">&lt;-</span> BigC[<span class="dv">1</span><span class="sc">:</span>k,<span class="dv">1</span><span class="sc">:</span>k]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="from-var-to-svar-cholesky-identification" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="from-var-to-svar-cholesky-identification"><span class="header-section-number">5</span> From VAR to SVAR: Cholesky identification</h2>
+<p>We can define the Covariance Matrix of the residuals as</p>
+<p><span class="math display">\[
+\hat{\Omega} = \frac{\hat{e}\hat{e'}}{n-Kp-1}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>T <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dta)<span class="sc">-</span>k<span class="sc">*</span>p<span class="sc">-</span>k<span class="sc">-</span>p <span class="co"># -p lags for n variables, -k constants, -p initially discarded observations</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>err <span class="ot">&lt;-</span> f_VAR_output<span class="sc">$</span>err</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>omega  <span class="ot">&lt;-</span> (<span class="fu">t</span>(err)<span class="sc">%*%</span> err)<span class="sc">/</span>T</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Omega Matrix"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Omega Matrix"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>omega</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           IPgr        infl         FFR
+IPgr 0.44521335 0.001381010 0.069136053
+infl 0.00138101 0.049137558 0.007039618
+FFR  0.06913605 0.007039618 0.256137692</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(omega))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Cholesky of Omega"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Cholesky of Omega"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>S</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            IPgr      infl       FFR
+IPgr 0.667243096 0.0000000 0.0000000
+infl 0.002069725 0.2216603 0.0000000
+FFR  0.103614491 0.0307911 0.4944225</code></pre>
+</div>
+</div>
+<p>Now, it is easy to identify the shocks just post multiplying the S matrix</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(hor, k, k)) </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>hor) { <span class="co">#This loop lags and concatenates the matrix</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  D[i, ,]<span class="ot">&lt;-</span> C[i, ,]<span class="sc">%*%</span>S   </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>D_Chol <span class="ot">&lt;-</span> <span class="fu">array</span>( D, <span class="at">dim =</span><span class="fu">c</span>(hor,k<span class="sc">*</span>k))  <span class="co">#Reshape the matrix </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Where each column of the matrix D_Chol is an identified IRF. That we can easily plot the matrix in a simple loop .</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting the IRF</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>names_plot_title_i <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">names</span>(dta),<span class="dv">1</span>, <span class="at">each=</span><span class="dv">3</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>names_plot_title <span class="ot">&lt;-</span> <span class="fu">rep.int</span>(<span class="fu">names</span>(dta),<span class="dv">3</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))  <span class="co"># 3 rows and 2 columns</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>j<span class="ot">&lt;-</span><span class="dv">1</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(k<span class="sc">*</span>k)) { <span class="co">#This loop lags and concatenates the matrix</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  p_title <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Shock from "</span> , names_plot_title_i[i], <span class="st">" to "</span> , names_plot_title[j])</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>),D_Chol[,i], <span class="at">type=</span><span class="st">"l"</span> , <span class="at">main =</span> p_title, <span class="at">ylab=</span><span class="st">"Response"</span> , <span class="at">xlab=</span><span class="st">"Horizon"</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  j<span class="ot">&lt;-</span> j<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, it would be interesting to have some confidence intervals of our estimations. Because many shocks are pretty close to zero. To do so, we have to bootstrap the residuals.</p>
+</section>
+<section id="bootstrapping-the-residuals" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="bootstrapping-the-residuals"><span class="header-section-number">6</span> Bootstrapping the residuals</h2>
+<ol type="1">
+<li><p>Fix the first N × p observations of your data set.</p></li>
+<li><p>Estimate the VAR(p) on the original data, save the residuals and the coefficients. This is, save the matrices A and u in the case of the VAR(1) with two variables.</p>
+<p><span class="math display">\[
+A_{1}=\left[\begin{array}{cc}\alpha_{11} &amp; \alpha_{12} \\\alpha_{21} &amp; \alpha_{22}\end{array}\right] \;,   {\bf{u}}_{t}=\left[\begin{array}{c}u_{1,t} \\u_{2,t}\end{array}\right]
+\]</span></p></li>
+</ol>
+<!-- -->
+<ol start="3" type="1">
+<li><p>Initialize the outer loop from 1:iter.</p></li>
+<li><p>Initialize an inner loop from 1:T, where T is the length of the original data set.</p></li>
+<li><p>Simulate a data sequence of dimension T × N using the original coefficient estimates and a random sample with replacement from the distribution of the estimated residuals assuming a joint distribution.</p></li>
+<li><p>Save the new sequence only temporally and exit the first inner loop.</p></li>
+<li><p>Estimate a VAR(p) on the new sequence.</p></li>
+<li><p>Initialize another inner loop from 0 to the horizon H of the IRF.</p></li>
+<li><p>Fill in the companion form matrix Fˆ and compute Wold impulse responses up to H</p></li>
+<li><p>Store the IRFs and exit the second inner loop</p></li>
+<li><p>Exit the outer loop.</p></li>
+<li><p>At each horizon and for each shock and variable compute the desired percentile. Typically we use 68% confidence bands, so we need the 84-percentile for the upper bound and the 16-percentile for the lower bound.</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>BootVAR_Chol <span class="ot">&lt;-</span> <span class="cf">function</span>(dta, iter,hor, p, <span class="at">conf=</span><span class="dv">68</span>){</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>n    <span class="ot">&lt;-</span> <span class="fu">ncol</span>(dta)<span class="co">#Number of variables (3)</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>f_VAR_output <span class="ot">&lt;-</span> <span class="fu">f_VAR</span>(dta,<span class="at">p=</span><span class="dv">3</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>pi_hat    <span class="ot">&lt;-</span> f_VAR_output<span class="sc">$</span>pi_hat</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>Y_initial <span class="ot">&lt;-</span> f_VAR_output<span class="sc">$</span>Y_initial</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>err       <span class="ot">&lt;-</span> f_VAR_output<span class="sc">$</span>err</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>T<span class="ot">=</span><span class="fu">nrow</span>(<span class="fu">as.matrix</span>(dta))<span class="sc">-</span><span class="fu">nrow</span>(Y_initial) <span class="co"># Data after losing lags</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>cons <span class="ot">&lt;-</span> <span class="fu">t</span>(pi_hat[<span class="dv">1</span>,])</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>PI   <span class="ot">&lt;-</span> <span class="fu">t</span>(pi_hat[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(pi_hat),])</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>ExtraBigD <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>,<span class="fu">c</span>(hor,n<span class="sc">*</span>n,iter))</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Step 1: Generate a new sample with bootstrap</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iter) { </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  Y_new <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, T,n)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  Y_in  <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">t</span>(<span class="fu">apply</span>(Y_initial, <span class="dv">2</span>, rev)), <span class="at">dim =</span><span class="fu">c</span>(<span class="dv">1</span>,n<span class="sc">*</span>n))</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>T){</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    random_integer <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(<span class="dv">1</span>, <span class="at">min =</span> <span class="dv">1</span>, <span class="at">max =</span> T))      </span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    t_PI <span class="ot">&lt;-</span> <span class="fu">t</span>(PI)</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    Y_new[i,] <span class="ot">&lt;-</span> cons <span class="sc">+</span> Y_in<span class="sc">%*%</span>t_PI <span class="sc">+</span> err[random_integer,]  </span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    Y_in <span class="ot">&lt;-</span><span class="fu">c</span>(Y_new[i,], Y_in[<span class="dv">1</span><span class="sc">:</span>(n<span class="sc">*</span>(p<span class="dv">-1</span>))])</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  Data_new <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Y_initial, Y_new)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">#STEP 2: Estimate VAR(p) with new sample and obtain IRF:</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  f_VAR_output <span class="ot">&lt;-</span> <span class="fu">f_VAR</span>(Data_new,<span class="at">p=</span><span class="dv">3</span>)</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  pi_hat_c    <span class="ot">&lt;-</span> f_VAR_output<span class="sc">$</span>pi_hat</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>  err_c       <span class="ot">&lt;-</span> f_VAR_output<span class="sc">$</span>err</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>  A    <span class="ot">&lt;-</span> <span class="fu">t</span>(pi_hat_c[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(pi_hat),])</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>  Aux  <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">diag</span>(n<span class="sc">*</span>p<span class="sc">-</span>n), <span class="fu">matrix</span>(<span class="dv">0</span>, n<span class="sc">*</span>p<span class="sc">-</span>n,n)) <span class="co">#BigA companion form, np x np matrix</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>  BigA_c <span class="ot">&lt;-</span> <span class="fu">rbind</span>(A, Aux)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>  T <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Data_new)<span class="sc">-</span>n<span class="sc">*</span>p<span class="sc">-</span>n<span class="sc">-</span>p</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>  omega  <span class="ot">&lt;-</span> (<span class="fu">t</span>(err_c)<span class="sc">%*%</span> err_c)<span class="sc">/</span>T</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(omega))</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>  C_c <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(hor, n, n)) </span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>hor) { <span class="co">#This loop lags and concatenates the matrix</span></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>    BigC_c  <span class="ot">&lt;-</span> BigA_c <span class="sc">%^%</span>(i<span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>    C_c[i, ,]<span class="ot">&lt;-</span> BigC_c[<span class="dv">1</span><span class="sc">:</span>n,<span class="dv">1</span><span class="sc">:</span>n]<span class="sc">%*%</span>S  </span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>  C_c_1 <span class="ot">&lt;-</span> <span class="fu">array</span>( C_c, <span class="at">dim =</span><span class="fu">c</span>(hor,n<span class="sc">*</span>n)) </span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>  ExtraBigD[,,j] <span class="ot">&lt;-</span> C_c_1</span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a>}<span class="co">#End of the iteration loop</span></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a><span class="co">#Create bands</span></span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a>LowD <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, hor,n<span class="sc">*</span>n)</span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a>HighD<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, hor,n<span class="sc">*</span>n)</span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a>low_p <span class="ot">&lt;-</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">100</span>)<span class="sc">*</span>(<span class="dv">100</span><span class="sc">-</span>conf)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a>    m_ExtraBigD <span class="ot">&lt;-</span> ExtraBigD[ ,j<span class="sc">+</span>n<span class="sc">*</span>k<span class="sc">-</span>n, ]</span>
+<span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a>    Dmin <span class="ot">&lt;-</span> <span class="fu">rowQuantiles</span>(m_ExtraBigD, <span class="at">probs=</span>low_p) <span class="co">#16th percentile</span></span>
+<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a>    LowD[,j<span class="sc">+</span>n<span class="sc">*</span>k<span class="sc">-</span>n] <span class="ot">&lt;-</span> Dmin; <span class="co">#lower band</span></span>
+<span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a>    Dmax <span class="ot">&lt;-</span> <span class="fu">rowQuantiles</span>(m_ExtraBigD, <span class="at">probs=</span><span class="dv">1</span><span class="sc">-</span>low_p) <span class="co">#84th percentile</span></span>
+<span id="cb18-67"><a href="#cb18-67" aria-hidden="true" tabindex="-1"></a>    HighD[,j<span class="sc">+</span>n<span class="sc">*</span>k<span class="sc">-</span>n]<span class="ot">&lt;-</span> Dmax  <span class="co">#Upper band</span></span>
+<span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-69"><a href="#cb18-69" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-70"><a href="#cb18-70" aria-hidden="true" tabindex="-1"></a><span class="fu">return</span>(<span class="fu">list</span>(<span class="at">HighD =</span> HighD, <span class="at">LowD=</span>LowD))</span>
+<span id="cb18-71"><a href="#cb18-71" aria-hidden="true" tabindex="-1"></a>} <span class="co">#End of function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we have load the function, we are in the situation to plot the IRFs with their interval.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Plotting the IRFs with CI </span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>boot <span class="ot">&lt;-</span> <span class="fu">BootVAR_Chol</span>(dta, <span class="at">iter=</span><span class="dv">25</span>, <span class="at">hor=</span><span class="dv">40</span>, <span class="at">p =</span> <span class="dv">3</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>HighD <span class="ot">&lt;-</span> boot<span class="sc">$</span>HighD</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>LowD  <span class="ot">&lt;-</span> boot<span class="sc">$</span>LowD</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))  <span class="co"># 3 rows and 2 columns</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>j<span class="ot">&lt;-</span><span class="dv">1</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(k<span class="sc">*</span>k)) { <span class="co">#This loop lags and concatenates the matrix</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  p_title <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Shock from "</span> , names_plot_title_i[i], <span class="st">" to "</span> , names_plot_title[j])</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  m_aux <span class="ot">&lt;-</span> <span class="fu">c</span>(D_Chol[,i],LowD[,i],HighD[,i])</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>),D_Chol[,i], <span class="at">type=</span><span class="st">"l"</span> , <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(m_aux),<span class="fu">max</span>(m_aux)) , <span class="at">main =</span> p_title, <span class="at">ylab=</span><span class="st">"Response"</span> , <span class="at">xlab=</span><span class="st">"Horizon"</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>), LowD[,i], <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">type=</span><span class="st">"l"</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>), HighD[,i], <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  j<span class="ot">&lt;-</span> j<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-price-puzzle" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="the-price-puzzle"><span class="header-section-number">7</span> The price puzzle</h2>
+<p>In our Cholesky identification we have assumed that the monetary policy shock has no effects contemporaneously on both inflation and GDP growth. The price puzzle appears in the first column, bottom row in our graph above. A positive shock from the monetary policy (meaning higher policy interest rate) increases at the beginning, rather than decreases the prices! In other words, after a contractionary shock inflation goes up.</p>
+<p>Christiano Eichenbaum and Evans (1998) explain this issue, that was first pointed out by Sims in the following way:</p>
+<p>“Sims (1992) conjectured that prices appeared to rise after certain measures of a contractionary policy shock because those measures were based on specifications of It that did not include information about future inflation that was available to the Fed. Put differently, the conjecture is that policy shocks which are associated with substantial price puzzles are actually confounded with non-policy disturbances that signal future increases in prices.” (CEE 98)</p>
+<p>According to Gambetti (2020) the prize puzzle can be solved (meaning prices drop after a hike in policy rates) by including an index of commodity prices</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/andresmtnezglez\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Andrés Martínez Glez · Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
