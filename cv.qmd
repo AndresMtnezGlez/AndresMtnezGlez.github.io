@@ -4,7 +4,7 @@ description: "CV of Andrés Martínez Glez, economist at AIReF, Madrid."
 toc: true
 ---
 
-[{{< fa file-pdf >}} Download PDF version](cv.pdf){.btn .btn-outline-primary}
+[Download PDF version](cv.pdf){.btn .btn-outline-primary}
 
 ## Current position
 

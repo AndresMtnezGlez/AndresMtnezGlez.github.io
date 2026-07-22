@@ -5,3 +5,5 @@
 /.luarc.json
 *_files/
 /.quarto/
+/docs/
+/_freeze/
