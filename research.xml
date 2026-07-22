@@ -637,6 +637,138 @@ font-style: inherit;">'Posterior predictive distribution for individual height (
   <pubDate>Sun, 30 Apr 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues</title>
+  <dc:creator>Andrés Martínez González</dc:creator>
+  <link>https://andresmtnezglez.github.io/posts/pca-eigenvectors/</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="what-is-pca" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-pca"><span class="header-section-number">1</span> What is PCA?</h2>
+<p>Principal components analysis (PCA) is a technique for reducing the dimensionality of such datasets, increasing interpretability but at the same time minimizing information loss.</p>
+<p>PCA is an: - <strong>Unsupervised approach</strong>: because it involves only a set of features or variables <img src="https://latex.codecogs.com/png.latex?X_1,%20X_2,%20...%20,%20X_p"> and <strong>no</strong> associated response <img src="https://latex.codecogs.com/png.latex?Y"> - <strong>Feature extraction method</strong>: because a new independent variable is extracted as combination of the variables in the dataset.</p>
+<p>It finds a low-dimensional representation of a data set that contains as much as possible of the variation. The idea is that each of the <img src="https://latex.codecogs.com/png.latex?n"> observations lives in <img src="https://latex.codecogs.com/png.latex?p-">dimensional space, but not all of these dimensions are equally interesting. PCA seeks a small number of dimensions that are as interesting as possible, where the concept of interesting is measured by the amount that the observations vary along each dimension.</p>
+<p>The first principal component of a set of features <img src="https://latex.codecogs.com/png.latex?X_1,%20X_2,%20...%20,%20X_p"> is the <em>normalized</em> linear combination of the features that has the largest variance.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AZ_%7B1%7D=%5Cphi_%7B11%7D%20X_%7B1%7D+%5Cphi_%7B21%7D%20X_%7B2%7D+%5Ccdots+%5Cphi_%7Bp%201%7D%20X_%7Bp%7D%0A"></p>
+<p>By normalized, we mean that <img src="https://latex.codecogs.com/png.latex?%5Csum_%7Bj=1%7D%5Ep%20%5Cphi%5E2_%7Bj1%7D%20=1">. We refer to the elements <img src="https://latex.codecogs.com/png.latex?%5Cphi_%7B11%7D,%20...,%20%5Cphi_%7Bp1%7D"> as the <strong>loadings</strong> of the first principal component. Together, the loadings make up the principal component loading vector, <img src="https://latex.codecogs.com/png.latex?%5Cbf%7B%5Cphi%7D%20=(%5Cphi_%7B11%7D,%20...,%20%5Cphi_%7Bp1%7D)%5ET"> We constrain the loadings so that their sum of squares is equal to one, since otherwise setting these elements to be arbitrarily large in absolute value could result in an arbitrarily large variance.</p>
+<p>Given a <img src="https://latex.codecogs.com/png.latex?(n,p)"> data set <img src="https://latex.codecogs.com/png.latex?X"> how do we compute the first principal component? Since we are only interested in variance, we assume that each of the variables in <img src="https://latex.codecogs.com/png.latex?X"> has been centered to have mean zero (that is, the column means of X are zero). We then look for the linear combination of the sample feature values of the form:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Az_%7Bi1%7D=%5Cphi_%7B11%7D%20x_%7Bi1%7D+%5Cphi_%7B21%7D%20x_%7Bi2%7D+%5Ccdots+%5Cphi_%7Bp%201%7D%20x_%7Bip%7D%0A"> That has largest sample variance, subject to the constraint that <img src="https://latex.codecogs.com/png.latex?%5Csum_%7Bj=1%7D%5E%7Bp%7D%20%5Cphi_%7Bj%201%7D%5E%7B2%7D=1">. In other words, the first principal component loading vector solves the optimization problem:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cunderset%7B%5Cphi_%7B11%7D,%20%5Cldots,%20%5Cphi_%7Bp%201%7D%7D%7B%5Coperatorname%7Bmaximize%7D%7D%5Cleft%5C%7B%5Cfrac%7B1%7D%7Bn%7D%20%5Csum_%7Bi=1%7D%5E%7Bn%7D%5Cleft(%5Csum_%7Bj=1%7D%5E%7Bp%7D%20%5Cphi_%7Bj%201%7D%20x_%7Bi%20j%7D%5Cright)%5E%7B2%7D%5Cright%5C%7D%20%5Ctext%20%7B%20subject%20to%20%7D%20%5Csum_%7Bj=1%7D%5E%7Bp%7D%20%5Cphi_%7Bj%201%7D%5E%7B2%7D=1%0A"></p>
+<p>We can rewrite the linear combination of the sample feature values function as <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B1%7D%7Bn%7D%5Csum_%7Bi=1%7D%5En%20z_%7Bi1%7D%5E2"> Since <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B1%7D%7Bn%7D%5Csum_%7Bi=1%7D%5En%20x_%7Bij%7D=%200">, the average of the <img src="https://latex.codecogs.com/png.latex?z_%7B11%7D,%20...%20,%20z_%7Bn1%7D"> will be zero as well. The problem can be solved via an eigendecomposition.</p>
+<section id="steps-to-perform-pca" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="steps-to-perform-pca"><span class="header-section-number">1.1</span> Steps to perform PCA</h3>
+<ol type="1">
+<li>Take your matrix of independent variables or features <img src="https://latex.codecogs.com/png.latex?X">, whose columns are <img src="https://latex.codecogs.com/png.latex?X_1,%20X_2,%20...%20,%20X_p"> and standarize each column or variable. Therefore we would obtain a new centered matrix <img src="https://latex.codecogs.com/png.latex?Z">. Centered would mean that each column has mean zero.</li>
+</ol>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cquad%20Z_1%20=%20%5Cfrac%7BX_1-%5Cmu_1%7D%7B%5Csigma_1%7D%0A"></p>
+<ol type="1">
+<li>Take the matrix <img src="https://latex.codecogs.com/png.latex?Z"> transpose it and multiply the transposed matrix by <img src="https://latex.codecogs.com/png.latex?Z">. This would yield a covariance matrix of <img src="https://latex.codecogs.com/png.latex?Z">.</li>
+</ol>
+<p><img src="https://latex.codecogs.com/png.latex?%0AZ%5ETZ%0A"></p>
+<ol start="2" type="1">
+<li>Calculate the eigenvectors and their corresponding eigenvalues of <img src="https://latex.codecogs.com/png.latex?Z%5ETZ">. This process is the eigendecomposition of <img src="https://latex.codecogs.com/png.latex?Z%5ETZ"> into <img src="https://latex.codecogs.com/png.latex?PDP%5E%7B-1%7D"> where <img src="https://latex.codecogs.com/png.latex?P"> is the matrix of eigenvectors and <img src="https://latex.codecogs.com/png.latex?D"> is the is the <em>diagonal matrix</em> with <strong>eigenvalues</strong> on the diagonal and values of zero everywhere else. The eigenvalues on the diagonal of <img src="https://latex.codecogs.com/png.latex?D"> will be associated with the corresponding column in <img src="https://latex.codecogs.com/png.latex?P">. That is, the first element of <img src="https://latex.codecogs.com/png.latex?D"> is <img src="https://latex.codecogs.com/png.latex?%5Clambda_1"> and the corresponding eigenvector is the first column of <img src="https://latex.codecogs.com/png.latex?P">. This holds for all elements in <img src="https://latex.codecogs.com/png.latex?D"> and their corresponding eigenvectors in <img src="https://latex.codecogs.com/png.latex?P">.. We will always be able to calculate <img src="https://latex.codecogs.com/png.latex?PDP%5E%7B-1%7D"> in this fashion. <strong>Good news</strong>: we can always calculate <img src="https://latex.codecogs.com/png.latex?PDP%5E%7B-1%7D"> in this fashion because <img src="https://latex.codecogs.com/png.latex?Z%5ETZ"> is a symmetric, positive semidefinite matrix.</li>
+<li>Take the eigenvalues <img src="https://latex.codecogs.com/png.latex?%5Clambda_1,%5Clambda_2,%20...,%20%5Clambda_p"> and sort them from largest to smallest. In doing so, sort the eigenvectors in <img src="https://latex.codecogs.com/png.latex?P">. accordingly. (For example, if <img src="https://latex.codecogs.com/png.latex?%5Clambda_2"> is the largest eigenvalue, then take the second column of <img src="https://latex.codecogs.com/png.latex?P"> and place it in the first column position.) Call this sorted matrix of eigenvectors <img src="https://latex.codecogs.com/png.latex?P%5E*">. The columns of <img src="https://latex.codecogs.com/png.latex?P%5E*"> should be the same as the columns of <img src="https://latex.codecogs.com/png.latex?P"> but perhaps in a different order.) <strong>Good news:</strong> these eigenvectors are independent of one another.</li>
+<li>Calculate <img src="https://latex.codecogs.com/png.latex?Z%5E*%20=%20ZP%5E*">. This new matrix, <img src="https://latex.codecogs.com/png.latex?Z%5E*">, is a centered/standardized version of <img src="https://latex.codecogs.com/png.latex?X"> but now each observation is a combination of the original variables, where the weights are determined by the eigenvector. <strong>Good news:</strong> because our eigenvectors in *P** are independent of one another, each column of *Z<strong> is also independent of one another. In other words they are </strong>orthogonal** to every other PC, where orthogonal is fancy math word for perpendicular.</li>
+</ol>
+</section>
+<section id="in-a-nuthsell" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="in-a-nuthsell"><span class="header-section-number">1.2</span> In a nuthsell</h3>
+<p>PCA is a method that brings together: 1. A measure of how each variable is associated with one another. (<strong>Covariance matrix</strong>.) 2. The directions in which our data are dispersed. (<strong>Eigenvectors</strong>.) 3. The relative importance of these different directions. (<strong>Eigenvalues</strong>.)</p>
+<p>PCA combines our predictors and allows us to drop the eigenvectors that are relatively unimportant. Next section would describe these three elements, if your are already familar you can skip it.</p>
+<section id="covariance-matrix" class="level4" data-number="1.2.1">
+<h4 data-number="1.2.1" class="anchored" data-anchor-id="covariance-matrix"><span class="header-section-number">1.2.1</span> 1. Covariance matrix</h4>
+<p><strong>Variance</strong> is a measure of the variability or it simply measures how spread the data set is. Mathematically, it is the average squared deviation from the mean score.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Avar(x)%20=%20%5Cfrac%7B1%7D%7Bn%7D%20%5Csum(x_i-%5Cbar%7Bx%7D)%5E2%0A"></p>
+<p><strong>Covariance</strong> is a measure of the extent to which corresponding elements from two sets of ordered data move in the same direction.</p>
+<p>The variance-covariance matrix or simply covariance matrix <img src="https://latex.codecogs.com/png.latex?C_x"> is obtained</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AC_%7Bx%7D=E%5B(X-E%5BX%5D)(X-E%5BX%5D)%5D=%5Cfrac%7B1%7D%7Bn-1%7D(X-%5Cbar%7BX%7D)(X-%5Cbar%7BX%7D)%5E%7BT%7D%0A"></p>
+<p>Once we have demeaned the matrix <img src="https://latex.codecogs.com/png.latex?X"> sa <img src="https://latex.codecogs.com/png.latex?Z"> we can calculate the <img src="https://latex.codecogs.com/png.latex?C_x"> matrix as the matrix premultiplication of the transpose by the matrix with out being transpose.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AC_x%20=%5Cfrac%7B1%7D%7Bn-1%7D%20Z%5ETZ=%5Cleft(%5Cbegin%7Barray%7D%7Bcccc%7Dz_%7B11%7D%20&amp;%20z_%7B21%7D%20&amp;%20%5Ccdots%20&amp;%20z_%7Bp%201%7D%20%5C%5Cz_%7B12%7D%20&amp;%20z_%7B22%7D%20&amp;%20%5Ccdots%20&amp;%20z_%7Bp%202%7D%20%5C%5C%5Cvdots%20&amp;%20%5Cvdots%20&amp;%20%5Cddots%20&amp;%20%5Cvdots%20%5C%5Cz_%7B1%20n%7D%20&amp;%20z_%7B2%20n%7D%20&amp;%20%5Ccdots%20&amp;%20z_%7Bpn%7D%5Cend%7Barray%7D%5Cright)%5Cleft(%5Cbegin%7Barray%7D%7Bcccc%7Dz_%7B11%7D%20&amp;%20z_%7B12%7D%20&amp;%20%5Ccdots%20&amp;%20z_%7B1%20p%7D%20%5C%5Cz_%7B21%7D%20&amp;%20z_%7B22%7D%20&amp;%20%5Ccdots%20&amp;%20z_%7B2%20p%7D%20%5C%5C%5Cvdots%20&amp;%20%5Cvdots%20&amp;%20%5Cddots%20&amp;%20%5Cvdots%20%5C%5Cz_%7Bn%201%7D%20&amp;%20z_%7Bn%202%7D%20&amp;%20%5Ccdots%20&amp;%20z_%7Bn%20p%7D%5Cend%7Barray%7D%5Cright)%20=%5C%5C=%5Cbegin%7Bbmatrix%7D%0A%5Csum_iz_%7Bi1%7D%5E2%20&amp;%20%5Ccdots&amp;%20%5Csum_iz_%7Bi1%7Dz_%7Bip%7D%20%5C%5C%0A%5Csum_iz_%7Bni%7Dz_%7Bi1%7D%20&amp;%20%5Ccdots&amp;%20%20%5Csum_iz_%7Bin%7D%5E2%0A%5Cend%7Bbmatrix%7D=%20%5Cbegin%7Bbmatrix%7D%0AVar(Z_1)&amp;%20%5Ccdots&amp;%20Cov(Z_%7B1,p%7D)%20%5C%5C%0ACov(Z_%7Bn,1%7D)%20&amp;%20%5Ccdots&amp;%20%20Var(Z_n)%0A%5Cend%7Bbmatrix%7D%0A"></p>
+</section>
+<section id="eigenvectors" class="level4" data-number="1.2.2">
+<h4 data-number="1.2.2" class="anchored" data-anchor-id="eigenvectors"><span class="header-section-number">1.2.2</span> 2. Eigenvectors</h4>
+<p>Eigenvectors are those vectors when a linear transformation is performed on them, then <strong>their directions does not change</strong>.</p>
+<p>Matrices are said to act as functions or ‘transformations’ in the linear space- which means, after applying a transformation to a vector in the linear space, the <em>linearity</em> is maintained.</p>
+<p>Imagine the vector <img src="https://latex.codecogs.com/png.latex?a=%5Cbegin%7Bbmatrix%7D%202%5C%5C2%5Cend%7Bbmatrix%7D"> we can represent it in a coordinate space.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/pca-eigenvectors/img-1.png" class="img-fluid figure-img"></p>
+<figcaption>Vector a in coordinate space</figcaption>
+</figure>
+</div>
+<p>Now imagine the matrix <img src="https://latex.codecogs.com/png.latex?B=%5Cbegin%7Bbmatrix%7D%201&amp;1%5C%5C0&amp;1%5Cend%7Bbmatrix%7D">.If we multiply the matrix and the vector <img src="https://latex.codecogs.com/png.latex?Ba"> we obtain:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0ABa%20=%20%5Cbegin%7Bbmatrix%7D%201&amp;1%5C%5C0&amp;1%5Cend%7Bbmatrix%7D%20%5Cbegin%7Bbmatrix%7D%202%5C%5C2%5Cend%7Bbmatrix%7D%20=%20%5Cbegin%7Bbmatrix%7D%204%5C%5C2%5Cend%7Bbmatrix%7D%0A"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/pca-eigenvectors/img-2.png" class="img-fluid figure-img"></p>
+<figcaption>Result of the transformation Ba</figcaption>
+</figure>
+</div>
+<p>However this matrix multiplication is a changing in basis. In the standard coordinate system, unit vectors <em>i</em> and <em>j</em> are considered the ‘<strong>basis</strong>’ vectors. These standard basis vectors become a way of measuring our system.</p>
+<p>The column vectors of the matrix <img src="https://latex.codecogs.com/png.latex?B"> give the position of the new basis vectors. So the vector <img src="https://latex.codecogs.com/png.latex?a"> =[4,2] ]in the new coordinate system is actually the vector [4,2]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/pca-eigenvectors/img-4.png" class="img-fluid figure-img"></p>
+<figcaption>Change of basis</figcaption>
+</figure>
+</div>
+<p>During a linear transformation, there may exist some vectors that remain on their original span, and are only scaled or shrunk. In other words, <strong>their direction remains <em>unchanged</em>.</strong> Mathematically, igiven a transformation defined by the matrix <img src="https://latex.codecogs.com/png.latex?A"> it is expressed as <img src="https://latex.codecogs.com/png.latex?%0AAv=%5Clambda%20v%0A"> Where <img src="https://latex.codecogs.com/png.latex?%5Clambda"> is the eigenvalue associated to the eigenvector <img src="https://latex.codecogs.com/png.latex?v"> and the matrix A is known as the transformation applied on vector <img src="https://latex.codecogs.com/png.latex?v">. In other words, we can explain teh eigenvector expressed as the Transofmration function:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AT(v)%20=%20%5Clambda%20v%0A"></p>
+<p>Geometrically speaking, we can visualize it in the following way</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/pca-eigenvectors/img-5.png" class="img-fluid figure-img"></p>
+<figcaption>Eigenvector stretched by its eigenvalue</figcaption>
+</figure>
+</div>
+<p>Here, the transformation on vector <em>x</em> stretches it to twice its length. Hence the eigenvalue associated with this transformation is 2. Negative eigenvalues are associated with <em>flipping</em> the vector or reversing the direction of the vector.</p>
+<p>The eigenvector associated to this matrix are <img src="https://latex.codecogs.com/png.latex?%5Cbegin%7Bbmatrix%7D%201%5C%5C0%5Cend%7Bbmatrix%7D"> and <img src="https://latex.codecogs.com/png.latex?%5Cbegin%7Bbmatrix%7D%20-1%5C%5C0%5Cend%7Bbmatrix%7D"> which are the spaces that do not change after applying the transformation. The corresponding <strong>eigenvalue</strong>, is the factor by which the eigenvector is scaled.</p>
+</section>
+<section id="eigenvalues" class="level4" data-number="1.2.3">
+<h4 data-number="1.2.3" class="anchored" data-anchor-id="eigenvalues"><span class="header-section-number">1.2.3</span> 3. Eigenvalues</h4>
+<p>Consider the following matrix and vector:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AA=%5Cbegin%7Bbmatrix%7D%207&amp;-5%5C%5C4&amp;-2%5Cend%7Bbmatrix%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Av=%20%5Cbegin%7Bbmatrix%7D%201%5C%5C1%5Cend%7Bbmatrix%7D%0A"></p>
+<p>Then:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AAv%20=%20%5Cbegin%7Bbmatrix%7D%202%5C%5C2%5Cend%7Bbmatrix%7D%0A"></p>
+<p>This result can be expressed as: <img src="https://latex.codecogs.com/png.latex?2%5Cbegin%7Bbmatrix%7D%201%5C%5C1%5Cend%7Bbmatrix%7D"> or <img src="https://latex.codecogs.com/png.latex?2v"></p>
+<p>Which is actually:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AAv=%5Clambda%20v%0A"></p>
+<p>Where [1,1] is the Eigenvector and <img src="https://latex.codecogs.com/png.latex?%5Clambda=2"> is the eigenvalue.</p>
+<p>This process can be made simplier as:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AAv=%5Clambda%20v%5C%5C%0A%5Crightarrow%20Av-%5Clambda%20v=0%0A%5C%5C%0A%5Crightarrow%20v(A-%5Clambda%20I%20)=0%0A"></p>
+<p>Therefore we need to find:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Adet(A-%5Clambda%20I)=0%0A"></p>
+<p>In our example, adding the values to the matrix A we see:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Adet(%5Cbegin%7Bbmatrix%7D%207&amp;-5%5C%5C4&amp;-2%5Cend%7Bbmatrix%7D-%5Clambda%5Cbegin%7Bbmatrix%7D%201&amp;0%5C%5C0&amp;1%5Cend%7Bbmatrix%7D)=0%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Adet(%5Cbegin%7Bbmatrix%7D%207-%5Clambda&amp;-5%5C%5C4&amp;-2-%5Clambda%5Cend%7Bbmatrix%7D)%20=%200%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A(7-%5Clambda)(-2-%5Clambda)-(-5)(4)=0%5C%5C%0A-14+2%5Clambda-7%5Clambda+%5Clambda%5E2+20=0%5C%5C%0A-5%5Clambda+%5Clambda+6=0%5C%5C%0A(%5Clambda-2)(%5Clambda-3)=0%0A"></p>
+<p>And therefore our solutions are <img src="https://latex.codecogs.com/png.latex?%5Clambda=2"> and <img src="https://latex.codecogs.com/png.latex?%5Clambda=3"></p>
+<p>The eigenvector for the first eigenvalue can be calculated as:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Bbmatrix%7D%207&amp;-5%5C%5C4&amp;-2%5Cend%7Bbmatrix%7D%5Cbegin%7Bbmatrix%7D%20v_1%5C%5Cv_2%5Cend%7Bbmatrix%7D=%202%20%5Cbegin%7Bbmatrix%7D%20v_1%5C%5Cv_2%5Cend%7Bbmatrix%7D%0A"></p>
+<p>Which becomes:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A7v_1-5v_2=2v_1%5C%5C%0A4v_1-2v_2=2v_2%0A"></p>
+<p>And this becomes:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A-5v_2%20=-5v_1%5C%5C%0A4v_1=%204v_2%0A"></p>
+<p>So <img src="https://latex.codecogs.com/png.latex?v_1%20=1"> and <img src="https://latex.codecogs.com/png.latex?v_2%20=1"></p>
+
+
+</section>
+</section>
+</section>
+
+ ]]></description>
+  <category>PCA</category>
+  <category>dimensionality reduction</category>
+  <category>linear algebra</category>
+  <category>eigenvectors</category>
+  <category>statistics</category>
+  <guid>https://andresmtnezglez.github.io/posts/pca-eigenvectors/</guid>
+  <pubDate>Thu, 25 Nov 2021 23:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Replicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R</title>
   <dc:creator>Andrés Martínez González</dc:creator>
   <link>https://andresmtnezglez.github.io/posts/favar-bernanke-boivin-eliasz/</link>

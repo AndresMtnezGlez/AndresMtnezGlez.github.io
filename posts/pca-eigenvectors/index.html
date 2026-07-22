@@ -6,9 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Technical notes and code on VAR models, time-series econometrics, and applied macroeconomics by Andrés Martínez Glez.">
+<meta name="author" content="Andrés Martínez González">
+<meta name="dcterms.date" content="2021-11-26">
+<meta name="description" content="An introduction to principal component analysis (PCA), deriving the first principal component as a constrained variance-maximisation problem and explaining the three building blocks it rests on: the covariance matrix, eigenvectors, and eigenvalues, with worked numerical examples.">
 
-<title>Research &amp; Notes – Andrés Martínez Glez</title>
+<title>An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues – Andrés Martínez Glez</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,26 +26,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./favicon.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,35 +71,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <script type="application/ld+json">
 
 {
@@ -208,13 +179,19 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Andrés Martínez Glez" href="research.xml" data-external="1"><meta property="og:title" content="Research &amp; Notes – Andrés Martínez Glez">
-<meta property="og:description" content="Technical notes and code on VAR models, time-series econometrics, and applied macroeconomics by Andrés Martínez Glez.">
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues – Andrés Martínez Glez">
+<meta property="og:description" content="An introduction to principal component analysis (PCA), deriving the first principal component as a constrained variance-maximisation problem and explaining the three building blocks it rests on: the covariance matrix, eigenvectors, and eigenvalues, with worked numerical examples.">
+<meta property="og:image" content="https://andresmtnezglez.github.io/posts/pca-eigenvectors/img-1.png">
 <meta property="og:site_name" content="Andrés Martínez Glez">
-<meta name="twitter:title" content="Research &amp; Notes – Andrés Martínez Glez">
-<meta name="twitter:description" content="Technical notes and code on VAR models, time-series econometrics, and applied macroeconomics by Andrés Martínez Glez.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image:height" content="605">
+<meta property="og:image:width" content="761">
+<meta name="twitter:title" content="An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues – Andrés Martínez Glez">
+<meta name="twitter:description" content="An introduction to principal component analysis (PCA), deriving the first principal component as a constrained variance-maximisation problem and explaining the three building blocks it rests on: the covariance matrix, eigenvectors, and eigenvalues, with worked numerical examples.">
+<meta name="twitter:image" content="https://andresmtnezglez.github.io/posts/pca-eigenvectors/img-1.png">
+<meta name="twitter:image-height" content="605">
+<meta name="twitter:image-width" content="761">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -224,7 +201,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Andrés Martínez Glez</span>
     </a>
   </div>
@@ -235,15 +212,15 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./cv.html"> 
+    <a class="nav-link" href="../../cv.html"> 
 <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./research.html" aria-current="page"> 
+    <a class="nav-link" href="../../research.html"> 
 <span class="menu-text">Research &amp; Notes</span></a>
   </li>  
 </ul>
@@ -275,26 +252,55 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(7)</span></div><div class="category" data-category="QVIoMSk=">AR(1) <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QmF5ZXNpYW4=">Bayesian <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24=">dimensionality reduction <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZWlnZW52ZWN0b3Jz">eigenvectors <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZmFjdG9yJTIwbW9kZWxz">factor models <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RkFWQVI=">FAVAR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R2liYnMlMjBzYW1wbGVy">Gibbs sampler <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW1wdWxzZSUyMHJlc3BvbnNl">impulse response <span class="quarto-category-count">(2)</span></div><div class="category" data-category="bGluZWFyJTIwYWxnZWJyYQ==">linear algebra <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bWFjcm9lY29ub21ldHJpY3M=">macroeconometrics <span class="quarto-category-count">(3)</span></div><div class="category" data-category="TWFya292JTIwY2hhaW5z">Markov chains <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TUNNQw==">MCMC <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bW9uZXRhcnklMjBwb2xpY3k=">monetary policy <span class="quarto-category-count">(2)</span></div><div class="category" data-category="bnVtZXJpY2FsJTIwbWV0aG9kcw==">numerical methods <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UENB">PCA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Ug==">R <span class="quarto-category-count">(6)</span></div><div class="category" data-category="cmVwbGljYXRpb24=">replication <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c2ltdWxhdGlvbg==">simulation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdGlzdGljcw==">statistics <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c3RvY2hhc3RpYyUyMHByb2Nlc3Nlcw==">stochastic processes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U1ZBUg==">SVAR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGF1Y2hlbg==">Tauchen <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGltZSUyMHNlcmllcw==">time series <span class="quarto-category-count">(2)</span></div><div class="category" data-category="VkFS">VAR <span class="quarto-category-count">(4)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-pca" id="toc-what-is-pca" class="nav-link active" data-scroll-target="#what-is-pca"><span class="header-section-number">1</span> What is PCA?</a>
+  <ul class="collapse">
+  <li><a href="#steps-to-perform-pca" id="toc-steps-to-perform-pca" class="nav-link" data-scroll-target="#steps-to-perform-pca"><span class="header-section-number">1.1</span> Steps to perform PCA</a></li>
+  <li><a href="#in-a-nuthsell" id="toc-in-a-nuthsell" class="nav-link" data-scroll-target="#in-a-nuthsell"><span class="header-section-number">1.2</span> In a nuthsell</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Research &amp; Notes</h1>
-</div>
+<h1 class="title">An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">PCA</div>
+    <div class="quarto-category">dimensionality reduction</div>
+    <div class="quarto-category">linear algebra</div>
+    <div class="quarto-category">eigenvectors</div>
+    <div class="quarto-category">statistics</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    Technical notes and code on VAR models, time-series econometrics, and applied macroeconomics by Andrés Martínez Glez.
+    An introduction to principal component analysis (PCA), deriving the first principal component as a constrained variance-maximisation problem and explaining the three building blocks it rests on: the covariance matrix, eigenvectors, and eigenvalues, with worked numerical examples.
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andrés Martínez González </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 26, 2021</p>
+    </div>
+  </div>
   
     
   </div>
@@ -304,234 +310,181 @@ window.Quarto = {
 </header>
 
 
-<p>Technical notes, replications, and code. Source for everything here is on <a href="https://github.com/AndresMtnezGlez">GitHub</a>; older versions of some notes remain on <a href="https://rpubs.com/andresmtnezglez">RPubs</a>.</p>
-
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="VkFSJTJDdGltZSUyMHNlcmllcyUyQ1I=" data-listing-date-sort="1784671200000" data-listing-file-modified-sort="1784709718814" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="14">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/example-var/index.html" class="no-external">Estimating a VAR model in R</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGltZSUyMHNlcmllcw=='); return false;">time series</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
+<section id="what-is-pca" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-pca"><span class="header-section-number">1</span> What is PCA?</h2>
+<p>Principal components analysis (PCA) is a technique for reducing the dimensionality of such datasets, increasing interpretability but at the same time minimizing information loss.</p>
+<p>PCA is an: - <strong>Unsupervised approach</strong>: because it involves only a set of features or variables <span class="math inline">\(X_1, X_2, ... , X_p\)</span> and <strong>no</strong> associated response <span class="math inline">\(Y\)</span> - <strong>Feature extraction method</strong>: because a new independent variable is extracted as combination of the variables in the dataset.</p>
+<p>It finds a low-dimensional representation of a data set that contains as much as possible of the variation. The idea is that each of the <span class="math inline">\(n\)</span> observations lives in <span class="math inline">\(p-\)</span>dimensional space, but not all of these dimensions are equally interesting. PCA seeks a small number of dimensions that are as interesting as possible, where the concept of interesting is measured by the amount that the observations vary along each dimension.</p>
+<p>The first principal component of a set of features <span class="math inline">\(X_1, X_2, ... , X_p\)</span> is the <em>normalized</em> linear combination of the features that has the largest variance.</p>
+<p><span class="math display">\[
+Z_{1}=\phi_{11} X_{1}+\phi_{21} X_{2}+\cdots+\phi_{p 1} X_{p}
+\]</span></p>
+<p>By normalized, we mean that <span class="math inline">\(\sum_{j=1}^p \phi^2_{j1} =1\)</span>. We refer to the elements <span class="math inline">\(\phi_{11}, ..., \phi_{p1}\)</span> as the <strong>loadings</strong> of the first principal component. Together, the loadings make up the principal component loading vector, <span class="math inline">\(\bf{\phi} =(\phi_{11}, ..., \phi_{p1})^T\)</span> We constrain the loadings so that their sum of squares is equal to one, since otherwise setting these elements to be arbitrarily large in absolute value could result in an arbitrarily large variance.</p>
+<p>Given a <span class="math inline">\((n,p)\)</span> data set <span class="math inline">\(X\)</span> how do we compute the first principal component? Since we are only interested in variance, we assume that each of the variables in <span class="math inline">\(X\)</span> has been centered to have mean zero (that is, the column means of X are zero). We then look for the linear combination of the sample feature values of the form:</p>
+<p><span class="math display">\[
+z_{i1}=\phi_{11} x_{i1}+\phi_{21} x_{i2}+\cdots+\phi_{p 1} x_{ip}
+\]</span> That has largest sample variance, subject to the constraint that <span class="math inline">\(\sum_{j=1}^{p} \phi_{j 1}^{2}=1\)</span>. In other words, the first principal component loading vector solves the optimization problem:</p>
+<p><span class="math display">\[
+\underset{\phi_{11}, \ldots, \phi_{p 1}}{\operatorname{maximize}}\left\{\frac{1}{n} \sum_{i=1}^{n}\left(\sum_{j=1}^{p} \phi_{j 1} x_{i j}\right)^{2}\right\} \text { subject to } \sum_{j=1}^{p} \phi_{j 1}^{2}=1
+\]</span></p>
+<p>We can rewrite the linear combination of the sample feature values function as <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n z_{i1}^2\)</span> Since <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n x_{ij}= 0\)</span>, the average of the <span class="math inline">\(z_{11}, ... , z_{n1}\)</span> will be zero as well. The problem can be solved via an eigendecomposition.</p>
+<section id="steps-to-perform-pca" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="steps-to-perform-pca"><span class="header-section-number">1.1</span> Steps to perform PCA</h3>
+<ol type="1">
+<li>Take your matrix of independent variables or features <span class="math inline">\(X\)</span>, whose columns are <span class="math inline">\(X_1, X_2, ... , X_p\)</span> and standarize each column or variable. Therefore we would obtain a new centered matrix <span class="math inline">\(Z\)</span>. Centered would mean that each column has mean zero.</li>
+</ol>
+<p><span class="math display">\[
+\quad Z_1 = \frac{X_1-\mu_1}{\sigma_1}
+\]</span></p>
+<ol type="1">
+<li>Take the matrix <span class="math inline">\(Z\)</span> transpose it and multiply the transposed matrix by <span class="math inline">\(Z\)</span>. This would yield a covariance matrix of <span class="math inline">\(Z\)</span>.</li>
+</ol>
+<p><span class="math display">\[
+Z^TZ
+\]</span></p>
+<ol start="2" type="1">
+<li>Calculate the eigenvectors and their corresponding eigenvalues of <span class="math inline">\(Z^TZ\)</span>. This process is the eigendecomposition of <span class="math inline">\(Z^TZ\)</span> into <span class="math inline">\(PDP^{-1}\)</span> where <span class="math inline">\(P\)</span> is the matrix of eigenvectors and <span class="math inline">\(D\)</span> is the is the <em>diagonal matrix</em> with <strong>eigenvalues</strong> on the diagonal and values of zero everywhere else. The eigenvalues on the diagonal of <span class="math inline">\(D\)</span> will be associated with the corresponding column in <span class="math inline">\(P\)</span>. That is, the first element of <span class="math inline">\(D\)</span> is <span class="math inline">\(\lambda_1\)</span> and the corresponding eigenvector is the first column of <span class="math inline">\(P\)</span>. This holds for all elements in <span class="math inline">\(D\)</span> and their corresponding eigenvectors in <span class="math inline">\(P\)</span>.. We will always be able to calculate <span class="math inline">\(PDP^{-1}\)</span> in this fashion. <strong>Good news</strong>: we can always calculate <span class="math inline">\(PDP^{-1}\)</span> in this fashion because <span class="math inline">\(Z^TZ\)</span> is a symmetric, positive semidefinite matrix.</li>
+<li>Take the eigenvalues <span class="math inline">\(\lambda_1,\lambda_2, ..., \lambda_p\)</span> and sort them from largest to smallest. In doing so, sort the eigenvectors in <span class="math inline">\(P\)</span>. accordingly. (For example, if <span class="math inline">\(\lambda_2\)</span> is the largest eigenvalue, then take the second column of <span class="math inline">\(P\)</span> and place it in the first column position.) Call this sorted matrix of eigenvectors <span class="math inline">\(P^*\)</span>. The columns of <span class="math inline">\(P^*\)</span> should be the same as the columns of <span class="math inline">\(P\)</span> but perhaps in a different order.) <strong>Good news:</strong> these eigenvectors are independent of one another.</li>
+<li>Calculate <span class="math inline">\(Z^* = ZP^*\)</span>. This new matrix, <span class="math inline">\(Z^*\)</span>, is a centered/standardized version of <span class="math inline">\(X\)</span> but now each observation is a combination of the original variables, where the weights are determined by the eigenvector. <strong>Good news:</strong> because our eigenvectors in *P** are independent of one another, each column of *Z<strong> is also independent of one another. In other words they are </strong>orthogonal** to every other PC, where orthogonal is fancy math word for perpendicular.</li>
+</ol>
+</section>
+<section id="in-a-nuthsell" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="in-a-nuthsell"><span class="header-section-number">1.2</span> In a nuthsell</h3>
+<p>PCA is a method that brings together: 1. A measure of how each variable is associated with one another. (<strong>Covariance matrix</strong>.) 2. The directions in which our data are dispersed. (<strong>Eigenvectors</strong>.) 3. The relative importance of these different directions. (<strong>Eigenvalues</strong>.)</p>
+<p>PCA combines our predictors and allows us to drop the eigenvectors that are relatively unimportant. Next section would describe these three elements, if your are already familar you can skip it.</p>
+<section id="covariance-matrix" class="level4" data-number="1.2.1">
+<h4 data-number="1.2.1" class="anchored" data-anchor-id="covariance-matrix"><span class="header-section-number">1.2.1</span> 1. Covariance matrix</h4>
+<p><strong>Variance</strong> is a measure of the variability or it simply measures how spread the data set is. Mathematically, it is the average squared deviation from the mean score.</p>
+<p><span class="math display">\[
+var(x) = \frac{1}{n} \sum(x_i-\bar{x})^2
+\]</span></p>
+<p><strong>Covariance</strong> is a measure of the extent to which corresponding elements from two sets of ordered data move in the same direction.</p>
+<p>The variance-covariance matrix or simply covariance matrix <span class="math inline">\(C_x\)</span> is obtained</p>
+<p><span class="math display">\[
+C_{x}=E[(X-E[X])(X-E[X])]=\frac{1}{n-1}(X-\bar{X})(X-\bar{X})^{T}
+\]</span></p>
+<p>Once we have demeaned the matrix <span class="math inline">\(X\)</span> sa <span class="math inline">\(Z\)</span> we can calculate the <span class="math inline">\(C_x\)</span> matrix as the matrix premultiplication of the transpose by the matrix with out being transpose.</p>
+<p><span class="math display">\[
+C_x =\frac{1}{n-1} Z^TZ=\left(\begin{array}{cccc}z_{11} &amp; z_{21} &amp; \cdots &amp; z_{p 1} \\z_{12} &amp; z_{22} &amp; \cdots &amp; z_{p 2} \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\z_{1 n} &amp; z_{2 n} &amp; \cdots &amp; z_{pn}\end{array}\right)\left(\begin{array}{cccc}z_{11} &amp; z_{12} &amp; \cdots &amp; z_{1 p} \\z_{21} &amp; z_{22} &amp; \cdots &amp; z_{2 p} \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\z_{n 1} &amp; z_{n 2} &amp; \cdots &amp; z_{n p}\end{array}\right) =\\=\begin{bmatrix}
+\sum_iz_{i1}^2 &amp; \cdots&amp; \sum_iz_{i1}z_{ip} \\
+\sum_iz_{ni}z_{i1} &amp; \cdots&amp;  \sum_iz_{in}^2
+\end{bmatrix}= \begin{bmatrix}
+Var(Z_1)&amp; \cdots&amp; Cov(Z_{1,p}) \\
+Cov(Z_{n,1}) &amp; \cdots&amp;  Var(Z_n)
+\end{bmatrix}
+\]</span></p>
+</section>
+<section id="eigenvectors" class="level4" data-number="1.2.2">
+<h4 data-number="1.2.2" class="anchored" data-anchor-id="eigenvectors"><span class="header-section-number">1.2.2</span> 2. Eigenvectors</h4>
+<p>Eigenvectors are those vectors when a linear transformation is performed on them, then <strong>their directions does not change</strong>.</p>
+<p>Matrices are said to act as functions or ‘transformations’ in the linear space- which means, after applying a transformation to a vector in the linear space, the <em>linearity</em> is maintained.</p>
+<p>Imagine the vector <span class="math inline">\(a=\begin{bmatrix} 2\\2\end{bmatrix}\)</span> we can represent it in a coordinate space.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img-1.png" class="img-fluid figure-img"></p>
+<figcaption>Vector a in coordinate space</figcaption>
+</figure>
 </div>
-<div class="delink listing-description"><a href="./posts/example-var/index.html" class="no-external">
-<p>Short description of what this note does — one sentence, it appears in the listing and in search results.</p>
-</a></div>
+<p>Now imagine the matrix <span class="math inline">\(B=\begin{bmatrix} 1&amp;1\\0&amp;1\end{bmatrix}\)</span>.If we multiply the matrix and the vector <span class="math inline">\(Ba\)</span> we obtain:</p>
+<p><span class="math display">\[
+Ba = \begin{bmatrix} 1&amp;1\\0&amp;1\end{bmatrix} \begin{bmatrix} 2\\2\end{bmatrix} = \begin{bmatrix} 4\\2\end{bmatrix}
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img-2.png" class="img-fluid figure-img"></p>
+<figcaption>Result of the transformation Ba</figcaption>
+</figure>
 </div>
-<div class="metadata">
-<a href="./posts/example-var/index.html" class="no-external">
-<div class="listing-date">
-Jul 22, 2026
+<p>However this matrix multiplication is a changing in basis. In the standard coordinate system, unit vectors <em>i</em> and <em>j</em> are considered the ‘<strong>basis</strong>’ vectors. These standard basis vectors become a way of measuring our system.</p>
+<p>The column vectors of the matrix <span class="math inline">\(B\)</span> give the position of the new basis vectors. So the vector <span class="math inline">\(a\)</span> =[4,2] ]in the new coordinate system is actually the vector [4,2]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img-4.png" class="img-fluid figure-img"></p>
+<figcaption>Change of basis</figcaption>
+</figure>
 </div>
-</a>
+<p>During a linear transformation, there may exist some vectors that remain on their original span, and are only scaled or shrunk. In other words, <strong>their direction remains <em>unchanged</em>.</strong> Mathematically, igiven a transformation defined by the matrix <span class="math inline">\(A\)</span> it is expressed as <span class="math display">\[
+Av=\lambda v
+\]</span> Where <span class="math inline">\(\lambda\)</span> is the eigenvalue associated to the eigenvector <span class="math inline">\(v\)</span> and the matrix A is known as the transformation applied on vector <span class="math inline">\(v\)</span>. In other words, we can explain teh eigenvector expressed as the Transofmration function:</p>
+<p><span class="math display">\[
+T(v) = \lambda v
+\]</span></p>
+<p>Geometrically speaking, we can visualize it in the following way</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img-5.png" class="img-fluid figure-img"></p>
+<figcaption>Eigenvector stretched by its eigenvalue</figcaption>
+</figure>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="QmF5ZXNpYW4lMkNNQ01DJTJDR2liYnMlMjBzYW1wbGVyJTJDc2ltdWxhdGlvbiUyQ3N0YXRpc3RpY3MlMkNS" data-listing-date-sort="1682892000000" data-listing-file-modified-sort="1784721049776" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="672">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/gibbs-sampler/index.html" class="no-external">The Gibbs Sampler: Bayesian Estimation of a Normal Model in R</a>
-</h3>
-<div class="listing-categories">
+<p>Here, the transformation on vector <em>x</em> stretches it to twice its length. Hence the eigenvalue associated with this transformation is 2. Negative eigenvalues are associated with <em>flipping</em> the vector or reversing the direction of the vector.</p>
+<p>The eigenvector associated to this matrix are <span class="math inline">\(\begin{bmatrix} 1\\0\end{bmatrix}\)</span> and <span class="math inline">\(\begin{bmatrix} -1\\0\end{bmatrix}\)</span> which are the spaces that do not change after applying the transformation. The corresponding <strong>eigenvalue</strong>, is the factor by which the eigenvector is scaled.</p>
+</section>
+<section id="eigenvalues" class="level4" data-number="1.2.3">
+<h4 data-number="1.2.3" class="anchored" data-anchor-id="eigenvalues"><span class="header-section-number">1.2.3</span> 3. Eigenvalues</h4>
+<p>Consider the following matrix and vector:</p>
+<p><span class="math display">\[
+A=\begin{bmatrix} 7&amp;-5\\4&amp;-2\end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+v= \begin{bmatrix} 1\\1\end{bmatrix}
+\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[
+Av = \begin{bmatrix} 2\\2\end{bmatrix}
+\]</span></p>
+<p>This result can be expressed as: <span class="math inline">\(2\begin{bmatrix} 1\\1\end{bmatrix}\)</span> or <span class="math inline">\(2v\)</span></p>
+<p>Which is actually:</p>
+<p><span class="math display">\[
+Av=\lambda v
+\]</span></p>
+<p>Where [1,1] is the Eigenvector and <span class="math inline">\(\lambda=2\)</span> is the eigenvalue.</p>
+<p>This process can be made simplier as:</p>
+<p><span class="math display">\[
+Av=\lambda v\\
+\rightarrow Av-\lambda v=0
+\\
+\rightarrow v(A-\lambda I )=0
+\]</span></p>
+<p>Therefore we need to find:</p>
+<p><span class="math display">\[
+det(A-\lambda I)=0
+\]</span></p>
+<p>In our example, adding the values to the matrix A we see:</p>
+<p><span class="math display">\[
+det(\begin{bmatrix} 7&amp;-5\\4&amp;-2\end{bmatrix}-\lambda\begin{bmatrix} 1&amp;0\\0&amp;1\end{bmatrix})=0
+\]</span></p>
+<p><span class="math display">\[
+det(\begin{bmatrix} 7-\lambda&amp;-5\\4&amp;-2-\lambda\end{bmatrix}) = 0
+\]</span></p>
+<p><span class="math display">\[
+(7-\lambda)(-2-\lambda)-(-5)(4)=0\\
+-14+2\lambda-7\lambda+\lambda^2+20=0\\
+-5\lambda+\lambda+6=0\\
+(\lambda-2)(\lambda-3)=0
+\]</span></p>
+<p>And therefore our solutions are <span class="math inline">\(\lambda=2\)</span> and <span class="math inline">\(\lambda=3\)</span></p>
+<p>The eigenvector for the first eigenvalue can be calculated as:</p>
+<p><span class="math display">\[
+\begin{bmatrix} 7&amp;-5\\4&amp;-2\end{bmatrix}\begin{bmatrix} v_1\\v_2\end{bmatrix}= 2 \begin{bmatrix} v_1\\v_2\end{bmatrix}
+\]</span></p>
+<p>Which becomes:</p>
+<p><span class="math display">\[
+7v_1-5v_2=2v_1\\
+4v_1-2v_2=2v_2
+\]</span></p>
+<p>And this becomes:</p>
+<p><span class="math display">\[
+-5v_2 =-5v_1\\
+4v_1= 4v_2
+\]</span></p>
+<p>So <span class="math inline">\(v_1 =1\)</span> and <span class="math inline">\(v_2 =1\)</span></p>
 
-<div class="listing-category" onclick="window.quartoListingCategory('QmF5ZXNpYW4='); return false;">Bayesian</div>
 
-<div class="listing-category" onclick="window.quartoListingCategory('TUNNQw=='); return false;">MCMC</div>
+</section>
+</section>
+</section>
 
-<div class="listing-category" onclick="window.quartoListingCategory('R2liYnMlMjBzYW1wbGVy'); return false;">Gibbs sampler</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c2ltdWxhdGlvbg=='); return false;">simulation</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/gibbs-sampler/index.html" class="no-external">
-<p>An introduction to the Gibbs sampler, an MCMC method for Bayesian estimation when analytical solutions are not available. Derives the conditional posteriors for a normal model with unknown mean and precision, implements the algorithm in R, and applies it to the Howell height data.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/gibbs-sampler/index.html" class="no-external">
-<div class="listing-date">
-May 1, 2023
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="UENBJTJDZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24lMkNsaW5lYXIlMjBhbGdlYnJhJTJDZWlnZW52ZWN0b3JzJTJDc3RhdGlzdGljcw==" data-listing-date-sort="1637881200000" data-listing-file-modified-sort="1784721500553" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1381">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/pca-eigenvectors/index.html" class="no-external">An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('UENB'); return false;">PCA</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24='); return false;">dimensionality reduction</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bGluZWFyJTIwYWxnZWJyYQ=='); return false;">linear algebra</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZWlnZW52ZWN0b3Jz'); return false;">eigenvectors</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/pca-eigenvectors/index.html" class="no-external">
-<p>An introduction to principal component analysis (PCA), deriving the first principal component as a constrained variance-maximisation problem and explaining the three building blocks it rests on: the covariance matrix, eigenvectors, and eigenvalues, with worked numerical examples.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/pca-eigenvectors/index.html" class="no-external">
-<div class="listing-date">
-Nov 26, 2021
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="RkFWQVIlMkNWQVIlMkNmYWN0b3IlMjBtb2RlbHMlMkNtb25ldGFyeSUyMHBvbGljeSUyQ21hY3JvZWNvbm9tZXRyaWNzJTJDcmVwbGljYXRpb24lMkNS" data-listing-date-sort="1615590000000" data-listing-file-modified-sort="1784714097216" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1488">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/favar-bernanke-boivin-eliasz/index.html" class="no-external">Replicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('RkFWQVI='); return false;">FAVAR</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZmFjdG9yJTIwbW9kZWxz'); return false;">factor models</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9uZXRhcnklMjBwb2xpY3k='); return false;">monetary policy</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm9lY29ub21ldHJpY3M='); return false;">macroeconometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cmVwbGljYXRpb24='); return false;">replication</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/favar-bernanke-boivin-eliasz/index.html" class="no-external">
-<p>A replication in R of Bernanke, Boivin and Eliasz (2005), building a factor-augmented VAR (FAVAR) by extracting principal components from a large macroeconomic dataset and tracing the effects of monetary policy shocks.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/favar-bernanke-boivin-eliasz/index.html" class="no-external">
-<div class="listing-date">
-Mar 13, 2021
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="VkFSJTJDU1ZBUiUyQ21vbmV0YXJ5JTIwcG9saWN5JTJDbWFjcm9lY29ub21ldHJpY3MlMkNpbXB1bHNlJTIwcmVzcG9uc2UlMkNyZXBsaWNhdGlvbiUyQ1I=" data-listing-date-sort="1614985200000" data-listing-file-modified-sort="1784714052016" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1983">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/cee-var-monetary-shocks/index.html" class="no-external">Replicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('U1ZBUg=='); return false;">SVAR</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9uZXRhcnklMjBwb2xpY3k='); return false;">monetary policy</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm9lY29ub21ldHJpY3M='); return false;">macroeconometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('aW1wdWxzZSUyMHJlc3BvbnNl'); return false;">impulse response</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cmVwbGljYXRpb24='); return false;">replication</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/cee-var-monetary-shocks/index.html" class="no-external">
-<p>A step-by-step replication in R of Christiano, Eichenbaum and Evans (1998), estimating a three-variable VAR in output growth, inflation and the Federal Funds Rate, with reduced-form SUR estimation, recursive identification and impulse response functions to a monetary policy shock.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/cee-var-monetary-shocks/index.html" class="no-external">
-<div class="listing-date">
-Mar 6, 2021
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="TWFya292JTIwY2hhaW5zJTJDc3RvY2hhc3RpYyUyMHByb2Nlc3NlcyUyQ1RhdWNoZW4lMkNBUigxKSUyQ251bWVyaWNhbCUyMG1ldGhvZHMlMkNS" data-listing-date-sort="1605826800000" data-listing-file-modified-sort="1784714627402" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3020">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/markov-chains-tauchen/index.html" class="no-external">A Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWFya292JTIwY2hhaW5z'); return false;">Markov chains</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3RvY2hhc3RpYyUyMHByb2Nlc3Nlcw=='); return false;">stochastic processes</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGF1Y2hlbg=='); return false;">Tauchen</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QVIoMSk='); return false;">AR(1)</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bnVtZXJpY2FsJTIwbWV0aG9kcw=='); return false;">numerical methods</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/markov-chains-tauchen/index.html" class="no-external">
-<p>Notes on discrete-time Markov chains in R, covering transition probabilities, n-step transition matrices, stationary distributions, estimating a transition matrix from data, and discretising an AR(1) process with the Tauchen method.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/markov-chains-tauchen/index.html" class="no-external">
-<div class="listing-date">
-Nov 20, 2020
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="VkFSJTJDdGltZSUyMHNlcmllcyUyQ21hY3JvZWNvbm9tZXRyaWNzJTJDaW1wdWxzZSUyMHJlc3BvbnNlJTJDUg==" data-listing-date-sort="1605222000000" data-listing-file-modified-sort="1784713417653" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2664">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/var-notebook/index.html" class="no-external">A Notebook on VAR Models: Wold Representation, Impulse Response Functions and Identification</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGltZSUyMHNlcmllcw=='); return false;">time series</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm9lY29ub21ldHJpY3M='); return false;">macroeconometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('aW1wdWxzZSUyMHJlc3BvbnNl'); return false;">impulse response</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/var-notebook/index.html" class="no-external">
-<p>Lecture-style notes deriving the vector moving average (Wold) representation of a VAR, structural identification via Cholesky decomposition, and impulse response functions, with worked examples in R using the vars package.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/var-notebook/index.html" class="no-external">
-<div class="listing-date">
-Nov 13, 2020
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
