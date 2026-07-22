@@ -1,0 +1,46 @@
+---
+title: "Curriculum Vitae"
+description: "CV of Andrés Martínez Glez, economist at AIReF, Madrid."
+toc: true
+---
+
+[{{< fa file-pdf >}} Download PDF version](cv.pdf){.btn .btn-outline-primary}
+
+## Current position
+
+**Economist**, Autoridad Independiente de Responsabilidad Fiscal (AIReF) — Madrid, Spain
+*[Start year] – present*
+
+Quantitative economic research and institutional policy analysis on fiscal rules, macroeconomic forecast endorsement, labour market impacts, and long-term growth modelling.
+
+- Lead, project on external reviews of IFIs — Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI)
+- [Add 2–4 more bullets: reports authored, models built, files owned]
+
+## Education
+
+**MSc in Economics** — [Institution], [Year]
+Thesis: *[Title]*
+
+**BSc in Economics** — [Institution], [Year]
+
+## Selected work
+
+- **[Report / analysis title]** — [one line on what it did and the method]
+- **Long-term growth model (R)** — implementation of the European Commission's EUCAM methodology
+- **[Royal Decree analysis]** — interrupted time-series analysis of the effect on Social Security affiliation
+
+See [Research & Notes](research.qmd) for code and technical write-ups.
+
+## Skills
+
+**Econometrics** — time series, VAR/SVAR, forecasting, interrupted time series, panel methods
+**Software** — R (tidyverse, data.table, vars, forecast), Quarto/R Markdown, Git, [add Stata/MATLAB/Python if relevant]
+**Languages** — Spanish (native), English ([level]), [others]
+
+## Presentations & professional activity
+
+- [Item]
+
+## Contact
+
+[YOUR@EMAIL](mailto:YOUR@EMAIL) · [GitHub](https://github.com/AndresMtnezGlez) · [LinkedIn](https://www.linkedin.com/in/YOUR-LINKEDIN)

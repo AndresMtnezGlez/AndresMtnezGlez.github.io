@@ -1,0 +1,41 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Andrés Martínez Glez"
+  site-url: "https://andresmtnezglez.github.io"
+  description: "Economist at AIReF (Spanish Independent Authority for Fiscal Responsibility). Fiscal governance, macroeconometrics, VAR models, and long-term growth."
+  favicon: favicon.png
+  open-graph: true
+  twitter-card: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: cv.qmd
+        text: CV
+      - href: research.qmd
+        text: Research & Notes
+    right:
+      - icon: github
+        href: https://github.com/AndresMtnezGlez
+        aria-label: GitHub
+      - icon: linkedin
+        href: https://www.linkedin.com/in/YOUR-LINKEDIN
+        aria-label: LinkedIn
+      - icon: envelope
+        href: mailto:YOUR@EMAIL
+        aria-label: Email
+  page-footer:
+    center: "© 2026 Andrés Martínez Glez · Built with [Quarto](https://quarto.org)"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    include-in-header: schema.html
+
+execute:
+  freeze: auto

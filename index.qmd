@@ -1,0 +1,41 @@
+---
+title: "Andrés Martínez Glez"
+subtitle: "Economist · AIReF · Madrid"
+image: profile.jpg
+about:
+  template: trestles
+  image-width: 12em
+  image-shape: rounded
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/AndresMtnezGlez
+    - icon: file-earmark-text
+      text: RPubs
+      href: https://rpubs.com/andresmtnezglez
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/YOUR-LINKEDIN
+    - icon: envelope
+      text: Email
+      href: mailto:YOUR@EMAIL
+---
+
+I am an economist at the **Autoridad Independiente de Responsabilidad Fiscal (AIReF)**, Spain's independent fiscal institution, based in Madrid.
+
+My work sits at the intersection of applied fiscal policy, econometrics, and institutional analysis. I work on EU and Spanish fiscal governance — the net expenditure path, the control account, and the reformed economic governance framework — as well as macroeconomic forecast endorsements, long-term growth modelling, and the labour-market effects of regulatory reform.
+
+I currently lead the project on external reviews of independent fiscal institutions within the Economic Governance Reform Working Group of the Network of EU Independent Fiscal Institutions (EUNIFI).
+
+Most of my applied work is in **R**: time-series and VAR estimation, forecasting, and reproducible reporting.
+
+::: {.callout-note appearance="simple"}
+Views expressed on this site are my own and do not represent those of AIReF.
+:::
+
+## Research interests
+
+- EU fiscal governance and the reformed fiscal rules
+- Macroeconometrics: VAR and structural VAR models, time-series forecasting
+- Long-term growth and potential output modelling
+- Labour market and social security microdata analysis

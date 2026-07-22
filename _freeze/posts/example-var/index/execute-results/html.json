@@ -1,0 +1,15 @@
+{
+  "hash": "7b7f1a7c6fddeac43c571e98f72e189f",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Estimating a VAR model in R\"\ndescription: \"Short description of what this note does — one sentence, it appears in the listing and in search results.\"\nauthor: \"Andrés Martínez Glez\"\ndate: \"2026-07-22\"\ncategories: [VAR, time series, R]\n---\n\n## Motivation\n\n[Text]\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(vars)\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'vars' was built under R version 4.5.3\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'strucchange' was built under R version 4.5.3\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'zoo' was built under R version 4.5.2\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'sandwich' was built under R version 4.5.2\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'urca' was built under R version 4.5.3\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'lmtest' was built under R version 4.5.3\n```\n\n\n:::\n:::\n\n\n[Your existing R chunks paste in unchanged from the .Rmd]",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

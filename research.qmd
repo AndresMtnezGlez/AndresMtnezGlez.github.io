@@ -1,0 +1,13 @@
+---
+title: "Research & Notes"
+description: "Technical notes and code on VAR models, time-series econometrics, and applied macroeconomics by Andrés Martínez Glez."
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: true
+  fields: [date, title, description, categories]
+  feed: true
+---
+
+Technical notes, replications, and code. Source for everything here is on [GitHub](https://github.com/AndresMtnezGlez); older versions of some notes remain on [RPubs](https://rpubs.com/andresmtnezglez).

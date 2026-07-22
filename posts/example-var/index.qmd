@@ -1,0 +1,19 @@
+---
+title: "Estimating a VAR model in R"
+description: "Short description of what this note does — one sentence, it appears in the listing and in search results."
+author: "Andrés Martínez Glez"
+date: "2026-07-22"
+categories: [VAR, time series, R]
+---
+
+## Motivation
+
+[Text]
+
+```{r}
+#| label: setup
+#| message: false
+library(vars)
+```
+
+[Your existing R chunks paste in unchanged from the .Rmd]
