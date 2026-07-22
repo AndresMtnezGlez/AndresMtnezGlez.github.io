@@ -1,0 +1,183 @@
+---
+title: "The Gibbs Sampler: Bayesian Estimation of a Normal Model in R"
+description: "An introduction to the Gibbs sampler, an MCMC method for Bayesian estimation when analytical solutions are not available. Derives the conditional posteriors for a normal model with unknown mean and precision, implements the algorithm in R, and applies it to the Howell height data."
+author: "Andrés Martínez González"
+date: "2023-05-01"
+categories: [Bayesian, MCMC, Gibbs sampler, simulation, statistics, R]
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+library(ggplot2)
+```
+
+## Introduction
+
+Gibbs sampler is an example of the Markov Chain - Monte Carlo (MCMC) technique used to estimate Bayesian models when analytical solution is not feasible.
+
+Prior distributions reflect your knowledge of the phenomenon prior to the experiment. They are part of the model. Initial values are part of the solution (MCMC algorithm) and tell the algorithm where to start looking for the posterior distribution. Initial values can be based on the data. The prior distributions cannot.
+
+## Theory
+
+Let $y_1,...,y_n$ be an i.i.d. sample from a normal distribution with unknown mean and unknown precision (inverse variance) :
+
+$$
+y_i|\mu,\tau \sim N(\mu,\tau)
+$$
+
+For the conjugate priors
+
+$$
+\mu \sim N(\mu_0,\tau_0)
+$$
+
+and
+
+$$
+\tau \sim Gamma(a,b)
+$$
+
+the conditional posterior distributions are:
+
+$$
+\mu|\tau,y \sim N\left( \frac{n\bar{y}\tau+\mu_0\tau_0}{n\tau+\tau_0}, n\tau+\tau_0 \right)
+$$
+
+and
+
+$$
+\tau|\mu,y \sim Gamma\left(a+n/2,b+\frac{1}{2}\sum_i(y_i-\mu)^2\right)
+$$
+
+respectively.
+
+## The Algorithm
+
+Now, let's implement the Gibbs sampler. Based on the above result, it should go as follows:
+- Step 1: assign some starting values $\mu^{\ast}$ and $\tau^{\ast}$ to the parameters of interest.
+- Step 2: Given $\tau = \tau^{\ast}$, sample the new value of $\mu^{\ast}$ from a normal distribution with mean $\frac{n\bar{y}\tau^{\ast}+\mu_0\tau_0}{n\tau^{\ast}+\tau_0}$and precision (inverse variance) $n\tau^{\ast}+\tau_0$.
+- Step 3: Given $\mu=\mu^{\ast}$, sample the new value of $\tau^{\ast}$ from a gamma distribution with parameters $a+n/2$ and $\frac{n\bar{y}\tau^{\ast}+\mu_0\tau_0}{n\tau^{\ast}+\tau_0}$.
+- Repeat Steps 2 and 3 many times.
+
+It is always worth it to write our your algorithm, as I have done above, before getting down to code.
+
+## The Code
+
+```{r}
+gibbs.normal <- function(y,mu0,tau0,a,b,Niter=10^3){
+ 
+n <- length(y)
+ 
+# preparing the vectors to store the sampled values
+mu.sample <- tau.sample <- numeric(Niter)
+
+# assigning starting values
+mu <- mean(y)
+tau <- 1/var(y)
+
+for(i in 1:Niter){
+ 
+  mu <- mu.sample[i] <- rnorm(1,
+                              (sum(y)*tau+mu0*tau0)/(n*tau+tau0),
+ 1/sqrt(n*tau+tau0))
+ 
+  tau <- tau.sample[i] <- rgamma(1,
+                                 a+n/2, 
+                                 b + .5*sum((y-mu.sample[i])^2))
+} 
+
+return(list(mu=mu.sample,tau=tau.sample))
+}
+```
+
+## Example
+
+Let's take a look at the anthropological data collected by Prof. Nancy Howell. You can see it has four variables: height (cm), weight (kg), age (years) and the variable `male` which equals 1 for a male and 0 for a female. Let's concentrate on adult heights only (and use a somewhat arbitrary cut-off point of 18 years of age):
+
+```{r}
+d <- read.csv("https://raw.githubusercontent.com/rmcelreath/rethinking/master/data/Howell1.csv", sep = ";")
+
+d.adult <- d[d$age >= 18,]
+
+ggplot(data=d.adult,aes(x=height))+
+ geom_density(aes(group=male,fill=male), alpha=.8)
+```
+
+We can see that both distributions are approximately normal. Both differ, men tend to be taller than women. We would like to propose a model able to generate these data.
+
+Let $x_i$ be the recorded height for individual $i$ : 
+$$
+x_i \sim N(\mu,\tau)
+$$
+
+We may know from the general knowledge of humans, that the **average** height in the population (**not** the height of a random individual) is probably cm.
+
+$$
+\mu \sim N(175,1/5^2)
+$$
+
+And since variances are a bit harder to pinpoint, we are going to be lazy and go with an informal prior for :
+
+$$
+\tau \sim Gamma(0.01,0.01)
+$$
+
+Then we can use our function
+
+```{r}
+set.seed(12345)
+# for men:
+  sample.m <- gibbs.normal(y=d.adult$height[d.adult$male==1],
+ mu0=175,tau0=1/5^2,a=0.01,b=0.01,Niter=10^3)
+# for women:
+sample.f <- gibbs.normal(y=d.adult$height[d.adult$male==0],
+ mu0=175,tau0=1/5^2,a=0.01,b=0.01,Niter=10^3)
+```
+
+To get **the posterior probability that a random man will be talled than a random woman**, we need to use the posterior predictive distribution. I.e., given the posterior samples for $\mu$ and $\tau$, generate the new observation from the data-generating (normal) mechanism. This can be compared with our sample mean:
+
+```{r}
+random.man <- rnorm(10^3,sample.m$mu,1/sqrt(sample.m$tau))
+random.woman <- rnorm(10^3,sample.f$mu,1/sqrt(sample.f$tau))
+
+mean(random.man > random.woman)
+```
+
+```{r}
+mean(sample.m$mu > sample.f$mu)
+```
+
+You may also want to plot the posterior distributions to get a better idea of what they look like:
+
+```{r}
+d.out <- data.frame( male=rep(1:0,c(10^3,10^3)),
+ mu=c(sample.m$mu,sample.f$mu),
+ tau=c(sample.m$tau, sample.f$tau),
+ y=c(random.woman,random.man))
+
+ggplot(data=d.out,aes(x=mu))+
+ geom_density(aes(group=male,fill=male),alpha=.8)+
+ ggtitle('Posterior distribution for average population height (mu)')
+```
+
+```{r}
+ggplot(data=d.out,aes(x=y))+
+ geom_density(aes(group=male,fill=male),alpha=.8)+
+ ggtitle('Posterior predictive distribution for individual height (y)')
+```
+
+**Sources:**
+
+Much of the code and text is directly obtained from these two resources
+
+[1] UCx STA02.1ucX University of Canterbury
+
+[2] McElreath, R. (2020). *Statistical rethinking: A Bayesian course with examples in R and Stan*. CRC press.
