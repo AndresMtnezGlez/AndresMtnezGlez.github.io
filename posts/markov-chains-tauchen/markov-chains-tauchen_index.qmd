@@ -1,0 +1,385 @@
+---
+title: "A Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation"
+description: "Notes on discrete-time Markov chains in R, covering transition probabilities, n-step transition matrices, stationary distributions, estimating a transition matrix from data, and discretising an AR(1) process with the Tauchen method."
+author: "Andrés Martínez González"
+date: "2020-11-20"
+categories: [Markov chains, stochastic processes, Tauchen, AR(1), numerical methods, R]
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+---
+
+Our focus is to understand a framework **where the effect of the past on the future is summarized by a state**. This **state** changes over time according to given probabilities.
+
+### Discrete time Markov Chains
+
+We will first consider discrete-time Markov chains, in which the **state** changes at certain discrete time instants, indexed by an integer variable $n$. At each time step $n$, the Markov chain has a **state** denoted by $X_n$ which belongs to a finite set $S$ of possible states called the **state space**. We can assume $S=[1, ...,m]$.
+
+The Markov chain is described in terms of its transition probabilities $p_{ij}$ : whenever the state happens to be $i$, there is probability $p_{ij}$ that the next state is equal to $j$. This can be expressed as:
+
+$$
+p_{ij}= P(X_{n+1}=j  | Xn=i)
+$$
+
+The key assumption underlying Markov processes is that the transition probabilities $p_{ij}$ apply whenever state $i$ is visited, no matter what happened in the past, and no matter how state $i$ was reached.
+
+$$
+P(X_{n+1}=j  | Xn=i, X_{n-1}=i_{n-1}, ..., X_o=i_o)= P(X_{n+1}=j  | Xn=i)=p_{ij}
+$$
+ How to read the expression above? It summarizes the **Markov property**, knowing the current state is enough to know probabilities for future states. The probability of the state tomorrow to be $j$ conditional on to know that the state today is $i$ is exactly the same as the probability of the state tomorrow to be $j$ conditional on knowing the state today and the whole sequence of states form the beginning. To conditional in a further past does not change the probability of the state tomorrow. In an absurd example, the probability of tomorrow being Sunday, is the same if we know that today is Saturday or if we know that today is Saturday and yesterday was Friday. The probability law of the next state $X_{n+1}$ depends on the past only through the value of the present state $X_{n}$
+
+All of the elements of a Markov chain model can be encoded in a transition probability matrix, which is simply a two-dimensional array whose element at the *ith* row and *jth* column is $p_{ij}$:
+
+$$
+\begin{aligned}
+\begin{bmatrix}
+ p_{1,1} & p_{12} & \dots & p_{1,m}\\
+p_{2,1} & p_{22} & \dots & p_{2,m}\\
+\vdots &\vdots &\vdots &\vdots &\\
+p_{m,1} & p_{m2} & \dots & p_{m,m}
+\end{bmatrix}
+\end{aligned}
+$$
+ This is a **stochastic matrix** (or **Markov matrix**) is an mxm square matrix P such that
+1. Each element of P is nonnegative, and
+2. Each row of P sums to one: $\sum_ {j=1}^mp_{ij}=1$
+3. Each row of P can be regarded as a probability mass function over m possible outcomes.
+
+### Example
+
+We can see an example to see how this works. Let’s imagine that we have a worker who, at any given time t is either employed (state 1) or unemployed (state 2).
+- If he is employed in a given month the probability that the next month he will be employed (or unemployed) in the next month will be 0.8 (or 0.2 respectively)
+- If he is unemployed in a given month the probability that the next month he will be employed (or unemployed) in the next month will be 0.6 (or 0.4 respectively)
+
+We assume that these probabilities do not depend on whether he was employed or unemployed in the previous months, so the problem has the typical Markov chain character (the future depends on the past only through the present).
+
+Therefore, if state 1 is employed and state 2 unemployed, the probabilities are:
+
+$$
+p_{11}=0.8 ,\quad p_{12}=0.2 ,\quad p_{21}=0.6 ,\quad p_{22}=0.4 ,
+$$
+
+With a transition probability matrix as:
+
+$$
+\begin{aligned}
+\begin{bmatrix}
+ 0.8 & 0.2 \\
+0.6 & 0.4 
+\end{bmatrix}
+\end{aligned}
+$$
+
+And as a probability graph:
+
+### Distribution dynamics of a Markov Chain
+
+A transition probability matrix can be also seen as the summary of a continuoum of agents. Where all these agents follow the same process. We can think of an economy with infinite many many households and every household has an income process that is described by this Markov chain. How many people in the economy are at given income level? We can collect $p_{i,t}$ in an N-vector $\bf{p_t}$. This vector can be considered the cross-sectional distribution. Obviously, we think now of $p_{i,t}$ as the fraction of the population that is in the state $X_i$ and therefore is natural to assume $\sum_ip_{i,t}=1$
+
+How many people are in time “t” in the state $X_i$? It is possible to relate $p_{i,t}$ to the distribution yesterday $p_{i,t-1}$. We would need to consider all possible states and add the probabilities that from a state different to $X_i$ in “t-1” a household ends in $X_i$ in “t” plus the probability that the fraction of households that are in “t-1” in $X_i$ remain in $X_i$ in “t”.
+
+$$
+p_{i,t} = \sum_jp_{j, t-1} \pi_{j,i}
+$$
+
+The above formula considers all possible states (j) in “t-1”. This is, add all the people in state “j” in “t-1” and multiplies it by the probability that someone in state “j” goes to state “i” and adds everything (summing) for all possible “j”.
+
+In vector notation is:
+
+$$
+\bf{p_t}=\Pi'p_{t-1}
+$$
+
+### n-Step Transition Probabilities
+
+Given a Markov chain model, we can compute the probability of any particular sequence of future states. This is analogous to the use of the multiplication rule in sequential (tree) probability models. If the initial state $X_0$. is given and is known to be equal to some $i_o$., a similar argument yields
+
+$$
+P(X_{1}=i_1, ...., X_{i_n}| X_0=i_0) = p_{i_0i_1}p_{i_1i_2}...p_{i_{n-1}i_n}
+$$
+
+Graphically, a state sequence can be identified with a sequence of arcs in the transition probability graph, and the probability of such a path (given the initial state) is given by the product of the probabilities associated with the arcs traversed by the path. For instance, let’s consider the following matrix of transition and its representation.
+
+What is the probability that if we start in a state 2, we go trhoguth the sequence:
+- Repeat state 2, Repeat State 2, go to state 3, go to state 4.
+
+$$
+P(X_{1}=2,X_{2}=2,X_{3}=3, X_{4}=4 | X_0=2) = p_{22}p_{22}p_{34}p_{34}=(.4)^2(.3)^2
+$$
+
+Note that in order to calculate a probability of this form, in which there is no conditioning on a fixed initial state, we need to specify a probability law for the initial state $X_0$.
+
+Many Markov chain problems require the calculation of the probability law of the state at some future time, conditioned on the current state. This probability law is captured by the n-step transition probabilities, defined by
+
+$$
+r_{ij}(n) = P(X_n = j|X_{0}= i)
+$$
+
+In words, rij (n) is the probability that the state after n time periods will be j, given that the current state is i. It can be calculated using the following basic recursion, known as the **Chapman-Kolmogorov equation**. The n-step transition probabilities can be generated by the recursive formula
+
+$$
+r_{ij}(n)= \sum_{k=1}^mr_{ik}(n-1)p_{kj} \quad for \quad n>1
+$$
+
+Starting with:
+
+$$
+r_{ij}(1)= p_{ij}
+$$
+
+We can view rij (n) as the element at the ith row and jth column of a twodimensional array, called the n-step transition probability matrix.
+
+The Chapman-Kolmogorov equation can be expressed as follows: the matrix of n-step transition probabilities rij (n) is obtained by multiplying the matrix of (n − 1)-step transition probabilities rik(n − 1), with the one-step transition probability matrix. Thus, the n-step transition probability matrix is the nth power of the transition probability matrix. Why?
+
+$$
+p_t = p_{t-1}\Pi \\
+p_t =\color{blue} {p_{t-1}}\color{red}\Pi =\color{blue} { p_{t-2} \Pi} \cdot \color{red}\Pi = \color{blue} { p_{t-3} \Pi\cdot\Pi}\cdot\color{red}\Pi= ...=p_o \Pi^t
+$$
+
+Let’s use our example of unemployment to see where this goes:
+
+```{r}
+library(expm)
+```
+
+```{r}
+mat <- matrix(c(.8, .2, .6, .4), nrow=2, ncol=2)
+mat
+```
+
+```{r}
+mat %^% 2
+```
+
+```{r}
+mat %^% 3
+```
+
+```{r}
+mat %^% 4
+```
+
+```{r}
+mat %^% 5
+```
+
+It seems it converges to .75 and .25 from both ways. Graphically:
+
+We can see that each rij (n) converges to a limit, as n → ∞, and this limit does not depend on the initial state. Thus, each state has a positive “**steady-state**” probability of being occupied at times far into the future. Furthermore, the probability rij (n) depends on the initial state i when n is small, but over time this dependence diminishes. Many (but by no means all) probabilistic models that evolve over time have such a character: after a sufficiently long time, the effect of their initial condition becomes negligible
+
+Classification of the states
+
+The previous example allowed us to graphically see many possible states depending on the chances of once the process has arrived to it, what are the odds of remaining or leaving it. This can be summed as:
+- Let us say that a state j is **accessible** from a state i if for some n, the n-step transition probability rij (n) is positive, i.e., if there is positive probability of reaching j, starting from i, after some number of time periods.
+- We say that i is **recurrent** if for every j that is accessible from i, i is also accessible from j. Thus, from any future state, there is always some probability of returning to i and, given enough time, this is certain to happen.
+- A state is called **transient** if it is not recurrent. After each visit to state i, there is positive probability that the state enters such a j. Given enough time, this will happen, and state i cannot be visited after that. Thus, a transient state will only be visited a finite number of times
+
+Classification of states given the transition probability graph. Starting from state 1, the only accessible state is itself, and so 1 is a recurrent state. States 1, 3, and 4 are accessible from 2, but 2 is not accessible from any of them, so state 2 is transient. States 3 and 4 are accessible only from each other (and themselves), and they are both recurrent
+
+### Stationary distributions
+
+A vector $\bf p^*$ is a stationary (invariant) distribution of the Markov chain if:
+
+$$
+\bf{p^*}=\Pi'p^*
+$$
+
+Where:
+- $\bf p^*$ is an eigenvector $\bf \Pi'$ is an of belonging to the eigenvalue 1.
+- $\bf p^*$ is a left eigenvector of $\bf \Pi$ such as: $\bf{p^*}'=\Pi {p^*}'$
+
+If there are two or more classes of recurrent states, it is clear that the limiting values of the rij (n) must depend on the initial state (visiting j far into the future will depend on whether j is in the same class as the initial state i). We will, therefore, restrict attention to chains involving a single recurrent class, plus possibly some transient states.
+
+### How to calculate the transition matrix
+
+Assume we are given the following table with states A, B, C and D
+
+```{r}
+set.seed(123458)
+dat<-data.frame(replicate(5,sample(c("A", "B", "C","D"), size = 5, replace=TRUE)))
+head(dat)
+```
+
+The first thing to do is to compute for each state, how many times it goes to another state(including it self). For instance, how many times does it go from A to A itself? It is one time in the fifth row and third column. How many times does it goes from A to D? It is three times, in the second, fourth and fifth row.
+
+Once we have this matrix (tt in our example) with the count, the probabilities are straightforward. Is just the division of each entry by the sum of each row. For instance, The probability of going from state A to state A is the division of how many times we have gone from A to A (which is 1) between how many times we have gone from A to anywhere (4) therefore is 0.25
+
+```{r}
+    X <- as.matrix(dat)                          #From dataframe to matrix
+    tt <- table( c(X[,-ncol(X)]), c(X[,-1]) )    #Counts each transition
+    tt                                           #Displays how many times
+```
+
+```{r}
+    tt_m <- tt / rowSums(tt)                     #Compute the probability. Dividing                                                  #By the sum of the row. 
+    round(tt_m,2)
+```
+
+### An applied example using AR(1) processes
+
+This follows the work of the course of Computational Methods of Professor Michael Reiter (BGSE, 2020). It can be shown as a an application of the article “Finite State Markov Chain Apriximations to Univariate and Vector Autoregressions” (Tauchen, 1985). The paper states Ta method for choosing values for the state variables and the transition probabilities so that the resulting finite-state Markov chain mimics closely an underlying continuousvalued autoregression. The motivation for the method is the well-known fact that the statistical properties of many economic time series are captured adequately by VA, after an adjustment for trend.
+
+Let’s suppose we have a AR(1) such as:
+
+$$
+y_t = \lambda y_{t-1} + u_t    \quad u_t \sim N(0,\sigma^2)
+$$
+
+Our objective is to approximate this autoregressive process with a Markov chain. To do so, first we have to discretized the state space. The first step would be to define a in which boundaries we would like our discrete state space to lie. We are interested in a discrete-value process that aproximates the continuous valued process described by $y_t$. A method for selected the discrete values is to select a vector equidistanced from the variance of our process. To do so, let’s find the variance of our $y_t$
+
+$$
+\begin{aligned}
+var(y_t) &= var(\lambda y_{t-1}) + var(u_t)\\
+var(y_t) &= var(\lambda y_{t-1}) + \sigma^2\\
+var(y_t) &= \lambda^2 var(y_{t-1}) + \sigma^2\\
+\end{aligned}
+$$
+
+Given that $var(y_t) = var(y_{t-1})$ we solve to get:
+
+$$
+var(y_t) = \frac{\sigma^2}{1-\lambda^2} \\
+\sigma_y = \sqrt{\frac{\sigma^2}{1-\lambda^2} }
+$$
+
+If we defined our grid as: $\bar{y}_1, \bar{y}_2, ...\bar{y}_N$ then $\bar{y}_N$ can be defined as $\bar{y}_N = m\sigma_y$ and $\bar{y}_1 = -\bar{y}_N$ and all the other elements $...\bar{y}_2, \bar{y}_3, ...\bar{y}_{N-1}...$ are elements of the equispaced interval (or vector) $[\bar{y}_1,\bar{y}_N]$. In particular, the space between (w) each entry will be given by the expression $w=(\bar{y}_N -\bar{y}_1)/N-1$
+
+Now, we can define our discrete state space. This state space is a grid, a vector with entries around the given standard deviation of our AR process. Let’s define a vector with N=11 entries that will characterize this AR(1) process:
+
+$$
+y_t = 0.95 y_{t-1} + u_t    \quad u_t \sim N(0,0.05^2)
+$$
+
+```{r}
+m = 2.5
+lambda = 0.95
+sigma = 0.05
+N = 11
+
+sdv_y = sqrt(sigma^2/(1-lambda^2))
+print(paste0("Standard Deviation of y_t =", sdv_y))
+```
+
+```{r}
+y_max = m*sdv_y                              # upper boundary of state space
+y_min = -y_max                               # upper boundary of state space  
+w = (y_max-y_min)/(N-1)                      # Length of the interval 
+s = seq(from = y_min, to = y_max, by = w )   # The discretized state space
+print("Discrite state space")
+```
+
+```{r}
+s
+```
+
+Now we have to calculate the transition matrix. To do so, let’s decompose the problem in three steps.
+- First, compute the transition probability in the **intremediate states.** Where the function $F(*)$ refers to the CDF of the normal distribution. The rationale for this assignment of the transition probabilities can be understood by considering a random variable of the form $v-\lambda\bar{y}_j|u$ where $\lambda\bar{y}_j$ is fixed and the error is distributed as the error stated above. Then the assignments for $p_{jk}$ make the distribution of $\bar{y}_t$ conditional on $\bar{y}_{t-1}=\bar{y}_j$ be a discrete approximation of the distribution of the random variable $v$. 
+$$
+p_{jk}= P(\bar{y}_k-\frac{w}{2} \leq \lambda\bar{y}_j+ u_t \leq\bar{y}_k+\frac{w}{2}) \\
+=F(\frac{\bar{y}_k-  \lambda\bar{y}_j+\frac{w}{2}}{\sigma}) -F(\frac{\bar{y}_k-  \lambda\bar{y}_j-\frac{w}{2}}{\sigma})
+$$
+
+Following the previous argument, if the partition of the grid is sufficiently fine, then the conditional distribution of $\bar{y}_t$ given $\bar{y}_{t-1}= \bar{y}_j$ will aproximate closely in the sense of weak covergence of that of $y_t$ given ${y}_{t-1}= \lambda\bar{y}_j$
+- Second, compute the transition probability of being in the same state as we started (the first column).
+
+$$
+p_{j1}= F(\frac{\bar{y}_1-  \lambda\bar{y}_j+\frac{w}{2}}{\sigma})
+$$
+
+- Third, compute the transition probability in the $$ (last column).
+
+$$
+p_{jN}= F(\frac{\bar{y}_N-  \lambda\bar{y}_j-\frac{w}{2}}{\sigma})
+$$
+
+Now let’s compute the process. First, we are going to fill the first row of the transition matrix. To do so, let’s fix the index of the row, j, to be equal to 1. We create a transition matrix full of `NA` and apply
+
+```{r}
+set.seed(123458)
+j=1 
+Tran<- matrix(NA, nrow=N, ncol=N)
+
+#Now the probability jumping between intermediate states: 
+
+for (k in 2:(N-1)) {
+      U = s[k]-lambda*s[j]+w/2 #Upper  
+      L = s[k]-lambda*s[j]-w/2 #Lower
+ 
+      Tran[j,k]= pnorm(U, mean=0, sd=sigma) - pnorm(L, mean=5, sd=3)
+}
+print("First step")
+```
+
+```{r}
+Tran[1,]
+```
+
+```{r}
+#Now the probability of remaining in the current state (first column): 
+ 
+      C = s[1]-lambda*s[j]+w/2 #Current
+Tran[j,1]= pnorm(C, mean=0, sd=sigma) 
+print("Second step")
+```
+
+```{r}
+Tran[1,]
+```
+
+```{r}
+#And the probabiilty of the last state (last column): 
+      LS = s[N]-lambda*s[j]+w/2 #Last column
+      Tran[j,N]= 1- pnorm(LS, mean=0, sd=sigma)
+      print("Thrid step")
+```
+
+```{r}
+Tran[1,]
+```
+
+Once we have fill the first row, we just need to make the code a little bit more compact iterating over the different rows. This is, letting the row index j freely.
+
+```{r}
+set.seed(123458)
+Tran<- matrix(NA, nrow=N, ncol=N)
+
+for (j in 1:N){
+
+  for (k in 2:(N-1)) {
+      U = s[k]-lambda*s[j]+w/2 #Upper  
+      L = s[k]-lambda*s[j]-w/2 #Lower
+ 
+      Tran[j,k]= pnorm(U, mean=0, sd=sigma) - pnorm(L, mean=0, sd=sigma)
+      }
+
+     #Probability of the first state(first column). 
+      C = s[1]-lambda*s[j]+w/2 #Current
+      Tran[j,1]= pnorm(C, mean=0, sd=sigma) 
+
+      #Probabiilty of the last state (last column): 
+      LS = s[N]-lambda*s[j]-w/2 #Last column
+      Tran[j,N]= 1- pnorm(LS, mean=0, sd=sigma)
+}
+round(Tran,2)
+```
+
+To double check our aproximation we can make use of the R package `Rtauchen`
+
+```{r}
+library(Rtauchen)
+set.seed(123458)
+Rt_grid = Tgrid(ne = 11, ssigma_eps =  0.05, llambda_eps = 0.95,m =  2.5)
+Rt_grid #Grid from the package
+```
+
+```{r}
+s       #Grid that we have create above
+```
+
+```{r}
+results = Rtauchen(ne = 11, ssigma_eps =  0.05, llambda_eps = 0.95,m =  2.5)
+round(results,2)
+```

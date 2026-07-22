@@ -1,0 +1,180 @@
+---
+title: "Replicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R"
+description: "A replication in R of Bernanke, Boivin and Eliasz (2005), building a factor-augmented VAR (FAVAR) by extracting principal components from a large macroeconomic dataset and tracing the effects of monetary policy shocks."
+author: "Andrés Martínez González"
+date: "2021-03-13"
+categories: [FAVAR, VAR, factor models, monetary policy, macroeconometrics, replication, R]
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+---
+
+In this project we will try tro replicate the results of of Bernanke, Boivin and Eliasz (QJE, 2005) in R. This code drinks from the work of Gambetti, Konstantin Boss, Kevin Kotzé Helmut Lütkepohl, and Joao Duarte.
+
+The BBE (2005) suggested augmenting standard small scale vector autoregression (VAR) models by adding unobserved latent factors estimated from a large macro dataset to include additional information in the analysis. They motivated the framework by observing that some economic concepts like output gap, the business cycle stance or inflation sometimes may not be observed without error by the econometrician (and maybe neither by the policy maker). By extracting the relevant information from a large dataset covering the main areas of the economy into factors would address the issue. On the other hand, variables observable in a timely manner and without large errors, could be defined as observed factors and included without transformation into the factor augmented VAR (FAVAR) system.
+
+### Load the libraries and the dataset
+
+As usual, our first step is to load the libraries and the dataset
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+list.of.packages <- c('boot', 'tsDyn', 'vars', 'repr', 'ggplot2', 'dplyr', 'reshape2', 'factoextra', 'svars')
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+sapply(list.of.packages, require, character.only = TRUE)
+data <- read.csv(url('https://github.com/AndresMtnezGlez/heptaomicron/raw/main/datafactor.csv'))
+data_CEE<- read.csv(url("https://github.com/AndresMtnezGlez/heptaomicron/raw/main/ex1data.csv"))
+```
+
+### Scale the data
+
+Dimensionality reduction is about extracting the variables that explain a largest share (leading) of the variance of the dataset. To avoid that units make very stable variables to have non deserved protagonism, we scale the dataset substracting the mean and dividing by the SD with the function `scale()` function.
+
+```{r}
+#Scale the data 
+data_scaled = scale(data, center = TRUE, scale = TRUE)
+#Check if the normalization has worked 
+melt(data_scaled) %>% ggplot(.,aes(x=value)) +
+  geom_density(aes(color=Var2)) +
+  ggtitle("Density plot of all normalized variables") +
+  theme(legend.position = "none")
+```
+
+### A quick receipt for PCA
+
+Let's suppose we have a matrix with several variables in columns. For each one of this variables we have to subtract the mean of the column, which will make it to have zero mean. In addition, we standardize by dividing by the standard deviation. In doin so we would have a normalize (0,1) matrix which we will call $\bar{X}$ (whe have its density plot just above).
+
+Next we transpose our matrix and multiply our original matrix by its transpose. This $\bar{X}' \bar{X}$ is a linear algebra way to obtain the covariance matrix.
+
+The next step is to calculate the eigenvectors and their corresponding eigenvalues of$\bar{X}' \bar{X}$. From a geometric point of view, an eigenvector is a vector whose direction remains unchanged when a linear transformation is applied to it. To picture it mentally, we can imagine a 2x2 matrix, which is composed of two vectors (two directions). If we transform our cartesian axis to make it fit with the directions suggested by the 2x2 matrix, those ray-vectors that remain pointing in the same direction in our cartesian axis and in our new axis (derived by the 2x2 matrix) are the so called eigenvectors.
+
+Therefore, if we assume ν a vector and λ a scalar that satisfies $(\bar{X}' \bar{X})ν = λν$, then λ is called eigenvalue associated with eigenvector ν of A. The eigenvalues of A are roots of the characteristic equation
+
+$$det((\bar{X}' \bar{X})-\lambda I)=0$$ Once we have solve this equation we will have our eigenvalue and vectors. To keep the geometric intuition, the determinant is just the factor by which a square in a Cartesian plane is increased (\>1), reduced (\<1), or flipped (\<0) after applying our 2x2 matrix. The idea is quite the same applying our covariance matrix.
+
+Good, we have our eigenvectors. Now we sort them by the decreasing eigenvalues. Fine, but, how does it relate to time series analysis? A possible representation of the eigenvectors is to assume that each *principal component* is just linear combination of each of the $p$ columns (variables) of the matrix $Z$ such as:
+
+$$
+PCA_1 = \phi_{11}\bar{X}_1 + \phi_{21}\bar{X}_2 + ...+ \phi_{p1}\bar{X}_p 
+$$
+
+Where the $PCA_1$ explains the largest share of the variance and $\phi_1$ is the first principal component loading vector with elements $\phi_{11},\phi_{21},..., \phi_{p1}$. In other words, the PCA give us several vectors (or time series) which are a weighed mean of all the variables and where the weights are designed so the first component explains the largest share of the variance, the second a smaller share and so on. There are two amazing things about PCA. First, it is just linear algebra, so is only about flipping matrices. Second, the PCA's are uncorrelated (orthogonal) to each other, so make a perfect candidate to include them as independent variables in a regression.
+
+Now we use the function `prcomp()` to compute the algebra above and get the eigenvectors. We also plot the percentage of total variation of explained by each PCA. This percentage of variation can be defined as:
+
+$$
+PVE = \frac{\sum^n_{i=1}(\sum^p_{j=1}\phi_{jm}x_{ij})^2}{\sum^p_{j=1}\sum^n_{i=1}x^2_{ij}} 
+$$
+
+```{r}
+pc_all <- prcomp(data_scaled, center=F, scale.=F, rank. = 3) 
+summary(pc_all)
+fviz_eig(pc_all)
+```
+
+As we can see, the first PC explains about the 14.4% of the total variance, the second, the 6.9%, the third the 5.8% and so on. The cumulative variance explained by the first three factors is the 27%.
+
+In addition we can see the factor loading (weights) of each component or dimension as:
+
+```{r}
+res.var <- get_pca_var(pc_all)
+as.data.frame(res.var$contrib) %>% 
+  select(.,1:3) %>% 
+  head(., 10)# Contributions to the PCs
+
+```
+
+### Computing the factors
+
+To compute the factors we just premultiply the four matrix of scaled variables with our three first factor loading which are stored in the matrix $\hat{\Lambda}$. Below we just plot the factors too see how they look.
+
+$$
+\hat{F} = \bar{X} \hat{\Lambda}
+$$
+
+```{r}
+m_X_bar <- as.matrix(data_scaled)
+m_Gamma_alt <- res.var$contrib[,1:3] #Factor loadings
+m_F_hat <- m_X_bar %*% m_Gamma_alt
+aux <- data.frame(time = 1:576,m_F_hat)
+df <- melt(aux, id.vars = 'time', variable.name = 'series')
+ggplot(df, aes(time,value)) + geom_line() + facet_grid(series ~ .)+
+    ggtitle("The three factors") 
+
+
+```
+
+### Estimate the (FA)VAR model
+
+Once we have the the factors we can estimate our (FA)VAR model. There are two type of series, the observable contained in the matrix $Y_t$ and the not observable series, summarized from the matrix $X_t$ into the matrix $F_t$ .
+
+$$
+\begin{align}X_t &= \Lambda F_t + e_t \\ \\\begin{bmatrix} F_t \\ Y_t \end{bmatrix} &= \Psi(L)\begin{bmatrix} F_{t-1} \\ Y_{t-1} \end{bmatrix} + v_t \end{align}
+$$
+
+To estimate the FAVAR model we just join the matrix of factors and the matrix of observable data. To run the model we will make use of the libraries `vars` and `svars`. In doing so we will make a recursive identification with the Cholesky decomposition.
+
+```{r}
+dta_FAVAR <- cbind(m_F_hat, as.matrix(data_CEE))
+var.1 <- VAR(dta_FAVAR, p = 12, type = "const", season = NULL, exog = NULL)
+
+summary(var.1)
+#Identification via Cholesky
+svar.1 <- id.chol(var.1)
+
+
+```
+
+Now, we can plot the IRF's of the selected variables, meaning that we are not interested in the impact or shock from or to a factor to another factor or variable because it does not have any economic interpretation.
+
+```{r}
+#Plot the IRFs 
+irf.svar.1 <- irf(svar.1, n.ahead = 40)
+
+aux <- select(irf.svar.1$irf, 1, 23:25, 29:31, 35:37)
+df_aux <- as.data.frame(aux)
+
+impulse <- melt(df_aux, id = 'V1')
+ggplot(impulse, aes_(x = ~V1, y = ~value)) + geom_line() + geom_hline(yintercept =        0, color = 'red') +
+       facet_wrap(~variable, scales="free_y", labeller = label_parsed) +
+       xlab("Horizon") + ylab("Response") +
+       ggtitle("Selected IRF's from FAVAR(12)")+
+       theme_bw()
+```
+
+We can see that the second row third column partially solves the prize puzzle. To make things more clear, let's replicate Christiano, Eichenbaum and Evans (CEE) (1998) to see the effect of a hike in federal funds to the inflation
+
+```{r}
+#Run the VAR 
+var.2 <- VAR(data_CEE, p = 12, type = "const", season = NULL, exog = NULL)
+#Identification via Cholesky
+svar.2 <- id.chol(var.2)
+#Plot the IRFs 
+irf.svar.1 <- irf(svar.2, n.ahead = 40)
+plot(irf.svar.1, scales = 'free_y')+
+ggtitle("IRF's from SVAR(12)")
+
+
+```
+
+We can see that while in the SVAR(12) the effect of FED Funds' hike in inflation is mainly positive, in the case of the FAVAR(12) is mainly negative so we have partially solved the prize puzzle.
+
+### Bootstrapping
+
+For bootstraping we will need to make use of the moving block bootstrap. In particular we will use the function `mb.boot()` the reason is that there are time dependency in the sampling and we can not ignore that fact.
+
+```{r}
+boot.svar.2 <-  mb.boot(svar.2, n.ahead = 40, nboot = 100)
+plot(boot.svar.2)
+```
+
+As we can see the results in the CEE (1998) are robust to the bootrstraping.
+
+### The Prize Puzzle
+
+According to BBE (2005), central banks and the private sector have information not reflected in the VAR. Therefore, the measurement of policy innovations is likely to be contaminated. In addition, IRFscan be observed only for the included variables, which generally constitute only a small subset of the variables that the researcher and policymaker care about.
+
+The FAVAR method exploits a richer dataset than the VAR(p) model and it summarizes it in a set of factors. By doing so, the different dataset or information contained in the VAR and in the reality reduces profoundly. Adding this factors it allows to solve one of the most concerning puzzles in the empirical literature, the so called *prize puzzle.* With the FAVAR we see a mainly negative response of prices after a hike in the the federal funds rate or the so called policy rate.
