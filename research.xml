@@ -59,6 +59,584 @@ font-style: inherit;">library</span>(vars)</span></code></pre></div>
   <pubDate>Tue, 21 Jul 2026 22:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>The Gibbs Sampler: Bayesian Estimation of a Normal Model in R</title>
+  <dc:creator>Andrés Martínez González</dc:creator>
+  <link>https://andresmtnezglez.github.io/posts/gibbs-sampler/</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span></code></pre></div>
+</div>
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Gibbs sampler is an example of the Markov Chain - Monte Carlo (MCMC) technique used to estimate Bayesian models when analytical solution is not feasible.</p>
+<p>Prior distributions reflect your knowledge of the phenomenon prior to the experiment. They are part of the model. Initial values are part of the solution (MCMC algorithm) and tell the algorithm where to start looking for the posterior distribution. Initial values can be based on the data. The prior distributions cannot.</p>
+</section>
+<section id="theory" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="theory"><span class="header-section-number">2</span> Theory</h2>
+<p>Let <img src="https://latex.codecogs.com/png.latex?y_1,...,y_n"> be an i.i.d. sample from a normal distribution with unknown mean and unknown precision (inverse variance) :</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Ay_i%7C%5Cmu,%5Ctau%20%5Csim%20N(%5Cmu,%5Ctau)%0A"></p>
+<p>For the conjugate priors</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmu%20%5Csim%20N(%5Cmu_0,%5Ctau_0)%0A"></p>
+<p>and</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Ctau%20%5Csim%20Gamma(a,b)%0A"></p>
+<p>the conditional posterior distributions are:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmu%7C%5Ctau,y%20%5Csim%20N%5Cleft(%20%5Cfrac%7Bn%5Cbar%7By%7D%5Ctau+%5Cmu_0%5Ctau_0%7D%7Bn%5Ctau+%5Ctau_0%7D,%20n%5Ctau+%5Ctau_0%20%5Cright)%0A"></p>
+<p>and</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Ctau%7C%5Cmu,y%20%5Csim%20Gamma%5Cleft(a+n/2,b+%5Cfrac%7B1%7D%7B2%7D%5Csum_i(y_i-%5Cmu)%5E2%5Cright)%0A"></p>
+<p>respectively.</p>
+</section>
+<section id="the-algorithm" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-algorithm"><span class="header-section-number">3</span> The Algorithm</h2>
+<p>Now, let’s implement the Gibbs sampler. Based on the above result, it should go as follows: - Step 1: assign some starting values <img src="https://latex.codecogs.com/png.latex?%5Cmu%5E%7B%5Cast%7D"> and <img src="https://latex.codecogs.com/png.latex?%5Ctau%5E%7B%5Cast%7D"> to the parameters of interest. - Step 2: Given <img src="https://latex.codecogs.com/png.latex?%5Ctau%20=%20%5Ctau%5E%7B%5Cast%7D">, sample the new value of <img src="https://latex.codecogs.com/png.latex?%5Cmu%5E%7B%5Cast%7D"> from a normal distribution with mean <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bn%5Cbar%7By%7D%5Ctau%5E%7B%5Cast%7D+%5Cmu_0%5Ctau_0%7D%7Bn%5Ctau%5E%7B%5Cast%7D+%5Ctau_0%7D">and precision (inverse variance) <img src="https://latex.codecogs.com/png.latex?n%5Ctau%5E%7B%5Cast%7D+%5Ctau_0">. - Step 3: Given <img src="https://latex.codecogs.com/png.latex?%5Cmu=%5Cmu%5E%7B%5Cast%7D">, sample the new value of <img src="https://latex.codecogs.com/png.latex?%5Ctau%5E%7B%5Cast%7D"> from a gamma distribution with parameters <img src="https://latex.codecogs.com/png.latex?a+n/2"> and <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bn%5Cbar%7By%7D%5Ctau%5E%7B%5Cast%7D+%5Cmu_0%5Ctau_0%7D%7Bn%5Ctau%5E%7B%5Cast%7D+%5Ctau_0%7D">. - Repeat Steps 2 and 3 many times.</p>
+<p>It is always worth it to write our your algorithm, as I have done above, before getting down to code.</p>
+</section>
+<section id="the-code" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="the-code"><span class="header-section-number">4</span> The Code</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">gibbs.normal <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(y,mu0,tau0,a,b,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Niter=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>){</span>
+<span id="cb2-2"> </span>
+<span id="cb2-3">n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(y)</span>
+<span id="cb2-4"> </span>
+<span id="cb2-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># preparing the vectors to store the sampled values</span></span>
+<span id="cb2-6">mu.sample <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tau.sample <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">numeric</span>(Niter)</span>
+<span id="cb2-7"></span>
+<span id="cb2-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># assigning starting values</span></span>
+<span id="cb2-9">mu <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(y)</span>
+<span id="cb2-10">tau <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">var</span>(y)</span>
+<span id="cb2-11"></span>
+<span id="cb2-12"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span>(i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>Niter){</span>
+<span id="cb2-13"> </span>
+<span id="cb2-14">  mu <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mu.sample[i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb2-15">                              (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(y)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>tau<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span>mu0<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>tau0)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>(n<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>tau<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span>tau0),</span>
+<span id="cb2-16"> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(n<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>tau<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span>tau0))</span>
+<span id="cb2-17"> </span>
+<span id="cb2-18">  tau <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tau.sample[i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rgamma</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb2-19">                                 a<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span>n<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, </span>
+<span id="cb2-20">                                 b <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>((y<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>mu.sample[i])<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span>
+<span id="cb2-21">} </span>
+<span id="cb2-22"></span>
+<span id="cb2-23"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">return</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mu=</span>mu.sample,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">tau=</span>tau.sample))</span>
+<span id="cb2-24">}</span></code></pre></div>
+</div>
+</section>
+<section id="example" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="example"><span class="header-section-number">5</span> Example</h2>
+<p>Let’s take a look at the anthropological data collected by Prof.&nbsp;Nancy Howell. You can see it has four variables: height (cm), weight (kg), age (years) and the variable <code>male</code> which equals 1 for a male and 0 for a female. Let’s concentrate on adult heights only (and use a somewhat arbitrary cut-off point of 18 years of age):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">d <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read.csv</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://raw.githubusercontent.com/rmcelreath/rethinking/master/data/Howell1.csv"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sep =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">";"</span>)</span>
+<span id="cb3-2"></span>
+<span id="cb3-3">d.adult <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> d[d<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>age <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">18</span>,]</span>
+<span id="cb3-4"></span>
+<span id="cb3-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data=</span>d.adult,<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x=</span>height))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-6"> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_density</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">group=</span>male,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill=</span>male), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">alpha=</span>.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/gibbs-sampler/index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see that both distributions are approximately normal. Both differ, men tend to be taller than women. We would like to propose a model able to generate these data.</p>
+<p>Let <img src="https://latex.codecogs.com/png.latex?x_i"> be the recorded height for individual <img src="https://latex.codecogs.com/png.latex?i"> : <img src="https://latex.codecogs.com/png.latex?%0Ax_i%20%5Csim%20N(%5Cmu,%5Ctau)%0A"></p>
+<p>We may know from the general knowledge of humans, that the <strong>average</strong> height in the population (<strong>not</strong> the height of a random individual) is probably cm.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmu%20%5Csim%20N(175,1/5%5E2)%0A"></p>
+<p>And since variances are a bit harder to pinpoint, we are going to be lazy and go with an informal prior for :</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Ctau%20%5Csim%20Gamma(0.01,0.01)%0A"></p>
+<p>Then we can use our function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12345</span>)</span>
+<span id="cb4-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for men:</span></span>
+<span id="cb4-3">  sample.m <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gibbs.normal</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y=</span>d.adult<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>height[d.adult<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>male<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>],</span>
+<span id="cb4-4"> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mu0=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">175</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">tau0=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">a=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.01</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">b=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.01</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Niter=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb4-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for women:</span></span>
+<span id="cb4-6">sample.f <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gibbs.normal</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y=</span>d.adult<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>height[d.adult<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>male<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>],</span>
+<span id="cb4-7"> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mu0=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">175</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">tau0=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">a=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.01</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">b=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.01</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Niter=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span></code></pre></div>
+</div>
+<p>To get <strong>the posterior probability that a random man will be talled than a random woman</strong>, we need to use the posterior predictive distribution. I.e., given the posterior samples for <img src="https://latex.codecogs.com/png.latex?%5Cmu"> and <img src="https://latex.codecogs.com/png.latex?%5Ctau">, generate the new observation from the data-generating (normal) mechanism. This can be compared with our sample mean:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">random.man <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,sample.m<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mu,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(sample.m<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>tau))</span>
+<span id="cb5-2">random.woman <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,sample.f<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mu,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(sample.f<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>tau))</span>
+<span id="cb5-3"></span>
+<span id="cb5-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(random.man <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> random.woman)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.911</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(sample.m<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mu <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> sample.f<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mu)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p>You may also want to plot the posterior distributions to get a better idea of what they look like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">d.out <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>( <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">male=</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)),</span>
+<span id="cb9-2"> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mu=</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(sample.m<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mu,sample.f<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>mu),</span>
+<span id="cb9-3"> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">tau=</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(sample.m<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>tau, sample.f<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>tau),</span>
+<span id="cb9-4"> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y=</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(random.woman,random.man))</span>
+<span id="cb9-5"></span>
+<span id="cb9-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data=</span>d.out,<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x=</span>mu))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-7"> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_density</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">group=</span>male,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill=</span>male),<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">alpha=</span>.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-8"> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggtitle</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Posterior distribution for average population height (mu)'</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/gibbs-sampler/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data=</span>d.out,<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x=</span>y))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb10-2"> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_density</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">group=</span>male,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill=</span>male),<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">alpha=</span>.<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb10-3"> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggtitle</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Posterior predictive distribution for individual height (y)'</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://andresmtnezglez.github.io/posts/gibbs-sampler/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Sources:</strong></p>
+<p>Much of the code and text is directly obtained from these two resources</p>
+<p>[1] UCx STA02.1ucX University of Canterbury</p>
+<p>[2] McElreath, R. (2020). <em>Statistical rethinking: A Bayesian course with examples in R and Stan</em>. CRC press.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>Bayesian</category>
+  <category>MCMC</category>
+  <category>Gibbs sampler</category>
+  <category>simulation</category>
+  <category>statistics</category>
+  <category>R</category>
+  <guid>https://andresmtnezglez.github.io/posts/gibbs-sampler/</guid>
+  <pubDate>Sun, 30 Apr 2023 22:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Replicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R</title>
   <dc:creator>Andrés Martínez González</dc:creator>
   <link>https://andresmtnezglez.github.io/posts/favar-bernanke-boivin-eliasz/</link>

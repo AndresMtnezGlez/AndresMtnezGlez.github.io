@@ -3,6 +3,7 @@
     "listing": "/research.html",
     "items": [
       "/posts/example-var/index.html",
+      "/posts/gibbs-sampler/index.html",
       "/posts/favar-bernanke-boivin-eliasz/index.html",
       "/posts/cee-var-monetary-shocks/index.html",
       "/posts/markov-chains-tauchen/index.html",
