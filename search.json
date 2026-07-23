@@ -11,28 +11,28 @@
     "href": "research.html#var-and-structural-macroeconometrics",
     "title": "Research & Notes",
     "section": "VAR and structural macroeconometrics",
-    "text": "VAR and structural macroeconometrics\nEstimation and identification of vector autoregressions, impulse response analysis, and replications of classic papers in empirical monetary and business-cycle macroeconomics.\n\n\n\n\n\nReplicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R\n\n\nA replication in R of Bernanke, Boivin and Eliasz (2005), building a factor-augmented VAR (FAVAR) by extracting principal components from a large macroeconomic dataset and tracing the effects of monetary policy shocks.\n\n\n\n\n\nMar 13, 2021\n\n\n\n\n\n\n\nReplicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR\n\n\nA step-by-step replication in R of Christiano, Eichenbaum and Evans (1998), estimating a three-variable VAR in output growth, inflation and the Federal Funds Rate, with reduced-form SUR estimation, recursive identification and impulse response functions to a monetary policy shock.\n\n\n\n\n\nMar 6, 2021\n\n\n\n\n\n\n\nDoes Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR\n\n\nA hands-on macroeconometric study of how the labour share responds to productivity shocks, replicating the overshooting result of Rios-Rull and Santaeulalia-Llopis (2010). Covers VAR estimation and lag selection, structural identification through A and B models, impulse response functions, forecast error variance decomposition, and a robustness check using an alternative definition of the labour share.\n\n\n\n\n\nNov 14, 2020\n\n\n\n\n\n\n\nA Notebook on VAR Models: Wold Representation, Impulse Response Functions and Identification\n\n\nLecture-style notes deriving the vector moving average (Wold) representation of a VAR, structural identification via Cholesky decomposition, and impulse response functions, with worked examples in R using the vars package.\n\n\n\n\n\nNov 13, 2020\n\n\n\n\n\nNo matching items"
+    "text": "VAR and structural macroeconometrics\nEstimation and identification of vector autoregressions, impulse response analysis, and replications of classic papers in empirical monetary and business-cycle macroeconomics.\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "research.html#bayesian-and-computational-methods",
     "href": "research.html#bayesian-and-computational-methods",
     "title": "Research & Notes",
     "section": "Bayesian and computational methods",
-    "text": "Bayesian and computational methods\nSimulation-based estimation, Markov chain methods, and numerical techniques for discretising stochastic processes.\n\n\n\n\n\nThe Gibbs Sampler: Bayesian Estimation of a Normal Model in R\n\n\nAn introduction to the Gibbs sampler, an MCMC method for Bayesian estimation when analytical solutions are not available. Derives the conditional posteriors for a normal model with unknown mean and precision, implements the algorithm in R, and applies it to the Howell height data.\n\n\n\n\n\nMay 1, 2023\n\n\n\n\n\n\n\nMetropolis-Hastings from Scratch: Bayesian Estimation of an AR(1) Model in R\n\n\nA practical guide to the Metropolis-Hastings algorithm, building intuition through the Good King Markov parable before implementing it in R to estimate an AR(1) model. Compares direct sampling from a Normal-inverted-Gamma posterior with the random-walk Metropolis-Hastings sampler, covering proposal distributions, acceptance probabilities and convergence.\n\n\n\n\n\nApr 15, 2021\n\n\n\n\n\n\n\nA Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation\n\n\nNotes on discrete-time Markov chains in R, covering transition probabilities, n-step transition matrices, stationary distributions, estimating a transition matrix from data, and discretising an AR(1) process with the Tauchen method.\n\n\n\n\n\nNov 20, 2020\n\n\n\n\n\nNo matching items"
+    "text": "Bayesian and computational methods\nSimulation-based estimation, Markov chain methods, and numerical techniques for discretising stochastic processes.\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "research.html#statistical-methods",
     "href": "research.html#statistical-methods",
     "title": "Research & Notes",
     "section": "Statistical methods",
-    "text": "Statistical methods\nDimensionality reduction and the linear algebra behind it.\n\n\n\n\n\nAn Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues\n\n\nAn introduction to principal component analysis (PCA), deriving the first principal component as a constrained variance-maximisation problem and explaining the three building blocks it rests on: the covariance matrix, eigenvectors, and eigenvalues, with worked numerical examples.\n\n\n\n\n\nNov 26, 2021\n\n\n\n\n\nNo matching items"
+    "text": "Statistical methods\nDimensionality reduction and the linear algebra behind it.\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "research.html#all-notes",
     "href": "research.html#all-notes",
     "title": "Research & Notes",
     "section": "All notes",
-    "text": "All notes\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\n\nTitle\n\n\n\nCategories\n\n\n\n\n\n\n\n\nMay 1, 2023\n\n\nThe Gibbs Sampler: Bayesian Estimation of a Normal Model in R\n\n\nBayesian, MCMC, Gibbs sampler, simulation, statistics, R\n\n\n\n\n\n\nNov 26, 2021\n\n\nAn Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues\n\n\nPCA, dimensionality reduction, linear algebra, eigenvectors, statistics\n\n\n\n\n\n\nApr 15, 2021\n\n\nMetropolis-Hastings from Scratch: Bayesian Estimation of an AR(1) Model in R\n\n\nBayesian, MCMC, Metropolis-Hastings, AR(1), simulation, time series, R\n\n\n\n\n\n\nMar 13, 2021\n\n\nReplicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R\n\n\nFAVAR, VAR, factor models, monetary policy, macroeconometrics, replication, R\n\n\n\n\n\n\nMar 6, 2021\n\n\nReplicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR\n\n\nVAR, SVAR, monetary policy, macroeconometrics, impulse response, replication, R\n\n\n\n\n\n\nNov 20, 2020\n\n\nA Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation\n\n\nMarkov chains, stochastic processes, Tauchen, AR(1), numerical methods, R\n\n\n\n\n\n\nNov 14, 2020\n\n\nDoes Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR\n\n\nSVAR, VAR, labour share, productivity, macroeconometrics, impulse response, FEVD, R\n\n\n\n\n\n\nNov 13, 2020\n\n\nA Notebook on VAR Models: Wold Representation, Impulse Response Functions and Identification\n\n\nVAR, time series, macroeconometrics, impulse response, R\n\n\n\n\n\n\nNo matching items"
+    "text": "All notes\n\n\n\n\n\nThe Gibbs Sampler: Bayesian Estimation of a Normal Model in R\n\n\n\nBayesian\n\nMCMC\n\nGibbs sampler\n\nsimulation\n\nstatistics\n\nR\n\n\n\n\n\n\nMay 1, 2023\n\n\n\n\n\n\n\nAn Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues\n\n\n\nPCA\n\ndimensionality reduction\n\nlinear algebra\n\neigenvectors\n\nstatistics\n\n\n\n\n\n\nNov 26, 2021\n\n\n\n\n\n\n\nMetropolis-Hastings from Scratch: Bayesian Estimation of an AR(1) Model in R\n\n\n\nBayesian\n\nMCMC\n\nMetropolis-Hastings\n\nAR(1)\n\nsimulation\n\ntime series\n\nR\n\n\n\n\n\n\nApr 15, 2021\n\n\n\n\n\n\n\nReplicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R\n\n\n\nFAVAR\n\nVAR\n\nfactor models\n\nmonetary policy\n\nmacroeconometrics\n\nreplication\n\nR\n\n\n\n\n\n\nMar 13, 2021\n\n\n\n\n\n\n\nReplicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR\n\n\n\nVAR\n\nSVAR\n\nmonetary policy\n\nmacroeconometrics\n\nimpulse response\n\nreplication\n\nR\n\n\n\n\n\n\nMar 6, 2021\n\n\n\n\n\n\n\nA Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation\n\n\n\nMarkov chains\n\nstochastic processes\n\nTauchen\n\nAR(1)\n\nnumerical methods\n\nR\n\n\n\n\n\n\nNov 20, 2020\n\n\n\n\n\n\n\nDoes Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR\n\n\n\nSVAR\n\nVAR\n\nlabour share\n\nproductivity\n\nmacroeconometrics\n\nimpulse response\n\nFEVD\n\nR\n\n\n\n\n\n\nNov 14, 2020\n\n\n\n\n\n\n\nA Notebook on VAR Models: Wold Representation, Impulse Response Functions and Identification\n\n\n\nVAR\n\ntime series\n\nmacroeconometrics\n\nimpulse response\n\nR\n\n\n\n\n\n\nNov 13, 2020\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/redistributive-shocks-labour-share/index.html",
@@ -186,56 +186,63 @@
     "href": "cv.html",
     "title": "Curriculum Vitae",
     "section": "",
-    "text": "Download PDF version"
+    "text": "Download PDF"
   },
   {
-    "objectID": "cv.html#current-position",
-    "href": "cv.html#current-position",
+    "objectID": "cv.html#professional-experience",
+    "href": "cv.html#professional-experience",
     "title": "Curriculum Vitae",
-    "section": "Current position",
-    "text": "Current position\nEconomist, Autoridad Independiente de Responsabilidad Fiscal (AIReF) — Madrid, Spain [Start year] – present\nQuantitative economic research and institutional policy analysis on fiscal rules, macroeconomic forecast endorsement, labour market impacts, and long-term growth modelling.\n\nLead, project on external reviews of IFIs — Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI)\n[Add 2–4 more bullets: reports authored, models built, files owned]"
+    "section": "Professional experience",
+    "text": "Professional experience\nEconomist / Analyst — Independent Authority for Fiscal Responsibility (AIReF), Madrid\n2021 – present\n\nQuantitative analysis of fiscal policy and macroeconomic imbalances. Estimation of structural models for public debt anchor heterogeneity across countries; elasticity analysis of economic activity and the energy market.\nAnalysis of EU and Spanish fiscal governance: the net expenditure path, the control account, and the reformed economic governance framework.\nEndorsement (aval) of the government’s macroeconomic forecasts.\nLong-term growth modelling in R following the European Commission’s EUCAM methodology.\nLead of the project on external reviews of independent fiscal institutions, Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI).\n\nTechnical Advisor, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid\n2017 – 2020\n\nSpain’s deputy head of delegation to the Ecofin Output Gaps Working Group: improvement of the common methodology used to estimate potential output, output gap indicators and cyclically adjusted budget balances, a cornerstone of the surveillance of member states’ fiscal policy within the Stability and Growth Pact.\nSpain’s deputy head of delegation to the Ecofin LIME Working Group: analytical tools to assess structural reforms within the Macroeconomic Imbalances Procedure; benchmark models for imbalances related to the external sector, private sector balance sheet positions and public debt; contribution to the definition of Spain’s economic policy priorities within the European Semester.\nApplied analysis on deterministic and stochastic public debt sustainability, government forecast biases, benchmarking of the Spanish housing market, the EU fiscal framework, household financial conditions, non-linear Okun’s Law estimated with MARS, and exogenous and endogenous policy shocks with the in-house DSGE model EREMS.\nParticipation in the elaboration of the Government’s official medium-term forecasts: maintenance and development of over nineteen error correction models for real and nominal variables, used to draw the official medium-term macroeconomic outlook in the Stability Programmes, Draft Budget Laws and Draft Budgetary Plans.\n\nInstructor — ICEX | CECO, Madrid\n2017 – present\n\nEconomic theory, statistics and the international institutional framework, taught to small groups of economics graduates. Classroom and e-learning.\n\nTrainee — Caser Insurance, Madrid\n2015\n\nMarket analysis and data analysis to identify profitable market segments and provide early warning of possible fraud in the vehicle and real estate branches."
   },
   {
     "objectID": "cv.html#education",
     "href": "cv.html#education",
     "title": "Curriculum Vitae",
     "section": "Education",
-    "text": "Education\nMSc in Economics — [Institution], [Year] Thesis: [Title]\nBSc in Economics — [Institution], [Year]"
+    "text": "Education\nMSc in Specialized Economic Analysis: Macroeconomic Policy — Barcelona School of Economics\n2020 – 2021\nQuantitative and statistical methods, fiscal policy, advanced time series and computational methods. Data science specialisation: applied machine learning, nowcasting, web scraping and unsupervised learning.\nPreparation for the High Corps of Spanish State Economics and Trade Experts\n2015 – 2017\nMicroeconomics, macroeconomics, international trade, international organisations, economics of the EU, public policy and the Spanish economy. Ranked 3rd among 24 successful candidates out of more than 200 initial candidates.\nBachelor of Business — Dundalk Institute of Technology, Ireland\n2013 – 2014\nErasmus programme. International business: supply chain management, consumer psychology, statistical methods.\nDegree in Economics (Honours) — Universidad de León\n2011 – 2015\nAverage grade 8.4/10 over 240 ECTS. Second prize, College Economics Olympic Games, 2012. Full merit scholarship, 2011–2012. Final thesis: Income Inequality: a Political Economy Approach."
   },
   {
     "objectID": "cv.html#selected-work",
     "href": "cv.html#selected-work",
     "title": "Curriculum Vitae",
     "section": "Selected work",
-    "text": "Selected work\n\n[Report / analysis title] — [one line on what it did and the method]\nLong-term growth model (R) — implementation of the European Commission’s EUCAM methodology\n[Royal Decree analysis] — interrupted time-series analysis of the effect on Social Security affiliation\n\nSee Research & Notes for code and technical write-ups."
+    "text": "Selected work\n\nLong-term growth model in R — implementation of the European Commission’s EUCAM methodology for potential output and long-run growth projections.\nInterrupted time-series analysis of Royal Decree 316/2026 — estimation of the impact on Social Security affiliation figures.\nError Correction Model package (with J. Sansa) — econometric package written in Hansl to perform ECM estimation and diagnostics and to automate output presentation, built to achieve a pseudo general equilibrium. Main tool for forecasting the medium-term macroeconomic scenario.\n\nTechnical notes and code are collected under Research & Notes."
   },
   {
     "objectID": "cv.html#skills",
     "href": "cv.html#skills",
     "title": "Curriculum Vitae",
     "section": "Skills",
-    "text": "Skills\nEconometrics — time series, VAR/SVAR, forecasting, interrupted time series, panel methods Software — R (tidyverse, data.table, vars, forecast), Quarto/R Markdown, Git, [add Stata/MATLAB/Python if relevant] Languages — Spanish (native), English ([level]), [others]"
+    "text": "Skills\nEconometrics — time series, VAR and structural VAR, forecasting and error correction models, interrupted time series, panel data, potential output and output gap estimation.\nProgramming — R (advanced), Hansl/Gretl, Python (NumPy, Pandas, Matplotlib), VBA/Excel, MATLAB, Git, Quarto.\nLanguages — Spanish (native), English (proficient), Portuguese (proficient)."
   },
   {
-    "objectID": "cv.html#presentations-professional-activity",
-    "href": "cv.html#presentations-professional-activity",
+    "objectID": "cv.html#short-courses",
+    "href": "cv.html#short-courses",
     "title": "Curriculum Vitae",
-    "section": "Presentations & professional activity",
-    "text": "Presentations & professional activity\n\n[Item]"
+    "section": "Short courses",
+    "text": "Short courses\nText mining and web scraping (BSE) · National Accounts (Institute for Fiscal Studies) · Data Analysis in Social Science (MIT) · Python (IFS) · Econometrics with Gretl (Ministry of Economy) · Panel Data Models (IFS) · VBA/Excel programming (National Statistics Institute) · Quantitative Methods in R (IFS) · Time Series Analysis in Tramo/Seats (Ministry of Economy) · Time Series Forecasting Methods (IFS)"
+  },
+  {
+    "objectID": "cv.html#professional-activity",
+    "href": "cv.html#professional-activity",
+    "title": "Curriculum Vitae",
+    "section": "Professional activity",
+    "text": "Professional activity\n\n\n\n\n\n\n\n2017–2018\nSecretary, State Economists Association (ATCEE)\n\n\n2017\nDean of Financial Affairs, Residencia César Carlos, Madrid\n\n\n2014–2015\nSecretary, Students’ Committee, Faculty of Business, Universidad de León\n\n\n2011–2015\nHead of the Economics Students’ Union, Universidad de León\n\n\n2012–2013\nEvent organisation, Dundalk Institute of Technology\n\n\n2011–2013\nMember, Business Faculty Commission, Universidad de León"
   },
   {
     "objectID": "cv.html#contact",
     "href": "cv.html#contact",
     "title": "Curriculum Vitae",
     "section": "Contact",
-    "text": "Contact\nYOUR@EMAIL · GitHub · LinkedIn"
+    "text": "Contact\nandres.mtnez.glez@gmail.com\nGitHub · LinkedIn · RPubs"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Andrés Martínez Glez",
     "section": "",
-    "text": "I am an economist at the Autoridad Independiente de Responsabilidad Fiscal (AIReF), Spain’s independent fiscal institution, based in Madrid.\nMy work sits at the intersection of applied fiscal policy, econometrics, and institutional analysis. I work on EU and Spanish fiscal governance — the net expenditure path, the control account, and the reformed economic governance framework — as well as macroeconomic forecast endorsements, long-term growth modelling, and the labour-market effects of regulatory reform.\nI currently lead the project on external reviews of independent fiscal institutions within the Economic Governance Reform Working Group of the Network of EU Independent Fiscal Institutions (EUNIFI).\nMost of my applied work is in R: time-series and VAR estimation, forecasting, and reproducible reporting."
+    "text": "I am an economist at the Autoridad Independiente de Responsabilidad Fiscal (AIReF), Spain’s independent fiscal institution, based in Madrid.\nI work on applied fiscal policy and macroeconomic analysis, at the intersection of econometrics, EU fiscal governance, and long-run growth modelling. This page collects a set of technical notes and small projects in R that I wrote during my master’s and the years after; mostly working through methods in time series, Bayesian computation, and statistical learning."
   },
   {
     "objectID": "index.html#research-interests",

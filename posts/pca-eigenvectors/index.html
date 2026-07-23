@@ -38,7 +38,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
@@ -71,6 +70,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -311,7 +311,7 @@ window.Quarto = {
 
 
 <section id="what-is-pca" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="what-is-pca"><span class="header-section-number">1</span> What is PCA?</h2>
+<h2 data-number="1" data-anchor-id="what-is-pca"><span class="header-section-number">1</span> What is PCA?</h2>
 <p>Principal components analysis (PCA) is a technique for reducing the dimensionality of such datasets, increasing interpretability but at the same time minimizing information loss.</p>
 <p>PCA is an: - <strong>Unsupervised approach</strong>: because it involves only a set of features or variables <span class="math inline">\(X_1, X_2, ... , X_p\)</span> and <strong>no</strong> associated response <span class="math inline">\(Y\)</span> - <strong>Feature extraction method</strong>: because a new independent variable is extracted as combination of the variables in the dataset.</p>
 <p>It finds a low-dimensional representation of a data set that contains as much as possible of the variation. The idea is that each of the <span class="math inline">\(n\)</span> observations lives in <span class="math inline">\(p-\)</span>dimensional space, but not all of these dimensions are equally interesting. PCA seeks a small number of dimensions that are as interesting as possible, where the concept of interesting is measured by the amount that the observations vary along each dimension.</p>
@@ -329,7 +329,7 @@ z_{i1}=\phi_{11} x_{i1}+\phi_{21} x_{i2}+\cdots+\phi_{p 1} x_{ip}
 \]</span></p>
 <p>We can rewrite the linear combination of the sample feature values function as <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n z_{i1}^2\)</span> Since <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n x_{ij}= 0\)</span>, the average of the <span class="math inline">\(z_{11}, ... , z_{n1}\)</span> will be zero as well. The problem can be solved via an eigendecomposition.</p>
 <section id="steps-to-perform-pca" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="steps-to-perform-pca"><span class="header-section-number">1.1</span> Steps to perform PCA</h3>
+<h3 data-number="1.1" data-anchor-id="steps-to-perform-pca"><span class="header-section-number">1.1</span> Steps to perform PCA</h3>
 <ol type="1">
 <li>Take your matrix of independent variables or features <span class="math inline">\(X\)</span>, whose columns are <span class="math inline">\(X_1, X_2, ... , X_p\)</span> and standarize each column or variable. Therefore we would obtain a new centered matrix <span class="math inline">\(Z\)</span>. Centered would mean that each column has mean zero.</li>
 </ol>
@@ -349,11 +349,11 @@ Z^TZ
 </ol>
 </section>
 <section id="in-a-nuthsell" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="in-a-nuthsell"><span class="header-section-number">1.2</span> In a nuthsell</h3>
+<h3 data-number="1.2" data-anchor-id="in-a-nuthsell"><span class="header-section-number">1.2</span> In a nuthsell</h3>
 <p>PCA is a method that brings together: 1. A measure of how each variable is associated with one another. (<strong>Covariance matrix</strong>.) 2. The directions in which our data are dispersed. (<strong>Eigenvectors</strong>.) 3. The relative importance of these different directions. (<strong>Eigenvalues</strong>.)</p>
 <p>PCA combines our predictors and allows us to drop the eigenvectors that are relatively unimportant. Next section would describe these three elements, if your are already familar you can skip it.</p>
 <section id="covariance-matrix" class="level4" data-number="1.2.1">
-<h4 data-number="1.2.1" class="anchored" data-anchor-id="covariance-matrix"><span class="header-section-number">1.2.1</span> 1. Covariance matrix</h4>
+<h4 data-number="1.2.1" data-anchor-id="covariance-matrix"><span class="header-section-number">1.2.1</span> 1. Covariance matrix</h4>
 <p><strong>Variance</strong> is a measure of the variability or it simply measures how spread the data set is. Mathematically, it is the average squared deviation from the mean score.</p>
 <p><span class="math display">\[
 var(x) = \frac{1}{n} \sum(x_i-\bar{x})^2
@@ -375,7 +375,7 @@ Cov(Z_{n,1}) &amp; \cdots&amp;  Var(Z_n)
 \]</span></p>
 </section>
 <section id="eigenvectors" class="level4" data-number="1.2.2">
-<h4 data-number="1.2.2" class="anchored" data-anchor-id="eigenvectors"><span class="header-section-number">1.2.2</span> 2. Eigenvectors</h4>
+<h4 data-number="1.2.2" data-anchor-id="eigenvectors"><span class="header-section-number">1.2.2</span> 2. Eigenvectors</h4>
 <p>Eigenvectors are those vectors when a linear transformation is performed on them, then <strong>their directions does not change</strong>.</p>
 <p>Matrices are said to act as functions or ‘transformations’ in the linear space- which means, after applying a transformation to a vector in the linear space, the <em>linearity</em> is maintained.</p>
 <p>Imagine the vector <span class="math inline">\(a=\begin{bmatrix} 2\\2\end{bmatrix}\)</span> we can represent it in a coordinate space.</p>
@@ -420,7 +420,7 @@ T(v) = \lambda v
 <p>The eigenvector associated to this matrix are <span class="math inline">\(\begin{bmatrix} 1\\0\end{bmatrix}\)</span> and <span class="math inline">\(\begin{bmatrix} -1\\0\end{bmatrix}\)</span> which are the spaces that do not change after applying the transformation. The corresponding <strong>eigenvalue</strong>, is the factor by which the eigenvector is scaled.</p>
 </section>
 <section id="eigenvalues" class="level4" data-number="1.2.3">
-<h4 data-number="1.2.3" class="anchored" data-anchor-id="eigenvalues"><span class="header-section-number">1.2.3</span> 3. Eigenvalues</h4>
+<h4 data-number="1.2.3" data-anchor-id="eigenvalues"><span class="header-section-number">1.2.3</span> 3. Eigenvalues</h4>
 <p>Consider the following matrix and vector:</p>
 <p><span class="math display">\[
 A=\begin{bmatrix} 7&amp;-5\\4&amp;-2\end{bmatrix}
@@ -487,13 +487,6 @@ det(\begin{bmatrix} 7-\lambda&amp;-5\\4&amp;-2-\lambda\end{bmatrix}) = 0
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -571,6 +564,11 @@ det(\begin{bmatrix} 7-\lambda&amp;-5\\4&amp;-2-\lambda\end{bmatrix}) = 0
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -902,4 +900,5 @@ det(\begin{bmatrix} 7-\lambda&amp;-5\\4&amp;-2-\lambda\end{bmatrix}) = 0
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

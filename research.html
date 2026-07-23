@@ -38,7 +38,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
@@ -83,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
     const options = {
       valueNames: ['listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-image"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -111,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
     const options = {
       valueNames: ['listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-image"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -139,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
     const options = {
       valueNames: ['listing-date','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-image"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -165,9 +164,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -184,6 +183,7 @@ ul.task-list li input[type="checkbox"] {
     }
   })
   </script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -369,7 +369,7 @@ window.Quarto = {
   <li><a href="#all-notes" id="toc-all-notes" class="nav-link" data-scroll-target="#all-notes">All notes</a></li>
   </ul>
 </nav>
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(16)</span></div><div class="category" data-category="QVIoMSk=">AR(1) <span class="quarto-category-count">(4)</span></div><div class="category" data-category="QmF5ZXNpYW4=">Bayesian <span class="quarto-category-count">(4)</span></div><div class="category" data-category="ZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24=">dimensionality reduction <span class="quarto-category-count">(2)</span></div><div class="category" data-category="ZWlnZW52ZWN0b3Jz">eigenvectors <span class="quarto-category-count">(2)</span></div><div class="category" data-category="ZmFjdG9yJTIwbW9kZWxz">factor models <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RkFWQVI=">FAVAR <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RkVWRA==">FEVD <span class="quarto-category-count">(2)</span></div><div class="category" data-category="R2liYnMlMjBzYW1wbGVy">Gibbs sampler <span class="quarto-category-count">(2)</span></div><div class="category" data-category="aW1wdWxzZSUyMHJlc3BvbnNl">impulse response <span class="quarto-category-count">(6)</span></div><div class="category" data-category="bGFib3VyJTIwc2hhcmU=">labour share <span class="quarto-category-count">(2)</span></div><div class="category" data-category="bGluZWFyJTIwYWxnZWJyYQ==">linear algebra <span class="quarto-category-count">(2)</span></div><div class="category" data-category="bWFjcm9lY29ub21ldHJpY3M=">macroeconometrics <span class="quarto-category-count">(8)</span></div><div class="category" data-category="TWFya292JTIwY2hhaW5z">Markov chains <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TUNNQw==">MCMC <span class="quarto-category-count">(4)</span></div><div class="category" data-category="TWV0cm9wb2xpcy1IYXN0aW5ncw==">Metropolis-Hastings <span class="quarto-category-count">(2)</span></div><div class="category" data-category="bW9uZXRhcnklMjBwb2xpY3k=">monetary policy <span class="quarto-category-count">(4)</span></div><div class="category" data-category="bnVtZXJpY2FsJTIwbWV0aG9kcw==">numerical methods <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UENB">PCA <span class="quarto-category-count">(2)</span></div><div class="category" data-category="cHJvZHVjdGl2aXR5">productivity <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Ug==">R <span class="quarto-category-count">(14)</span></div><div class="category" data-category="cmVwbGljYXRpb24=">replication <span class="quarto-category-count">(4)</span></div><div class="category" data-category="c2ltdWxhdGlvbg==">simulation <span class="quarto-category-count">(4)</span></div><div class="category" data-category="c3RhdGlzdGljcw==">statistics <span class="quarto-category-count">(4)</span></div><div class="category" data-category="c3RvY2hhc3RpYyUyMHByb2Nlc3Nlcw==">stochastic processes <span class="quarto-category-count">(2)</span></div><div class="category" data-category="U1ZBUg==">SVAR <span class="quarto-category-count">(4)</span></div><div class="category" data-category="VGF1Y2hlbg==">Tauchen <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dGltZSUyMHNlcmllcw==">time series <span class="quarto-category-count">(4)</span></div><div class="category" data-category="VkFS">VAR <span class="quarto-category-count">(8)</span></div></div></div>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -399,18 +399,148 @@ window.Quarto = {
 
 <p>Technical notes, replications, and code on applied macroeconometrics and statistical methods. Source for everything is on <a href="https://github.com/AndresMtnezGlez">GitHub</a>; older versions of some notes remain on <a href="https://rpubs.com/andresmtnezglez">RPubs</a>.</p>
 <section id="var-and-structural-macroeconometrics" class="level2">
-<h2 class="anchored" data-anchor-id="var-and-structural-macroeconometrics">VAR and structural macroeconometrics</h2>
+<h2 data-anchor-id="var-and-structural-macroeconometrics">VAR and structural macroeconometrics</h2>
 <p>Estimation and identification of vector autoregressions, impulse response analysis, and replications of classic papers in empirical monetary and business-cycle macroeconomics.</p>
 <div id="listing-var-macro" class="quarto-listing quarto-listing-container-default">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="RkFWQVIlMkNWQVIlMkNmYWN0b3IlMjBtb2RlbHMlMkNtb25ldGFyeSUyMHBvbGljeSUyQ21hY3JvZWNvbm9tZXRyaWNzJTJDcmVwbGljYXRpb24lMkNS" data-listing-date-sort="1615590000000" data-listing-file-modified-sort="1784714097216" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1488">
+
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+<section id="bayesian-and-computational-methods" class="level2">
+<h2 data-anchor-id="bayesian-and-computational-methods">Bayesian and computational methods</h2>
+<p>Simulation-based estimation, Markov chain methods, and numerical techniques for discretising stochastic processes.</p>
+<div id="listing-bayesian-computational" class="quarto-listing quarto-listing-container-default">
+<div class="list quarto-listing-default">
+
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+<section id="statistical-methods" class="level2">
+<h2 data-anchor-id="statistical-methods">Statistical methods</h2>
+<p>Dimensionality reduction and the linear algebra behind it.</p>
+<div id="listing-statistical-methods" class="quarto-listing quarto-listing-container-default">
+<div class="list quarto-listing-default">
+
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+<section id="all-notes" class="level2">
+<h2 data-anchor-id="all-notes">All notes</h2>
+<div id="listing-all-posts" class="quarto-listing quarto-listing-container-default">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="QmF5ZXNpYW4lMkNNQ01DJTJDR2liYnMlMjBzYW1wbGVyJTJDc2ltdWxhdGlvbiUyQ3N0YXRpc3RpY3MlMkNS" data-listing-date-sort="1682892000000" data-listing-file-modified-sort="1784721049776" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="672">
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/gibbs-sampler/index.html" class="no-external">The Gibbs Sampler: Bayesian Estimation of a Normal Model in R</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('QmF5ZXNpYW4='); return false;">Bayesian</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TUNNQw=='); return false;">MCMC</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('R2liYnMlMjBzYW1wbGVy'); return false;">Gibbs sampler</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2ltdWxhdGlvbg=='); return false;">simulation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
+
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/gibbs-sampler/index.html" class="no-external">
+<div class="listing-date">
+May 1, 2023
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="UENBJTJDZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24lMkNsaW5lYXIlMjBhbGdlYnJhJTJDZWlnZW52ZWN0b3JzJTJDc3RhdGlzdGljcw==" data-listing-date-sort="1637881200000" data-listing-file-modified-sort="1784721500553" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1381">
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/pca-eigenvectors/index.html" class="no-external">An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UENB'); return false;">PCA</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24='); return false;">dimensionality reduction</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bGluZWFyJTIwYWxnZWJyYQ=='); return false;">linear algebra</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZWlnZW52ZWN0b3Jz'); return false;">eigenvectors</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
+
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/pca-eigenvectors/index.html" class="no-external">
+<div class="listing-date">
+Nov 26, 2021
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="QmF5ZXNpYW4lMkNNQ01DJTJDTWV0cm9wb2xpcy1IYXN0aW5ncyUyQ0FSKDEpJTJDc2ltdWxhdGlvbiUyQ3RpbWUlMjBzZXJpZXMlMkNS" data-listing-date-sort="1618437600000" data-listing-file-modified-sort="1784790565085" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1664">
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/metropolis-hastings-ar1/index.html" class="no-external">Metropolis-Hastings from Scratch: Bayesian Estimation of an AR(1) Model in R</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('QmF5ZXNpYW4='); return false;">Bayesian</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TUNNQw=='); return false;">MCMC</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWV0cm9wb2xpcy1IYXN0aW5ncw=='); return false;">Metropolis-Hastings</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QVIoMSk='); return false;">AR(1)</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2ltdWxhdGlvbg=='); return false;">simulation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGltZSUyMHNlcmllcw=='); return false;">time series</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
+
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/metropolis-hastings-ar1/index.html" class="no-external">
+<div class="listing-date">
+Apr 15, 2021
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="RkFWQVIlMkNWQVIlMkNmYWN0b3IlMjBtb2RlbHMlMkNtb25ldGFyeSUyMHBvbGljeSUyQ21hY3JvZWNvbm9tZXRyaWNzJTJDcmVwbGljYXRpb24lMkNS" data-listing-date-sort="1615590000000" data-listing-file-modified-sort="1784714097216" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1488">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./posts/favar-bernanke-boivin-eliasz/index.html" class="no-external">Replicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R</a>
 </h3>
-<div class="delink listing-description"><a href="./posts/favar-bernanke-boivin-eliasz/index.html" class="no-external">
-<p>A replication in R of Bernanke, Boivin and Eliasz (2005), building a factor-augmented VAR (FAVAR) by extracting principal components from a large macroeconomic dataset and tracing the effects of monetary policy shocks.</p>
-</a></div>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RkFWQVI='); return false;">FAVAR</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZmFjdG9yJTIwbW9kZWxz'); return false;">factor models</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bW9uZXRhcnklMjBwb2xpY3k='); return false;">monetary policy</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm9lY29ub21ldHJpY3M='); return false;">macroeconometrics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cmVwbGljYXRpb24='); return false;">replication</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
+
+</div>
 </div>
 <div class="metadata">
 <a href="./posts/favar-bernanke-boivin-eliasz/index.html" class="no-external">
@@ -420,14 +550,28 @@ Mar 13, 2021
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="VkFSJTJDU1ZBUiUyQ21vbmV0YXJ5JTIwcG9saWN5JTJDbWFjcm9lY29ub21ldHJpY3MlMkNpbXB1bHNlJTIwcmVzcG9uc2UlMkNyZXBsaWNhdGlvbiUyQ1I=" data-listing-date-sort="1614985200000" data-listing-file-modified-sort="1784714052016" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1983">
+<div class="quarto-post image-right" data-index="4" data-categories="VkFSJTJDU1ZBUiUyQ21vbmV0YXJ5JTIwcG9saWN5JTJDbWFjcm9lY29ub21ldHJpY3MlMkNpbXB1bHNlJTIwcmVzcG9uc2UlMkNyZXBsaWNhdGlvbiUyQ1I=" data-listing-date-sort="1614985200000" data-listing-file-modified-sort="1784714052016" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1983">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./posts/cee-var-monetary-shocks/index.html" class="no-external">Replicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR</a>
 </h3>
-<div class="delink listing-description"><a href="./posts/cee-var-monetary-shocks/index.html" class="no-external">
-<p>A step-by-step replication in R of Christiano, Eichenbaum and Evans (1998), estimating a three-variable VAR in output growth, inflation and the Federal Funds Rate, with reduced-form SUR estimation, recursive identification and impulse response functions to a monetary policy shock.</p>
-</a></div>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U1ZBUg=='); return false;">SVAR</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bW9uZXRhcnklMjBwb2xpY3k='); return false;">monetary policy</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm9lY29ub21ldHJpY3M='); return false;">macroeconometrics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aW1wdWxzZSUyMHJlc3BvbnNl'); return false;">impulse response</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cmVwbGljYXRpb24='); return false;">replication</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
+
+</div>
 </div>
 <div class="metadata">
 <a href="./posts/cee-var-monetary-shocks/index.html" class="no-external">
@@ -437,14 +581,59 @@ Mar 6, 2021
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="U1ZBUiUyQ1ZBUiUyQ2xhYm91ciUyMHNoYXJlJTJDcHJvZHVjdGl2aXR5JTJDbWFjcm9lY29ub21ldHJpY3MlMkNpbXB1bHNlJTIwcmVzcG9uc2UlMkNGRVZEJTJDUg==" data-listing-date-sort="1605308400000" data-listing-file-modified-sort="1784790497640" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2340">
+<div class="quarto-post image-right" data-index="5" data-categories="TWFya292JTIwY2hhaW5zJTJDc3RvY2hhc3RpYyUyMHByb2Nlc3NlcyUyQ1RhdWNoZW4lMkNBUigxKSUyQ251bWVyaWNhbCUyMG1ldGhvZHMlMkNS" data-listing-date-sort="1605826800000" data-listing-file-modified-sort="1784714627402" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3020">
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/markov-chains-tauchen/index.html" class="no-external">A Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWFya292JTIwY2hhaW5z'); return false;">Markov chains</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c3RvY2hhc3RpYyUyMHByb2Nlc3Nlcw=='); return false;">stochastic processes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VGF1Y2hlbg=='); return false;">Tauchen</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QVIoMSk='); return false;">AR(1)</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bnVtZXJpY2FsJTIwbWV0aG9kcw=='); return false;">numerical methods</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
+
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/markov-chains-tauchen/index.html" class="no-external">
+<div class="listing-date">
+Nov 20, 2020
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="U1ZBUiUyQ1ZBUiUyQ2xhYm91ciUyMHNoYXJlJTJDcHJvZHVjdGl2aXR5JTJDbWFjcm9lY29ub21ldHJpY3MlMkNpbXB1bHNlJTIwcmVzcG9uc2UlMkNGRVZEJTJDUg==" data-listing-date-sort="1605308400000" data-listing-file-modified-sort="1784790497640" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2340">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./posts/redistributive-shocks-labour-share/index.html" class="no-external">Does Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR</a>
 </h3>
-<div class="delink listing-description"><a href="./posts/redistributive-shocks-labour-share/index.html" class="no-external">
-<p>A hands-on macroeconometric study of how the labour share responds to productivity shocks, replicating the overshooting result of Rios-Rull and Santaeulalia-Llopis (2010). Covers VAR estimation and lag selection, structural identification through A and B models, impulse response functions, forecast error variance decomposition, and a robustness check using an alternative definition of the labour share.</p>
-</a></div>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('U1ZBUg=='); return false;">SVAR</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bGFib3VyJTIwc2hhcmU='); return false;">labour share</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cHJvZHVjdGl2aXR5'); return false;">productivity</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm9lY29ub21ldHJpY3M='); return false;">macroeconometrics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aW1wdWxzZSUyMHJlc3BvbnNl'); return false;">impulse response</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('RkVWRA=='); return false;">FEVD</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
+
+</div>
 </div>
 <div class="metadata">
 <a href="./posts/redistributive-shocks-labour-share/index.html" class="no-external">
@@ -454,14 +643,24 @@ Nov 14, 2020
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="VkFSJTJDdGltZSUyMHNlcmllcyUyQ21hY3JvZWNvbm9tZXRyaWNzJTJDaW1wdWxzZSUyMHJlc3BvbnNlJTJDUg==" data-listing-date-sort="1605222000000" data-listing-file-modified-sort="1784713417653" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2664">
+<div class="quarto-post image-right" data-index="7" data-categories="VkFSJTJDdGltZSUyMHNlcmllcyUyQ21hY3JvZWNvbm9tZXRyaWNzJTJDaW1wdWxzZSUyMHJlc3BvbnNlJTJDUg==" data-listing-date-sort="1605222000000" data-listing-file-modified-sort="1784713417653" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2664">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./posts/var-notebook/index.html" class="no-external">A Notebook on VAR Models: Wold Representation, Impulse Response Functions and Identification</a>
 </h3>
-<div class="delink listing-description"><a href="./posts/var-notebook/index.html" class="no-external">
-<p>Lecture-style notes deriving the vector moving average (Wold) representation of a VAR, structural identification via Cholesky decomposition, and impulse response functions, with worked examples in R using the vars package.</p>
-</a></div>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VkFS'); return false;">VAR</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGltZSUyMHNlcmllcw=='); return false;">time series</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm9lY29ub21ldHJpY3M='); return false;">macroeconometrics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aW1wdWxzZSUyMHJlc3BvbnNl'); return false;">impulse response</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
+
+</div>
 </div>
 <div class="metadata">
 <a href="./posts/var-notebook/index.html" class="no-external">
@@ -474,254 +673,6 @@ Nov 13, 2020
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div>
-</section>
-<section id="bayesian-and-computational-methods" class="level2">
-<h2 class="anchored" data-anchor-id="bayesian-and-computational-methods">Bayesian and computational methods</h2>
-<p>Simulation-based estimation, Markov chain methods, and numerical techniques for discretising stochastic processes.</p>
-<div id="listing-bayesian-computational" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="QmF5ZXNpYW4lMkNNQ01DJTJDR2liYnMlMjBzYW1wbGVyJTJDc2ltdWxhdGlvbiUyQ3N0YXRpc3RpY3MlMkNS" data-listing-date-sort="1682892000000" data-listing-file-modified-sort="1784721049776" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="672">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/gibbs-sampler/index.html" class="no-external">The Gibbs Sampler: Bayesian Estimation of a Normal Model in R</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/gibbs-sampler/index.html" class="no-external">
-<p>An introduction to the Gibbs sampler, an MCMC method for Bayesian estimation when analytical solutions are not available. Derives the conditional posteriors for a normal model with unknown mean and precision, implements the algorithm in R, and applies it to the Howell height data.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/gibbs-sampler/index.html" class="no-external">
-<div class="listing-date">
-May 1, 2023
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="QmF5ZXNpYW4lMkNNQ01DJTJDTWV0cm9wb2xpcy1IYXN0aW5ncyUyQ0FSKDEpJTJDc2ltdWxhdGlvbiUyQ3RpbWUlMjBzZXJpZXMlMkNS" data-listing-date-sort="1618437600000" data-listing-file-modified-sort="1784790565085" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1664">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/metropolis-hastings-ar1/index.html" class="no-external">Metropolis-Hastings from Scratch: Bayesian Estimation of an AR(1) Model in R</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/metropolis-hastings-ar1/index.html" class="no-external">
-<p>A practical guide to the Metropolis-Hastings algorithm, building intuition through the Good King Markov parable before implementing it in R to estimate an AR(1) model. Compares direct sampling from a Normal-inverted-Gamma posterior with the random-walk Metropolis-Hastings sampler, covering proposal distributions, acceptance probabilities and convergence.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/metropolis-hastings-ar1/index.html" class="no-external">
-<div class="listing-date">
-Apr 15, 2021
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="TWFya292JTIwY2hhaW5zJTJDc3RvY2hhc3RpYyUyMHByb2Nlc3NlcyUyQ1RhdWNoZW4lMkNBUigxKSUyQ251bWVyaWNhbCUyMG1ldGhvZHMlMkNS" data-listing-date-sort="1605826800000" data-listing-file-modified-sort="1784714627402" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3020">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/markov-chains-tauchen/index.html" class="no-external">A Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/markov-chains-tauchen/index.html" class="no-external">
-<p>Notes on discrete-time Markov chains in R, covering transition probabilities, n-step transition matrices, stationary distributions, estimating a transition matrix from data, and discretising an AR(1) process with the Tauchen method.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/markov-chains-tauchen/index.html" class="no-external">
-<div class="listing-date">
-Nov 20, 2020
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-</section>
-<section id="statistical-methods" class="level2">
-<h2 class="anchored" data-anchor-id="statistical-methods">Statistical methods</h2>
-<p>Dimensionality reduction and the linear algebra behind it.</p>
-<div id="listing-statistical-methods" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="UENBJTJDZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24lMkNsaW5lYXIlMjBhbGdlYnJhJTJDZWlnZW52ZWN0b3JzJTJDc3RhdGlzdGljcw==" data-listing-date-sort="1637881200000" data-listing-file-modified-sort="1784721500553" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1381">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/pca-eigenvectors/index.html" class="no-external">An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/pca-eigenvectors/index.html" class="no-external">
-<p>An introduction to principal component analysis (PCA), deriving the first principal component as a constrained variance-maximisation problem and explaining the three building blocks it rests on: the covariance matrix, eigenvectors, and eigenvalues, with worked numerical examples.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/pca-eigenvectors/index.html" class="no-external">
-<div class="listing-date">
-Nov 26, 2021
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-</section>
-<section id="all-notes" class="level2">
-<h2 class="anchored" data-anchor-id="all-notes">All notes</h2>
-<div id="listing-all-posts" class="quarto-listing quarto-listing-container-table">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-    <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-    <select id="listing-all-posts-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-all-posts'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-      <option value="" disabled="" selected="" hidden="">Order By</option>
-      <option value="index" data-direction="asc">Default</option>
-      <option value="listing-date-sort" data-direction="asc">
-        Date - Oldest
-      </option>
-      <option value="listing-date-sort" data-direction="desc">
-        Date - Newest
-      </option>
-      <option value="listing-title-sort" data-direction="asc">
-        Title
-      </option>
-    </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<table class="quarto-listing-table table table-hover">
-<thead>
-<tr>
-
-<th>
-<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
-</th>
-
-<th>
-<a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
-</th>
-
-<th>
-Categories
-</th>
-
-</tr>
-</thead>
-<tbody class="list">
-
-<tr data-index="0" data-categories="QmF5ZXNpYW4lMkNNQ01DJTJDR2liYnMlMjBzYW1wbGVyJTJDc2ltdWxhdGlvbiUyQ3N0YXRpc3RpY3MlMkNS" data-listing-date-sort="1682892000000" data-listing-file-modified-sort="1784721049776" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="672" data-listing-title-sort="The Gibbs Sampler: Bayesian Estimation of a Normal Model in R" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">May 1, 2023</span>
-</td>
-<td>
-<a href="./posts/gibbs-sampler/index.html" class="title listing-title">The Gibbs Sampler: Bayesian Estimation of a Normal Model in R</a>
-</td>
-<td>
-<span class="listing-categories">Bayesian, MCMC, Gibbs sampler, simulation, statistics, R</span>
-</td>
-
-</tr>
-
-<tr data-index="1" data-categories="UENBJTJDZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24lMkNsaW5lYXIlMjBhbGdlYnJhJTJDZWlnZW52ZWN0b3JzJTJDc3RhdGlzdGljcw==" data-listing-date-sort="1637881200000" data-listing-file-modified-sort="1784721500553" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1381" data-listing-title-sort="An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">Nov 26, 2021</span>
-</td>
-<td>
-<a href="./posts/pca-eigenvectors/index.html" class="title listing-title">An Introduction to Principal Component Analysis: Covariance, Eigenvectors and Eigenvalues</a>
-</td>
-<td>
-<span class="listing-categories">PCA, dimensionality reduction, linear algebra, eigenvectors, statistics</span>
-</td>
-
-</tr>
-
-<tr data-index="2" data-categories="QmF5ZXNpYW4lMkNNQ01DJTJDTWV0cm9wb2xpcy1IYXN0aW5ncyUyQ0FSKDEpJTJDc2ltdWxhdGlvbiUyQ3RpbWUlMjBzZXJpZXMlMkNS" data-listing-date-sort="1618437600000" data-listing-file-modified-sort="1784790565085" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1664" data-listing-title-sort="Metropolis-Hastings from Scratch: Bayesian Estimation of an AR(1) Model in R" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">Apr 15, 2021</span>
-</td>
-<td>
-<a href="./posts/metropolis-hastings-ar1/index.html" class="title listing-title">Metropolis-Hastings from Scratch: Bayesian Estimation of an AR(1) Model in R</a>
-</td>
-<td>
-<span class="listing-categories">Bayesian, MCMC, Metropolis-Hastings, AR(1), simulation, time series, R</span>
-</td>
-
-</tr>
-
-<tr data-index="3" data-categories="RkFWQVIlMkNWQVIlMkNmYWN0b3IlMjBtb2RlbHMlMkNtb25ldGFyeSUyMHBvbGljeSUyQ21hY3JvZWNvbm9tZXRyaWNzJTJDcmVwbGljYXRpb24lMkNS" data-listing-date-sort="1615590000000" data-listing-file-modified-sort="1784714097216" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1488" data-listing-title-sort="Replicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">Mar 13, 2021</span>
-</td>
-<td>
-<a href="./posts/favar-bernanke-boivin-eliasz/index.html" class="title listing-title">Replicating Bernanke, Boivin and Eliasz (2005): A FAVAR Approach in R</a>
-</td>
-<td>
-<span class="listing-categories">FAVAR, VAR, factor models, monetary policy, macroeconometrics, replication, R</span>
-</td>
-
-</tr>
-
-<tr data-index="4" data-categories="VkFSJTJDU1ZBUiUyQ21vbmV0YXJ5JTIwcG9saWN5JTJDbWFjcm9lY29ub21ldHJpY3MlMkNpbXB1bHNlJTIwcmVzcG9uc2UlMkNyZXBsaWNhdGlvbiUyQ1I=" data-listing-date-sort="1614985200000" data-listing-file-modified-sort="1784714052016" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1983" data-listing-title-sort="Replicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">Mar 6, 2021</span>
-</td>
-<td>
-<a href="./posts/cee-var-monetary-shocks/index.html" class="title listing-title">Replicating Christiano, Eichenbaum and Evans (1998): Monetary Policy Shocks in a VAR</a>
-</td>
-<td>
-<span class="listing-categories">VAR, SVAR, monetary policy, macroeconometrics, impulse response, replication, R</span>
-</td>
-
-</tr>
-
-<tr data-index="5" data-categories="TWFya292JTIwY2hhaW5zJTJDc3RvY2hhc3RpYyUyMHByb2Nlc3NlcyUyQ1RhdWNoZW4lMkNBUigxKSUyQ251bWVyaWNhbCUyMG1ldGhvZHMlMkNS" data-listing-date-sort="1605826800000" data-listing-file-modified-sort="1784714627402" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3020" data-listing-title-sort="A Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">Nov 20, 2020</span>
-</td>
-<td>
-<a href="./posts/markov-chains-tauchen/index.html" class="title listing-title">A Notebook on Markov Chains: Transition Matrices, Stationary Distributions and Tauchen Discretisation</a>
-</td>
-<td>
-<span class="listing-categories">Markov chains, stochastic processes, Tauchen, AR(1), numerical methods, R</span>
-</td>
-
-</tr>
-
-<tr data-index="6" data-categories="U1ZBUiUyQ1ZBUiUyQ2xhYm91ciUyMHNoYXJlJTJDcHJvZHVjdGl2aXR5JTJDbWFjcm9lY29ub21ldHJpY3MlMkNpbXB1bHNlJTIwcmVzcG9uc2UlMkNGRVZEJTJDUg==" data-listing-date-sort="1605308400000" data-listing-file-modified-sort="1784790497640" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2340" data-listing-title-sort="Does Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">Nov 14, 2020</span>
-</td>
-<td>
-<a href="./posts/redistributive-shocks-labour-share/index.html" class="title listing-title">Does Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR</a>
-</td>
-<td>
-<span class="listing-categories">SVAR, VAR, labour share, productivity, macroeconometrics, impulse response, FEVD, R</span>
-</td>
-
-</tr>
-
-<tr data-index="7" data-categories="VkFSJTJDdGltZSUyMHNlcmllcyUyQ21hY3JvZWNvbm9tZXRyaWNzJTJDaW1wdWxzZSUyMHJlc3BvbnNlJTJDUg==" data-listing-date-sort="1605222000000" data-listing-file-modified-sort="1784713417653" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2664" data-listing-title-sort="A Notebook on VAR Models: Wold Representation, Impulse Response Functions and Identification" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">Nov 13, 2020</span>
-</td>
-<td>
-<a href="./posts/var-notebook/index.html" class="title listing-title">A Notebook on VAR Models: Wold Representation, Impulse Response Functions and Identification</a>
-</td>
-<td>
-<span class="listing-categories">VAR, time series, macroeconometrics, impulse response, R</span>
-</td>
-
-</tr>
-
-</tbody>
-</table>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
 
 
 
@@ -730,13 +681,6 @@ Categories
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -814,6 +758,11 @@ Categories
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1145,4 +1094,5 @@ Categories
 
 
 
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

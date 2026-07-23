@@ -73,7 +73,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
@@ -106,6 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -352,7 +352,7 @@ window.Quarto = {
 <p>In this project we will try tro replicate the results of of Bernanke, Boivin and Eliasz (QJE, 2005) in R. This code drinks from the work of Gambetti, Konstantin Boss, Kevin Kotzé Helmut Lütkepohl, and Joao Duarte.</p>
 <p>The BBE (2005) suggested augmenting standard small scale vector autoregression (VAR) models by adding unobserved latent factors estimated from a large macro dataset to include additional information in the analysis. They motivated the framework by observing that some economic concepts like output gap, the business cycle stance or inflation sometimes may not be observed without error by the econometrician (and maybe neither by the policy maker). By extracting the relevant information from a large dataset covering the main areas of the economy into factors would address the issue. On the other hand, variables observable in a timely manner and without large errors, could be defined as observed factors and included without transformation into the factor augmented VAR (FAVAR) system.</p>
 <section id="load-the-libraries-and-the-dataset" class="level3" data-number="0.1">
-<h3 data-number="0.1" class="anchored" data-anchor-id="load-the-libraries-and-the-dataset"><span class="header-section-number">0.1</span> Load the libraries and the dataset</h3>
+<h3 data-number="0.1" data-anchor-id="load-the-libraries-and-the-dataset"><span class="header-section-number">0.1</span> Load the libraries and the dataset</h3>
 <p>As usual, our first step is to load the libraries and the dataset</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>list.of.packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'boot'</span>, <span class="st">'tsDyn'</span>, <span class="st">'vars'</span>, <span class="st">'repr'</span>, <span class="st">'ggplot2'</span>, <span class="st">'dplyr'</span>, <span class="st">'reshape2'</span>, <span class="st">'factoextra'</span>, <span class="st">'svars'</span>)</span>
@@ -370,7 +370,7 @@ factoextra      svars
 </div>
 </section>
 <section id="scale-the-data" class="level3" data-number="0.2">
-<h3 data-number="0.2" class="anchored" data-anchor-id="scale-the-data"><span class="header-section-number">0.2</span> Scale the data</h3>
+<h3 data-number="0.2" data-anchor-id="scale-the-data"><span class="header-section-number">0.2</span> Scale the data</h3>
 <p>Dimensionality reduction is about extracting the variables that explain a largest share (leading) of the variance of the dataset. To avoid that units make very stable variables to have non deserved protagonism, we scale the dataset substracting the mean and dividing by the SD with the function <code>scale()</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Scale the data </span></span>
@@ -390,7 +390,7 @@ factoextra      svars
 </div>
 </section>
 <section id="a-quick-receipt-for-pca" class="level3" data-number="0.3">
-<h3 data-number="0.3" class="anchored" data-anchor-id="a-quick-receipt-for-pca"><span class="header-section-number">0.3</span> A quick receipt for PCA</h3>
+<h3 data-number="0.3" data-anchor-id="a-quick-receipt-for-pca"><span class="header-section-number">0.3</span> A quick receipt for PCA</h3>
 <p>Let’s suppose we have a matrix with several variables in columns. For each one of this variables we have to subtract the mean of the column, which will make it to have zero mean. In addition, we standardize by dividing by the standard deviation. In doin so we would have a normalize (0,1) matrix which we will call <span class="math inline">\(\bar{X}\)</span> (whe have its density plot just above).</p>
 <p>Next we transpose our matrix and multiply our original matrix by its transpose. This <span class="math inline">\(\bar{X}' \bar{X}\)</span> is a linear algebra way to obtain the covariance matrix.</p>
 <p>The next step is to calculate the eigenvectors and their corresponding eigenvalues of<span class="math inline">\(\bar{X}' \bar{X}\)</span>. From a geometric point of view, an eigenvector is a vector whose direction remains unchanged when a linear transformation is applied to it. To picture it mentally, we can imagine a 2x2 matrix, which is composed of two vectors (two directions). If we transform our cartesian axis to make it fit with the directions suggested by the 2x2 matrix, those ray-vectors that remain pointing in the same direction in our cartesian axis and in our new axis (derived by the 2x2 matrix) are the so called eigenvectors.</p>
@@ -451,7 +451,7 @@ IPNCONGD        0.5913619 0.03833919 1.604725e-01</code></pre>
 </div>
 </section>
 <section id="computing-the-factors" class="level3" data-number="0.4">
-<h3 data-number="0.4" class="anchored" data-anchor-id="computing-the-factors"><span class="header-section-number">0.4</span> Computing the factors</h3>
+<h3 data-number="0.4" data-anchor-id="computing-the-factors"><span class="header-section-number">0.4</span> Computing the factors</h3>
 <p>To compute the factors we just premultiply the four matrix of scaled variables with our three first factor loading which are stored in the matrix <span class="math inline">\(\hat{\Lambda}\)</span>. Below we just plot the factors too see how they look.</p>
 <p><span class="math display">\[
 \hat{F} = \bar{X} \hat{\Lambda}
@@ -474,7 +474,7 @@ IPNCONGD        0.5913619 0.03833919 1.604725e-01</code></pre>
 </div>
 </section>
 <section id="estimate-the-favar-model" class="level3" data-number="0.5">
-<h3 data-number="0.5" class="anchored" data-anchor-id="estimate-the-favar-model"><span class="header-section-number">0.5</span> Estimate the (FA)VAR model</h3>
+<h3 data-number="0.5" data-anchor-id="estimate-the-favar-model"><span class="header-section-number">0.5</span> Estimate the (FA)VAR model</h3>
 <p>Once we have the the factors we can estimate our (FA)VAR model. There are two type of series, the observable contained in the matrix <span class="math inline">\(Y_t\)</span> and the not observable series, summarized from the matrix <span class="math inline">\(X_t\)</span> into the matrix <span class="math inline">\(F_t\)</span> .</p>
 <p><span class="math display">\[
 \begin{align}X_t &amp;= \Lambda F_t + e_t \\ \\\begin{bmatrix} F_t \\ Y_t \end{bmatrix} &amp;= \Psi(L)\begin{bmatrix} F_{t-1} \\ Y_{t-1} \end{bmatrix} + v_t \end{align}
@@ -1090,7 +1090,7 @@ FFR    0.09366 -0.03022 -0.03523 0.15754 -0.03004  1.00000</code></pre>
 <p>We can see that while in the SVAR(12) the effect of FED Funds’ hike in inflation is mainly positive, in the case of the FAVAR(12) is mainly negative so we have partially solved the prize puzzle.</p>
 </section>
 <section id="bootstrapping" class="level3" data-number="0.6">
-<h3 data-number="0.6" class="anchored" data-anchor-id="bootstrapping"><span class="header-section-number">0.6</span> Bootstrapping</h3>
+<h3 data-number="0.6" data-anchor-id="bootstrapping"><span class="header-section-number">0.6</span> Bootstrapping</h3>
 <p>For bootstraping we will need to make use of the moving block bootstrap. In particular we will use the function <code>mb.boot()</code> the reason is that there are time dependency in the sampling and we can not ignore that fact.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>boot.svar<span class="fl">.2</span> <span class="ot">&lt;-</span>  <span class="fu">mb.boot</span>(svar<span class="fl">.2</span>, <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">nboot =</span> <span class="dv">100</span>)</span>
@@ -1106,7 +1106,7 @@ FFR    0.09366 -0.03022 -0.03523 0.15754 -0.03004  1.00000</code></pre>
 <p>As we can see the results in the CEE (1998) are robust to the bootrstraping.</p>
 </section>
 <section id="the-prize-puzzle" class="level3" data-number="0.7">
-<h3 data-number="0.7" class="anchored" data-anchor-id="the-prize-puzzle"><span class="header-section-number">0.7</span> The Prize Puzzle</h3>
+<h3 data-number="0.7" data-anchor-id="the-prize-puzzle"><span class="header-section-number">0.7</span> The Prize Puzzle</h3>
 <p>According to BBE (2005), central banks and the private sector have information not reflected in the VAR. Therefore, the measurement of policy innovations is likely to be contaminated. In addition, IRFscan be observed only for the included variables, which generally constitute only a small subset of the variables that the researcher and policymaker care about.</p>
 <p>The FAVAR method exploits a richer dataset than the VAR(p) model and it summarizes it in a set of factors. By doing so, the different dataset or information contained in the VAR and in the reality reduces profoundly. Adding this factors it allows to solve one of the most concerning puzzles in the empirical literature, the so called <em>prize puzzle.</em> With the FAVAR we see a mainly negative response of prices after a hike in the the federal funds rate or the so called policy rate.</p>
 
@@ -1116,13 +1116,6 @@ FFR    0.09366 -0.03022 -0.03523 0.15754 -0.03004  1.00000</code></pre>
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -1200,6 +1193,11 @@ FFR    0.09366 -0.03022 -0.03523 0.15754 -0.03004  1.00000</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1531,4 +1529,5 @@ FFR    0.09366 -0.03022 -0.03523 0.15754 -0.03004  1.00000</code></pre>
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

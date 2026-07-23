@@ -75,7 +75,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
@@ -108,6 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -355,14 +355,14 @@ window.Quarto = {
 <p>The estimation of posterior probability distributions using a stochastic process known as Markov chain Monte Carlo (MCMC). Here we’ll produce samples from the joint posterior without maximizing anything. Instead of having to lean on quadratic and other approximations of the shape of the posterior, now we’ll be able to sample directly from the posterior without assuming a Gaussian, or any other, shape.</p>
 <p>The cost of this power is that it may take much longer for our estimation to complete, and usually more work is required to specify the model as well. But the benefit is escaping the awkwardness of assuming multivariate normality</p>
 <section id="metropolis-hasting-algorithm" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="metropolis-hasting-algorithm"><span class="header-section-number">1</span> Metropolis-Hasting algorithm</h2>
+<h2 data-number="1" data-anchor-id="metropolis-hasting-algorithm"><span class="header-section-number">1</span> Metropolis-Hasting algorithm</h2>
 <p>A way to draw samples from a target posterior density <span class="math inline">\(Pr(\Theta|y)\)</span> is to use Markov chain techniques, where each sample only depends on the last sample drawn. Starting with an approximate target density, the aproximations are improved with each step of the sequential procedure.</p>
 <p>In other words, the sequence of samples is converging to samples drawn at random from the target distribution. A random walk from a Markov chain is simulated, where the stationary distribution of the chain is the target density, and the simulated values converge to the stationary distribution or the target density.</p>
 <p>The main concept in a Markov chain simulation is to devise a Markov process whose stationary distribution is the target density. The simulation must be long enough so that the present samples are close enough to the target. It has been shown that this is possible and that convergence can be accomplished.</p>
 <p>The general scheme for a Markov chain simulation is to create a sequence <span class="math inline">\(\Theta_t \quad t=1,2...\)</span> by beginning at some value <span class="math inline">\(\Theta_0\)</span> and at the t-th stage, select the present value from a transition function <span class="math inline">\(Q_t(\Theta_t|\Theta_{t-1})\)</span> , where the present value <span class="math inline">\(\Theta_t\)</span> only depends on the previous one via the transition function.</p>
 <p>The value of the starting value <span class="math inline">\(\Theta_0\)</span> is usually based on a good approximation to the target density. In order to converge to the target distribution, the transition function must be selected with care.</p>
 <section id="the-algorithm" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="the-algorithm"><span class="header-section-number">1.1</span> The algorithm</h3>
+<h3 data-number="1.1" data-anchor-id="the-algorithm"><span class="header-section-number">1.1</span> The algorithm</h3>
 <p>Suppose the target density <span class="math inline">\(Pr(\Theta|y)\)</span> can be computed, then the Metropolis technique generates a sequence <span class="math inline">\(\Theta_t \quad t=1,2...\)</span> with a distribution that converges to a stationary distribution of the chain.</p>
 <p>Briefly, the steps taken to construct the sequence are: <strong>a</strong>. Draw the initial value o starting point <span class="math inline">\(\Theta_0\)</span> from a starting distribution <span class="math inline">\(Pr_0(\Theta)\)</span>some approximation to the target density,</p>
 <p>For <span class="math inline">\(t=1,2,...\)</span> :</p>
@@ -378,7 +378,7 @@ s=\frac{Pr(\Theta_*|y)}{Pr(\Theta_{t-1}|y)}
 <p>To summarize the above: - <strong>If</strong> the jump given by step b above increases the posterior density, let <span class="math inline">\(\Theta_t=\Theta_*\)</span>; - <strong>However</strong>, if the jump decreases the posterior density, let <span class="math inline">\(\Theta_t=\Theta_*\)</span> with probability <span class="math inline">\(s\)</span>, otherwise let <span class="math inline">\(\Theta_t=\Theta_{t-1}\)</span>. - One must show the sequence generated is a Markov chain with a unique stationary density that converges to the target distribution</p>
 </section>
 <section id="a-story-about-good-king-markov" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="a-story-about-good-king-markov"><span class="header-section-number">1.2</span> A story about Good King Markov</h3>
+<h3 data-number="1.2" data-anchor-id="a-story-about-good-king-markov"><span class="header-section-number">1.2</span> A story about Good King Markov</h3>
 <p>For the moment, forget about posterior densities and MCMC. Consider instead the tale of Good King Markov. King Markov was a benevolent autocrat of an island kingdom, a circular archipelago, with 10 islands. Each island was neighbored by two others, and the entire archipelago formed a ring. The islands were of different sizes, and so had different sized populations living on them. The second island was about twice as populous as the first, the third about three times as populous as the first, and so on, up to the largest island, which was 10 times as populous as the smallest.</p>
 <p>The Good King was an autocrat, but he did have a number of obligations to his people. Among these obligations, King Markov agreed to visit each island in his kingdom from time to time. Since the people loved their king, each island preferred that he visit them more often. And so everyone agreed that the king should visit each island in proportion to its population size, visiting the largest island 10 times as often as the smallest, for example.</p>
 <p>The Good King Markov, however, wasn’t one for schedules or bookkeeping, and so he wanted a way to fulfill his obligation without planning his travels months ahead of time. Also, since the archipelago was a ring, the King insisted that he only move among adjacent islands, to minimize time spent on the water.</p>
@@ -436,7 +436,7 @@ s=\frac{Pr(\Theta_*|y)}{Pr(\Theta_{t-1}|y)}
 <p>• The “weeks” in our objective are <strong>samples taken from the joint posterior of the parameters</strong> in the model.</p>
 </section>
 <section id="estimating-ar1-with-m-h." class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="estimating-ar1-with-m-h."><span class="header-section-number">1.3</span> Estimating AR(1) with M-H.</h3>
+<h3 data-number="1.3" data-anchor-id="estimating-ar1-with-m-h."><span class="header-section-number">1.3</span> Estimating AR(1) with M-H.</h3>
 <p>Load the data</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(expm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -613,13 +613,6 @@ Pr(\sigma^2) = \propto(\sigma^2)^{-(\tilde{v}+2)/2} exp(-1/2\frac{\tilde{s}}{\si
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -697,6 +690,11 @@ Pr(\sigma^2) = \propto(\sigma^2)^{-(\tilde{v}+2)/2} exp(-1/2\frac{\tilde{s}}{\si
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1028,4 +1026,5 @@ Pr(\sigma^2) = \propto(\sigma^2)^{-(\tilde{v}+2)/2} exp(-1/2\frac{\tilde{s}}{\si
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

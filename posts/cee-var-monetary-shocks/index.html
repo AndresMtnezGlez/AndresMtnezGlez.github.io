@@ -73,7 +73,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
@@ -106,6 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -364,7 +364,7 @@ window.Quarto = {
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>dta<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://github.com/AndresMtnezGlez/heptaomicron/raw/main/ex1data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="reduced-form-in-sur-specification" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="reduced-form-in-sur-specification"><span class="header-section-number">1</span> Reduced form in SUR specification</h2>
+<h2 data-number="1" data-anchor-id="reduced-form-in-sur-specification"><span class="header-section-number">1</span> Reduced form in SUR specification</h2>
 <p>We start by estimating what is called the reduced form of the VAR. SUR stands for seemingly unrelated regression model with lagged variables and deterministic terms (the constant) as common regressors. For instance, the VAR(1) model with two variables can be expressed as:</p>
 <p><span class="math display">\[
 \begin{eqnarray}\nonumber
@@ -470,7 +470,7 @@ Serie1_{T} &amp; Serie2_{T}
 </div>
 </section>
 <section id="varp-estimation-using-ols" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="varp-estimation-using-ols"><span class="header-section-number">2</span> VAR(p) estimation using OLS</h2>
+<h2 data-number="2" data-anchor-id="varp-estimation-using-ols"><span class="header-section-number">2</span> VAR(p) estimation using OLS</h2>
 <p>Once we have the data properly structured in SUR fashion, it is fairly easy to implement the OLS estimator in matrix form. To do so, we will use a small function. This function will return us the estimated coefficients (K*P+K = Number of Variables * Number of lags + Number of variables (to account the constant)) .</p>
 <p>The OLS estimator can be defined as:</p>
 <p><span class="math display">\[
@@ -510,7 +510,7 @@ FFR   -0.03153 -0.03726  0.20864</code></pre>
 </div>
 </section>
 <section id="from-varp-to-var1-the-companion-form" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="from-varp-to-var1-the-companion-form"><span class="header-section-number">3</span> From VAR(p) to VAR(1): the Companion Form</h2>
+<h2 data-number="3" data-anchor-id="from-varp-to-var1-the-companion-form"><span class="header-section-number">3</span> From VAR(p) to VAR(1): the Companion Form</h2>
 <p>It is possible to express a VAR(p) model in a VAR(1) form, which turns out to be very useful in many practical situations (and for some technical derivations). This reformulation is done by expressing the VAR(p) model in the companion-form, which is accomplished as follows.</p>
 <p><span class="math display">\[
 \begin{eqnarray}\nonumber
@@ -590,7 +590,7 @@ FFR   0.20864
 </div>
 </section>
 <section id="from-var1-to-the-ma-representation" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="from-var1-to-the-ma-representation"><span class="header-section-number">4</span> From VAR(1) to the MA representation</h2>
+<h2 data-number="4" data-anchor-id="from-var1-to-the-ma-representation"><span class="header-section-number">4</span> From VAR(1) to the MA representation</h2>
 <p>If we start from:</p>
 <p><span class="math display">\[
 {\bf{y}}_{t}=\mu +A_{1}{\bf{y}}_{t-1}+{\bf{u}}_{t}
@@ -626,7 +626,7 @@ A(L)^{-1}  :=B(L)=\sum_{j=0}^{\infty }B_{j}L^{j}
 </div>
 </section>
 <section id="from-var-to-svar-cholesky-identification" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="from-var-to-svar-cholesky-identification"><span class="header-section-number">5</span> From VAR to SVAR: Cholesky identification</h2>
+<h2 data-number="5" data-anchor-id="from-var-to-svar-cholesky-identification"><span class="header-section-number">5</span> From VAR to SVAR: Cholesky identification</h2>
 <p>We can define the Covariance Matrix of the residuals as</p>
 <p><span class="math display">\[
 \hat{\Omega} = \frac{\hat{e}\hat{e'}}{n-Kp-1}
@@ -691,7 +691,7 @@ FFR  0.103614491 0.0307911 0.4944225</code></pre>
 <p>However, it would be interesting to have some confidence intervals of our estimations. Because many shocks are pretty close to zero. To do so, we have to bootstrap the residuals.</p>
 </section>
 <section id="bootstrapping-the-residuals" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="bootstrapping-the-residuals"><span class="header-section-number">6</span> Bootstrapping the residuals</h2>
+<h2 data-number="6" data-anchor-id="bootstrapping-the-residuals"><span class="header-section-number">6</span> Bootstrapping the residuals</h2>
 <ol type="1">
 <li><p>Fix the first N × p observations of your data set.</p></li>
 <li><p>Estimate the VAR(p) on the original data, save the residuals and the coefficients. This is, save the matrices A and u in the case of the VAR(1) with two variables.</p>
@@ -813,7 +813,7 @@ A_{1}=\left[\begin{array}{cc}\alpha_{11} &amp; \alpha_{12} \\\alpha_{21} &amp; \
 </div>
 </section>
 <section id="the-price-puzzle" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="the-price-puzzle"><span class="header-section-number">7</span> The price puzzle</h2>
+<h2 data-number="7" data-anchor-id="the-price-puzzle"><span class="header-section-number">7</span> The price puzzle</h2>
 <p>In our Cholesky identification we have assumed that the monetary policy shock has no effects contemporaneously on both inflation and GDP growth. The price puzzle appears in the first column, bottom row in our graph above. A positive shock from the monetary policy (meaning higher policy interest rate) increases at the beginning, rather than decreases the prices! In other words, after a contractionary shock inflation goes up.</p>
 <p>Christiano Eichenbaum and Evans (1998) explain this issue, that was first pointed out by Sims in the following way:</p>
 <p>“Sims (1992) conjectured that prices appeared to rise after certain measures of a contractionary policy shock because those measures were based on specifications of It that did not include information about future inflation that was available to the Fed. Put differently, the conjecture is that policy shocks which are associated with substantial price puzzles are actually confounded with non-policy disturbances that signal future increases in prices.” (CEE 98)</p>
@@ -825,13 +825,6 @@ A_{1}=\left[\begin{array}{cc}\alpha_{11} &amp; \alpha_{12} \\\alpha_{21} &amp; \
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -909,6 +902,11 @@ A_{1}=\left[\begin{array}{cc}\alpha_{11} &amp; \alpha_{12} \\\alpha_{21} &amp; \
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1240,4 +1238,5 @@ A_{1}=\left[\begin{array}{cc}\alpha_{11} &amp; \alpha_{12} \\\alpha_{21} &amp; \
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

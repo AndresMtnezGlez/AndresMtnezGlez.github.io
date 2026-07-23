@@ -74,7 +74,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
@@ -107,6 +106,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -567,7 +567,7 @@ LS_Total_dm 1.104107e-05 9.243735e-06</code></pre>
 </div>
 </div>
 <section id="from-var-to-svar" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="from-var-to-svar"><span class="header-section-number">1</span> From VAR to SVAR</h2>
+<h2 data-number="1" data-anchor-id="from-var-to-svar"><span class="header-section-number">1</span> From VAR to SVAR</h2>
 <p>To understand SVAR models, it is important to look more closely at the <em>variance-covariance matrix</em> . It contains the variances of the endogenous variable on its diagonal elements and covariances of the errors on the off-diagonal elements. The covariances contain information about contemporaneous effects each variable has on the others. The covariance matrices of standard VAR models is <em>symmetric</em>, i.e.&nbsp;the elements to the top-right of the diagonal (the “upper triangular”) mirror the elements to the bottom-left of the diagonal (the “lower triangular”). This reflects the idea that the relations between the endogenous variables only reflect correlations and do not allow to make statements about causal relationships.</p>
 <p>Contemporaneous causality or, more precisely, the structural relationships between the variables is analysed in the context of SVAR models, which impose special restrictions on the covariance matrix and – depending on the model – on other coefficient matrices as well. The drawback of this approach is that it depends on the more or less subjective assumptions made by the researcher. For many researchers this is too much subjectiv information, even if sound economic theory is used to justify them. However, they can be useful tools and that is why it is worth to look into them.</p>
 <p>To avoid this issue we have to follow and identification strategy and transform our VAR in a SVAR. Exploding the fact that <span class="math inline">\(\gamma_{1,2}\)</span>, this is, the effect of a lag of Labour Share on TFP is not significantly different from zero implies that current shocks to labor share do not have an impact on future productivity. Therefore the restriction that we are going to use, will make our matrix of VCV to look something like:</p>
@@ -576,7 +576,7 @@ LS_Total_dm 1.104107e-05 9.243735e-06</code></pre>
 \]</span></p>
 <p>To set-up the matrix for the contemporaneous coefficients, we need to make use of a matrix that has the appropriate dimensions. This is easily achieved with the aid of the <code>diagnol</code> matrix. To code this appropriately we need to insert zeros for restrictions and <code>NA</code> in all those places that would not pertain to a restriction.</p>
 <section id="the-b-model" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="the-b-model"><span class="header-section-number">1.1</span> The B Model</h3>
+<h3 data-number="1.1" data-anchor-id="the-b-model"><span class="header-section-number">1.1</span> The B Model</h3>
 <p>The B-model describes the structural relationships of the errors directly by adding a matrix <span class="math inline">\(B\)</span> to the error term and normalises the error variances to unity so that</p>
 <p><span class="math display">\[
 z_t  = \Gamma z_{t-1} + B\varepsilon_t
@@ -638,7 +638,7 @@ LS_Total_dm 0.001118   0.0009278</code></pre>
 </section>
 </section>
 <section id="irf" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="irf"><span class="header-section-number">2</span> IRF</h2>
+<h2 data-number="2" data-anchor-id="irf"><span class="header-section-number">2</span> IRF</h2>
 <p>Impulse response functions (IR) answer the question <em>What is the response of current and future values of each of the variables to a one-unit increase in the current value of one of the structural errors, assuming that this error returns to zero in subsequent periods and that all other errors are equal to zero</em> The implied thought experiment of changing one error while holding the others constant makes sense only when the errors are uncorrelated across equations. It is slower but more clear to keep each impulse reponse function separated to work with it latter.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>TFP_on_LS <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar<span class="fl">.1</span>, <span class="at">impulse =</span> <span class="st">"TFP_dt"</span>,  <span class="at">response =</span> <span class="st">"LS_Total_dm"</span>, <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span>
@@ -695,7 +695,7 @@ LS_Total_dm 0.001095349 0.002842178</code></pre>
 </div>
 </section>
 <section id="fevd" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="fevd"><span class="header-section-number">3</span> FEVD</h2>
+<h2 data-number="3" data-anchor-id="fevd"><span class="header-section-number">3</span> FEVD</h2>
 <p>To generate the forecast error variance decompositions we make use of the <code>fevd</code> command, where we set the number of steps ahead to ten. Note that these results suggest that output is largely determined by TFP shocks, while Labor share is influenced by both shocks.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>var.<span class="fl">1.</span>vd <span class="ot">&lt;-</span> <span class="fu">fevd</span>(var<span class="fl">.1</span>, <span class="at">n.ahead =</span> <span class="dv">10</span>)</span>
@@ -710,7 +710,7 @@ LS_Total_dm 0.001095349 0.002842178</code></pre>
 </div>
 </section>
 <section id="what-happens-if-we-change-the-definition-of-labor-share" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="what-happens-if-we-change-the-definition-of-labor-share"><span class="header-section-number">4</span> What happens if we change the definition of Labor Share?</h2>
+<h2 data-number="4" data-anchor-id="what-happens-if-we-change-the-definition-of-labor-share"><span class="header-section-number">4</span> What happens if we change the definition of Labor Share?</h2>
 <p>As the paper points out there are several ways to construct the Labor Share. Let’s see what happens if we use another definition of Labor Share. In this case we are using an accounting Labor Share of Income by legal form of organization isolating the corporate sector.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data_PS2_Macro.xlsx"</span>)</span>
@@ -977,13 +977,6 @@ LS_Total_dm 0.001118   0.0009278</code></pre>
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -1061,6 +1054,11 @@ LS_Total_dm 0.001118   0.0009278</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1392,4 +1390,5 @@ LS_Total_dm 0.001118   0.0009278</code></pre>
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

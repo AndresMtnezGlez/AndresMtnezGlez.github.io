@@ -67,6 +67,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -244,11 +245,11 @@ ul.task-list li input[type="checkbox"] {
     <i class="bi bi-file-earmark-text"></i>
      <span class="about-link-text">RPubs</span>
   </a>
-  <a href="https://www.linkedin.com/in/YOUR-LINKEDIN" class="about-link" rel="" target="">
+  <a href="https://www.linkedin.com/in/andr%C3%A9s-mart%C3%ADnez-8a034bba/" class="about-link" rel="" target="">
     <i class="bi bi-linkedin"></i>
      <span class="about-link-text">LinkedIn</span>
   </a>
-  <a href="mailto:YOUR@EMAIL" class="about-link" rel="" target="">
+  <a href="mailto:andres.mtnez.glez[at]gmail[.com]" class="about-link" rel="" target="">
     <i class="bi bi-envelope"></i>
      <span class="about-link-text">Email</span>
   </a>
@@ -257,9 +258,7 @@ ul.task-list li input[type="checkbox"] {
   <div class="about-contents"><main class="content" id="quarto-document-content">
 
 <p>I am an economist at the <strong>Autoridad Independiente de Responsabilidad Fiscal (AIReF)</strong>, Spain’s independent fiscal institution, based in Madrid.</p>
-<p>My work sits at the intersection of applied fiscal policy, econometrics, and institutional analysis. I work on EU and Spanish fiscal governance — the net expenditure path, the control account, and the reformed economic governance framework — as well as macroeconomic forecast endorsements, long-term growth modelling, and the labour-market effects of regulatory reform.</p>
-<p>I currently lead the project on external reviews of independent fiscal institutions within the Economic Governance Reform Working Group of the Network of EU Independent Fiscal Institutions (EUNIFI).</p>
-<p>Most of my applied work is in <strong>R</strong>: time-series and VAR estimation, forecasting, and reproducible reporting.</p>
+<p>I work on applied fiscal policy and macroeconomic analysis, at the intersection of econometrics, EU fiscal governance, and long-run growth modelling. This page collects a set of technical notes and small projects in R that I wrote during my master’s and the years after; mostly working through methods in time series, Bayesian computation, and statistical learning.</p>
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -363,6 +362,11 @@ ul.task-list li input[type="checkbox"] {
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -694,4 +698,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

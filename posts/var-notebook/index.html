@@ -73,7 +73,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
@@ -106,6 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -449,7 +449,7 @@ det(I_k - \Gamma z) \neq 0 \quad for \quad \vert z \vert &lt;1
 </div>
 </div>
 <section id="structural-innovations" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="structural-innovations"><span class="header-section-number">1</span> Structural Innovations</h2>
+<h2 data-number="1" data-anchor-id="structural-innovations"><span class="header-section-number">1</span> Structural Innovations</h2>
 <p>We have defined <span class="math inline">\(\varepsilon_t\)</span> as the vector of structural innovations. We would like them to be un correlated with each other in each period of time. In other words we would like them to be:</p>
 <p><span class="math display">\[
 \varepsilon_t  \sim N(0, I)
@@ -512,7 +512,7 @@ VAR(x) &amp;COV(x,y) \\ COV(y,x)  &amp; VAR(y)
 \]</span></p>
 </section>
 <section id="structural-vma-representation" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="structural-vma-representation"><span class="header-section-number">2</span> Structural VMA representation</h2>
+<h2 data-number="2" data-anchor-id="structural-vma-representation"><span class="header-section-number">2</span> Structural VMA representation</h2>
 <p>The structural VMA representation is:</p>
 <p><span class="math display">\[
 y_t = \tilde{\mu} + \Theta(L)u_t
@@ -568,7 +568,7 @@ y_t = \tilde{\mu} + \Theta(L)u_t
 <p>We define the <strong>dynamic multipliers</strong> as the response at <span class="math inline">\(t+s\)</span> of a variable <span class="math inline">\(y_i\)</span> (i.e.,<span class="math inline">\(y_{i, t+s}\)</span>) to a shock <span class="math inline">\(u_j\)</span>that happened at time <span class="math inline">\(t\)</span>, <span class="math inline">\(u_{j,t}\)</span> . • The dynamic multipliers are</p>
 </section>
 <section id="impulse-response-functions" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="impulse-response-functions"><span class="header-section-number">3</span> Impulse response functions</h2>
+<h2 data-number="3" data-anchor-id="impulse-response-functions"><span class="header-section-number">3</span> Impulse response functions</h2>
 <p>Impulse response functions (IR) answer the question <em>What is the response of current and future values of each of the variables to a one-unit increase in the current value of one of the structural errors, assuming that this error returns to zero in subsequent periods and that all other errors are equal to zero</em> The implied thought experiment of changing one error while holding the others constant makes sense only when the errors are uncorrelated across equations</p>
 <p>• IRFs describe the response at each period t + s, for all s &gt; 0, of variable yit+s to a shock ujt that happens at time t. • That is, IRFs are defined by the sequence of dynamic multipliers n θ (s) ij o .</p>
 <p>Let’s see it with an example. We assume we have two variables and we are interested to analyze the effect of on a variable in a bivariate system. To isolate such an effect, suppose that both variables assume their mean value prior to time t=0, <span class="math inline">\(y_t = \mu\)</span> and the first variable increases by one unit in period t = 0, that is, <span class="math inline">\(\varepsilon_{1,0}=1\)</span>. Now we can can trace out what happens to the system during periods t = 1, 2,… if no further shocks occur. Because we are not interested in the mean of the system in such an exercise but just in the variations of the variables around their means, we assume that all three variables have mean zero and set <span class="math inline">\(\mu=0\)</span>. Hence, <span class="math inline">\(y_t = \Gamma y_t + \varepsilon_t\)</span> or, in matrix form:</p>
@@ -675,11 +675,11 @@ Series.2  -0.1014   1.0000</code></pre>
 <p>However, those matrices only describe the correlation between the errors, but it remains unclear in which direction the causalities go. <em>Identifying</em> these causal relationships is one of the main challenges of any VAR analysis.</p>
 </section>
 <section id="what-is-the-impact-in-the-long-run" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="what-is-the-impact-in-the-long-run"><span class="header-section-number">4</span> What is the impact in the long run?</h2>
+<h2 data-number="4" data-anchor-id="what-is-the-impact-in-the-long-run"><span class="header-section-number">4</span> What is the impact in the long run?</h2>
 <p>Since yt is assumed covariance stationary, then the limiting dynamic multiplier is</p>
 <p>That is, shocks to uj have no long-run impact on the level of yi . In other terms, the response of yit+s in the long-run to shocks ujt at time t is zero. The reason is that yt (we have assumed) is covariance stationary.</p>
 <section id="what-is-the-cumulative-impact-in-the-long-run" class="level3" data-number="4.1">
-<h3 data-number="4.1" class="anchored" data-anchor-id="what-is-the-cumulative-impact-in-the-long-run"><span class="header-section-number">4.1</span> What is the <em>cumulative</em> impact in the long run?</h3>
+<h3 data-number="4.1" data-anchor-id="what-is-the-cumulative-impact-in-the-long-run"><span class="header-section-number">4.1</span> What is the <em>cumulative</em> impact in the long run?</h3>
 <p>Now, there is a legit question. He have seen the impact of one variable on another variable at a moment t+s. However, what is the cumulative impact in the long run? Apparently the answer to this questions is just to add all the all these impulses over time.</p>
 <p>The cumulative impact of <span class="math inline">\(u_j\)</span> on <span class="math inline">\(y_i\)</span> in the long-run is given by</p>
 <p><span class="math display">\[
@@ -740,14 +740,14 @@ Adjuntando el paquete: 'expm'</code></pre>
 </section>
 </section>
 <section id="forecast-error" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="forecast-error"><span class="header-section-number">5</span> Forecast Error</h2>
+<h2 data-number="5" data-anchor-id="forecast-error"><span class="header-section-number">5</span> Forecast Error</h2>
 <p>Forecast error is the difference between the actual value of</p>
 </section>
 <section id="forecast-error-variance-decomposition" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="forecast-error-variance-decomposition"><span class="header-section-number">6</span> Forecast Error Variance Decomposition</h2>
+<h2 data-number="6" data-anchor-id="forecast-error-variance-decomposition"><span class="header-section-number">6</span> Forecast Error Variance Decomposition</h2>
 </section>
 <section id="identification-strategy" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="identification-strategy"><span class="header-section-number">7</span> Identification Strategy</h2>
+<h2 data-number="7" data-anchor-id="identification-strategy"><span class="header-section-number">7</span> Identification Strategy</h2>
 <ul>
 <li><p>Short-run restrictions are associated with contemporaneous effects and, therefore, are implemented on <span class="math inline">\(\Theta_0\)</span>. A famous example is Stock &amp; Watson (2001). “Vector Autoregressions,” Journal of Economic Perspectives. For instance, the restriction imposed below implies that <span class="math inline">\(u_{2,t}\)</span> has no contemporaneous effect on <span class="math inline">\(y_{1,t}\)</span> that is:</p>
 <p><span class="math display">\[
@@ -765,13 +765,6 @@ Adjuntando el paquete: 'expm'</code></pre>
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -849,6 +842,11 @@ Adjuntando el paquete: 'expm'</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1180,4 +1178,5 @@ Adjuntando el paquete: 'expm'</code></pre>
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

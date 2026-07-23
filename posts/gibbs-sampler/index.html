@@ -73,7 +73,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
@@ -106,6 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script type="application/ld+json">
 
 {
@@ -350,12 +350,12 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="introduction" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<h2 data-number="1" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>Gibbs sampler is an example of the Markov Chain - Monte Carlo (MCMC) technique used to estimate Bayesian models when analytical solution is not feasible.</p>
 <p>Prior distributions reflect your knowledge of the phenomenon prior to the experiment. They are part of the model. Initial values are part of the solution (MCMC algorithm) and tell the algorithm where to start looking for the posterior distribution. Initial values can be based on the data. The prior distributions cannot.</p>
 </section>
 <section id="theory" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="theory"><span class="header-section-number">2</span> Theory</h2>
+<h2 data-number="2" data-anchor-id="theory"><span class="header-section-number">2</span> Theory</h2>
 <p>Let <span class="math inline">\(y_1,...,y_n\)</span> be an i.i.d. sample from a normal distribution with unknown mean and unknown precision (inverse variance) :</p>
 <p><span class="math display">\[
 y_i|\mu,\tau \sim N(\mu,\tau)
@@ -379,12 +379,12 @@ y_i|\mu,\tau \sim N(\mu,\tau)
 <p>respectively.</p>
 </section>
 <section id="the-algorithm" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="the-algorithm"><span class="header-section-number">3</span> The Algorithm</h2>
+<h2 data-number="3" data-anchor-id="the-algorithm"><span class="header-section-number">3</span> The Algorithm</h2>
 <p>Now, let’s implement the Gibbs sampler. Based on the above result, it should go as follows: - Step 1: assign some starting values <span class="math inline">\(\mu^{\ast}\)</span> and <span class="math inline">\(\tau^{\ast}\)</span> to the parameters of interest. - Step 2: Given <span class="math inline">\(\tau = \tau^{\ast}\)</span>, sample the new value of <span class="math inline">\(\mu^{\ast}\)</span> from a normal distribution with mean <span class="math inline">\(\frac{n\bar{y}\tau^{\ast}+\mu_0\tau_0}{n\tau^{\ast}+\tau_0}\)</span>and precision (inverse variance) <span class="math inline">\(n\tau^{\ast}+\tau_0\)</span>. - Step 3: Given <span class="math inline">\(\mu=\mu^{\ast}\)</span>, sample the new value of <span class="math inline">\(\tau^{\ast}\)</span> from a gamma distribution with parameters <span class="math inline">\(a+n/2\)</span> and <span class="math inline">\(\frac{n\bar{y}\tau^{\ast}+\mu_0\tau_0}{n\tau^{\ast}+\tau_0}\)</span>. - Repeat Steps 2 and 3 many times.</p>
 <p>It is always worth it to write our your algorithm, as I have done above, before getting down to code.</p>
 </section>
 <section id="the-code" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="the-code"><span class="header-section-number">4</span> The Code</h2>
+<h2 data-number="4" data-anchor-id="the-code"><span class="header-section-number">4</span> The Code</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gibbs.normal <span class="ot">&lt;-</span> <span class="cf">function</span>(y,mu0,tau0,a,b,<span class="at">Niter=</span><span class="dv">10</span><span class="sc">^</span><span class="dv">3</span>){</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> </span>
@@ -413,7 +413,7 @@ y_i|\mu,\tau \sim N(\mu,\tau)
 </div>
 </section>
 <section id="example" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="example"><span class="header-section-number">5</span> Example</h2>
+<h2 data-number="5" data-anchor-id="example"><span class="header-section-number">5</span> Example</h2>
 <p>Let’s take a look at the anthropological data collected by Prof.&nbsp;Nancy Howell. You can see it has four variables: height (cm), weight (kg), age (years) and the variable <code>male</code> which equals 1 for a male and 0 for a female. Let’s concentrate on adult heights only (and use a somewhat arbitrary cut-off point of 18 years of age):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/rmcelreath/rethinking/master/data/Howell1.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>)</span>
@@ -509,13 +509,6 @@ x_i \sim N(\mu,\tau)
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -593,6 +586,11 @@ x_i \sim N(\mu,\tau)
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -924,4 +922,5 @@ x_i \sim N(\mu,\tau)
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

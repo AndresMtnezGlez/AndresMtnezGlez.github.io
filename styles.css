@@ -1,3 +1,103 @@
-.navbar-brand { font-weight: 600; }
-body { font-size: 1.02rem; }
-.quarto-title-block .description { font-size: 1.05rem; color: #555; }
+/* ---- tipografía y base ---- */
+body {
+  font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+main { max-width: 46rem; }
+
+h1, h2, h3, h4 {
+  font-family: Charter, "Bitstream Charter", Cambria, Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #111;
+}
+
+h1 { font-size: 1.85rem; margin-bottom: 0.2rem; }
+h2 { font-size: 1.3rem; margin-top: 2.6rem; margin-bottom: 0.8rem;
+     padding-bottom: 0.3rem; border-bottom: 1px solid #e6e6e6; }
+h3 { font-size: 1.1rem; margin-top: 1.8rem; }
+
+a { color: #14507a; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---- navbar discreta ---- */
+.navbar {
+  background: #fff !important;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0.4rem 0;
+}
+.navbar-brand { font-weight: 600; font-size: 1.05rem; color: #111 !important; }
+.navbar .nav-link { color: #444 !important; font-size: 0.95rem; }
+.navbar .nav-link:hover { color: #14507a !important; }
+.navbar-brand-container { padding-left: 0; }
+
+/* ---- quitar badges de categoría ---- */
+.quarto-category, .listing-categories, .quarto-title .quarto-categories { display: none !important; }
+
+/* ---- barra lateral de categorías fuera ---- */
+#quarto-margin-sidebar .quarto-listing-category { display: none !important; }
+
+/* ---- listados: filas limpias, sin tarjetas ---- */
+.quarto-listing { margin-bottom: 2rem; }
+
+.quarto-post {
+  border: none !important;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0.9rem 0;
+  margin: 0;
+}
+.quarto-post:last-child { border-bottom: none; }
+
+.quarto-post .listing-title {
+  font-size: 1.03rem;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+.quarto-post .listing-title a { color: #14507a; }
+
+.quarto-post .listing-description {
+  font-size: 0.93rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.quarto-post .listing-date {
+  font-size: 0.85rem;
+  color: #999;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- toc discreto ---- */
+#TOC, .sidebar { font-size: 0.85rem; }
+#TOC a { color: #666; }
+
+/* ---- footer ---- */
+.nav-footer {
+  border-top: 1px solid #e6e6e6;
+  font-size: 0.85rem;
+  color: #888;
+  background: #fff;
+}
+
+/* ---- bloques de código ---- */
+pre {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  font-size: 0.86rem;
+}
+code { font-size: 0.88em; }
+
+/* ---- la nota "views are my own" sin caja llamativa ---- */
+.callout {
+  border: none !important;
+  border-left: 2px solid #ddd !important;
+  background: transparent !important;
+  font-size: 0.9rem;
+  color: #666;
+}
+.callout-title { display: none !important; }
