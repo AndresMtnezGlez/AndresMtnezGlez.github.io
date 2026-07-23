@@ -1,13 +1,65 @@
 ---
 title: "Research & Notes"
-description: "Technical notes and code on VAR models, time-series econometrics, and applied macroeconomics by Andrés Martínez Glez."
+description: "Technical notes and code on VAR models, structural macroeconometrics, Bayesian methods and statistical techniques, by Andrés Martínez González."
 listing:
-  contents: posts
-  sort: "date desc"
-  type: default
-  categories: true
-  fields: [date, title, description, categories]
-  feed: true
+  - id: var-macro
+    contents: posts
+    include:
+      categories: "{VAR,SVAR,FAVAR}"
+    sort: "date desc"
+    type: default
+    fields: [date, title, description]
+    feed: false
+  - id: bayesian-computational
+    contents: posts
+    include:
+      categories: "{Bayesian,MCMC,Markov chains,Tauchen,numerical methods}"
+    sort: "date desc"
+    type: default
+    fields: [date, title, description]
+    feed: false
+  - id: statistical-methods
+    contents: posts
+    include:
+      categories: "{PCA,dimensionality reduction,linear algebra}"
+    sort: "date desc"
+    type: default
+    fields: [date, title, description]
+    feed: false
+  - id: all-posts
+    contents: posts
+    sort: "date desc"
+    type: table
+    table-hover: true
+    categories: true
+    fields: [date, title, categories]
+    feed: true
 ---
 
-Technical notes, replications, and code. Source for everything here is on [GitHub](https://github.com/AndresMtnezGlez); older versions of some notes remain on [RPubs](https://rpubs.com/andresmtnezglez).
+Technical notes, replications, and code on applied macroeconometrics and statistical methods. Source for everything is on [GitHub](https://github.com/AndresMtnezGlez); older versions of some notes remain on [RPubs](https://rpubs.com/andresmtnezglez).
+
+## VAR and structural macroeconometrics
+
+Estimation and identification of vector autoregressions, impulse response analysis, and replications of classic papers in empirical monetary and business-cycle macroeconomics.
+
+:::{#var-macro}
+:::
+
+## Bayesian and computational methods
+
+Simulation-based estimation, Markov chain methods, and numerical techniques for discretising stochastic processes.
+
+:::{#bayesian-computational}
+:::
+
+## Statistical methods
+
+Dimensionality reduction and the linear algebra behind it.
+
+:::{#statistical-methods}
+:::
+
+## All notes
+
+:::{#all-posts}
+:::
