@@ -2,31 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://andresmtnezglez.github.io/research.html</loc>
-    <lastmod>2026-07-22T08:41:58.814Z</lastmod>
+    <lastmod>2026-07-23T06:59:30.874Z</lastmod>
   </url>
   <url>
-    <loc>https://andresmtnezglez.github.io/posts/pca-eigenvectors/index.html</loc>
-    <lastmod>2026-07-22T11:58:20.553Z</lastmod>
+    <loc>https://andresmtnezglez.github.io/posts/redistributive-shocks-labour-share/index.html</loc>
+    <lastmod>2026-07-23T07:08:17.640Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andresmtnezglez.github.io/posts/metropolis-hastings-ar1/index.html</loc>
+    <lastmod>2026-07-23T07:09:25.085Z</lastmod>
   </url>
   <url>
     <loc>https://andresmtnezglez.github.io/posts/gibbs-sampler/index.html</loc>
     <lastmod>2026-07-22T11:50:49.776Z</lastmod>
   </url>
   <url>
-    <loc>https://andresmtnezglez.github.io/posts/example-var/index.html</loc>
-    <lastmod>2026-07-22T08:41:58.814Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andresmtnezglez.github.io/index.html</loc>
-    <lastmod>2026-07-22T08:41:58.814Z</lastmod>
+    <loc>https://andresmtnezglez.github.io/posts/cee-var-monetary-shocks/index.html</loc>
+    <lastmod>2026-07-22T09:54:12.016Z</lastmod>
   </url>
   <url>
     <loc>https://andresmtnezglez.github.io/cv.html</loc>
     <lastmod>2026-07-22T08:54:16.783Z</lastmod>
   </url>
   <url>
-    <loc>https://andresmtnezglez.github.io/posts/cee-var-monetary-shocks/index.html</loc>
-    <lastmod>2026-07-22T09:54:12.016Z</lastmod>
+    <loc>https://andresmtnezglez.github.io/index.html</loc>
+    <lastmod>2026-07-22T08:41:58.814Z</lastmod>
   </url>
   <url>
     <loc>https://andresmtnezglez.github.io/posts/favar-bernanke-boivin-eliasz/index.html</loc>
@@ -35,6 +35,10 @@
   <url>
     <loc>https://andresmtnezglez.github.io/posts/markov-chains-tauchen/index.html</loc>
     <lastmod>2026-07-22T10:03:47.402Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andresmtnezglez.github.io/posts/pca-eigenvectors/index.html</loc>
+    <lastmod>2026-07-22T11:58:20.553Z</lastmod>
   </url>
   <url>
     <loc>https://andresmtnezglez.github.io/posts/var-notebook/index.html</loc>

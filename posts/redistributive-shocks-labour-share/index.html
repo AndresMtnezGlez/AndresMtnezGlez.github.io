@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andrés Martínez González">
+<meta name="author" content="Lucía Ibáñez">
+<meta name="dcterms.date" content="2020-11-14">
+<meta name="description" content="A hands-on macroeconometric study of how the labour share responds to productivity shocks, replicating the overshooting result of Rios-Rull and Santaeulalia-Llopis (2010). Covers VAR estimation and lag selection, structural identification through A and B models, impulse response functions, forecast error variance decomposition, and a robustness check using an alternative definition of the labour share.">
+
+<title>Does Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR – Andrés Martínez Glez</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="application/ld+json">
+
+{
+
+  "@context": "https://schema.org",
+
+  "@type": "Person",
+
+  "name": "Andrés Martínez Glez",
+
+  "givenName": "Andrés",
+
+  "familyName": "Martínez Glez",
+
+  "jobTitle": "Economist",
+
+  "worksFor": {
+
+    "@type": "Organization",
+
+    "name": "Autoridad Independiente de Responsabilidad Fiscal (AIReF)",
+
+    "alternateName": "Spanish Independent Authority for Fiscal Responsibility",
+
+    "url": "https://www.airef.es"
+
+  },
+
+  "address": {
+
+    "@type": "PostalAddress",
+
+    "addressLocality": "Madrid",
+
+    "addressCountry": "ES"
+
+  },
+
+  "url": "https://andresmtnezglez.github.io",
+
+  "knowsAbout": [
+
+    "Fiscal policy",
+
+    "EU fiscal governance",
+
+    "Macroeconometrics",
+
+    "Vector autoregression (VAR) models",
+
+    "Long-term growth modelling",
+
+    "Labour economics",
+
+    "R programming"
+
+  ],
+
+  "sameAs": [
+
+    "https://github.com/AndresMtnezGlez",
+
+    "https://rpubs.com/andresmtnezglez",
+
+    "https://orcid.org/YOUR-ORCID-ID",
+
+    "https://scholar.google.com/citations?user=YOUR-SCHOLAR-ID",
+
+    "https://www.linkedin.com/in/YOUR-LINKEDIN"
+
+  ]
+
+}
+
+</script>
+
+<meta name="robots" content="index, follow">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Does Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR – Andrés Martínez Glez">
+<meta property="og:description" content="A hands-on macroeconometric study of how the labour share responds to productivity shocks, replicating the overshooting result of Rios-Rull and Santaeulalia-Llopis (2010). Covers VAR estimation and lag selection, structural identification through A and B models, impulse response functions, forecast error variance decomposition, and a robustness check using an alternative definition of the labour share.">
+<meta property="og:image" content="https://andresmtnezglez.github.io/posts/redistributive-shocks-labour-share/index_files/figure-html/unnamed-chunk-1-1.png">
+<meta property="og:site_name" content="Andrés Martínez Glez">
+<meta property="og:image:height" content="960">
+<meta property="og:image:width" content="1344">
+<meta name="twitter:title" content="Does Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR – Andrés Martínez Glez">
+<meta name="twitter:description" content="A hands-on macroeconometric study of how the labour share responds to productivity shocks, replicating the overshooting result of Rios-Rull and Santaeulalia-Llopis (2010). Covers VAR estimation and lag selection, structural identification through A and B models, impulse response functions, forecast error variance decomposition, and a robustness check using an alternative definition of the labour share.">
+<meta name="twitter:image" content="https://andresmtnezglez.github.io/posts/redistributive-shocks-labour-share/index_files/figure-html/unnamed-chunk-1-1.png">
+<meta name="twitter:image-height" content="960">
+<meta name="twitter:image-width" content="1344">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Andrés Martínez Glez</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research &amp; Notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/AndresMtnezGlez"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/YOUR-LINKEDIN"> <i class="bi bi-linkedin" role="img" aria-label="LinkedIn">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:YOUR@EMAIL"> <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#from-var-to-svar" id="toc-from-var-to-svar" class="nav-link active" data-scroll-target="#from-var-to-svar"><span class="header-section-number">1</span> From VAR to SVAR</a>
+  <ul class="collapse">
+  <li><a href="#the-b-model" id="toc-the-b-model" class="nav-link" data-scroll-target="#the-b-model"><span class="header-section-number">1.1</span> The B Model</a></li>
+  </ul></li>
+  <li><a href="#irf" id="toc-irf" class="nav-link" data-scroll-target="#irf"><span class="header-section-number">2</span> IRF</a></li>
+  <li><a href="#fevd" id="toc-fevd" class="nav-link" data-scroll-target="#fevd"><span class="header-section-number">3</span> FEVD</a></li>
+  <li><a href="#what-happens-if-we-change-the-definition-of-labor-share" id="toc-what-happens-if-we-change-the-definition-of-labor-share" class="nav-link" data-scroll-target="#what-happens-if-we-change-the-definition-of-labor-share"><span class="header-section-number">4</span> What happens if we change the definition of Labor Share?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Does Productivity Move the Labour Share? Overshooting and Structural Identification in a Bivariate VAR</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">SVAR</div>
+    <div class="quarto-category">VAR</div>
+    <div class="quarto-category">labour share</div>
+    <div class="quarto-category">productivity</div>
+    <div class="quarto-category">macroeconometrics</div>
+    <div class="quarto-category">impulse response</div>
+    <div class="quarto-category">FEVD</div>
+    <div class="quarto-category">R</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    A hands-on macroeconometric study of how the labour share responds to productivity shocks, replicating the overshooting result of Rios-Rull and Santaeulalia-Llopis (2010). Covers VAR estimation and lag selection, structural identification through A and B models, impulse response functions, forecast error variance decomposition, and a robustness check using an alternative definition of the labour share.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andrés Martínez González </p>
+             <p>Lucía Ibáñez </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 14, 2020</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Working example: <a href="https://doi.org/10.1016/j.jmoneco.2010.10.004">Redistributive Shocks and Productivity Shocks</a> by Rios-Rull and Santaeulalia-Llopis (2010). The authors document the dynamic effects of productivity shocks on labor share. The so called overshooting is the situation when a productivity innovation produces a reduction of labor share at impact, making it countercyclical, but it also subsequently produces a long-lasting increase in labor share that peaks above mean five years later at a level larger in absolute terms than the initial drop, after which time it slowly returns to average.</p>
+<p>The authors analyze the behavior of a bivariate stochastic process for the labor share and a productivity residual (slightly different from the Solow residual) that explicitly considers the fact that factor input shares change over time</p>
+<p>Therefore, we are interested in 2 stationary series linearly detrended productivity residual, <span class="math inline">\(z_t^1\)</span> ; and labor share (deviations from mean), <span class="math inline">\(z_t^2\)</span></p>
+<p>The productivity residual is recovered from data on output, hours, capital and labor share. We may be interested not only in the cyclical properties of <span class="math inline">\(z_t^1\)</span> and <span class="math inline">\(z_t^2\)</span> but also in the systematic joint behavior between <span class="math inline">\(z_t^1\)</span> and <span class="math inline">\(z_t^2\)</span> . To get a better idea of this joint dynamics we can use a vector AR system, and compute IRFs and FEVDs</p>
+<p>We now pose a statistical model to find an underlying stochastic process that generates the joint distribution of <span class="math inline">\(z_t^1\)</span> and <span class="math inline">\(z_t^2\)</span> that is:</p>
+<p><span class="math display">\[
+z_t  = \Gamma z_{t-1} + \varepsilon_t, \quad \varepsilon_t  \sim N(0,\Sigma)
+\]</span></p>
+<p>Where, <span class="math inline">\(z_t = (z_t^1, z_t^2)'\)</span> and <span class="math inline">\(\Gamma\)</span> are 2by2 square matrix. The innovations <span class="math inline">\(\varepsilon_t = (\varepsilon_t^1, \varepsilon_t^2)'\)</span> are serially uncorrelated and follow a bivariate Gaussian distribution with unconditional mean zero and a symmetric positive definite variance-covariance matrix <span class="math inline">\(\Sigma\)</span></p>
+<p>Thus, this specification has seven parameters: the four coefficient regressors in <span class="math inline">\(\Gamma\)</span>, and the variances and covariance in <span class="math inline">\(\Sigma\)</span></p>
+<p>The first step is to load the data, apply the required transformations and look at time series plot. We’re going to make use of the package <code>vars</code> as well as other packages as <code>tidyvers</code> or <code>magrittr</code> If you need to download it then go the <strong>Packages</strong> tab and click on <strong>Install</strong>. Alternatively, you can type <code>install.packages(vars)</code> in the <strong>Console</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load some libraries to use its built in functions</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(readxl))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readxl' was built under R version 4.5.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(vars))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'vars' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'strucchange' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'zoo' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'sandwich' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'urca' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lmtest' was built under R version 4.5.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(pracma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'pracma' was built under R version 4.5.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(tidyverse))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tibble' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'purrr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.5.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'stringr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'forcats' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.5.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(magrittr))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'magrittr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data_PS2_Macro.xlsx"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"date"</span>, <span class="st">"LS_Total"</span>, <span class="st">"LS_Corp"</span>, <span class="st">"TFP"</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter to have the same time window as in the  paper</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>data  <span class="sc">%&lt;&gt;%</span>  <span class="fu">filter</span>(date <span class="sc">&gt;</span> <span class="st">"1954-03-01"</span> , date <span class="sc">&lt;</span>  <span class="st">"2005-03-01"</span>)  </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>data  <span class="sc">%&lt;&gt;%</span>  <span class="fu">mutate</span>(<span class="at">TFP_dt =</span>  <span class="fu">detrend</span>(TFP, <span class="at">tt =</span> <span class="st">'linear'</span>)) <span class="co">#Linear detrend</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>data  <span class="sc">%&lt;&gt;%</span>  <span class="fu">mutate</span>(<span class="at">LS_Total_dm =</span> <span class="fu">mean</span>(LS_Total) <span class="sc">-</span> LS_Total) <span class="co">#Deviations from the mean</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(date)) <span class="sc">+</span>  <span class="co">#Plotting the series</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> TFP_dt, <span class="at">colour =</span> <span class="st">"TFP_dt"</span>)) <span class="sc">+</span> </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Total_dm, <span class="at">colour =</span> <span class="st">"LS_Total_dm"</span>))<span class="sc">+</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Linearly detrended TFP &amp; labor share -deviations from mean-"</span>) <span class="sc">+</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Looking at the graph we could say that the variables could be considered fairly stationary. They seem to have a zero mean and a constant variance. Now we estimate the model and interpret the ouptput.</p>
+<p>We can make use of information criteria to determine lag length for the VAR(p) model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>series <span class="ot">&lt;-</span> <span class="fu">subset</span>(data, <span class="at">select=</span><span class="fu">c</span>(<span class="st">"TFP_dt"</span>, <span class="st">"LS_Total_dm"</span>))  </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>info.var <span class="ot">&lt;-</span> <span class="fu">VARselect</span>(series, <span class="at">lag.max =</span> <span class="dv">12</span>, <span class="at">type =</span> <span class="st">"both"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>info.var<span class="sc">$</span>selection</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AIC(n)  HQ(n)  SC(n) FPE(n) 
+     2      1      1      2 </code></pre>
+</div>
+</div>
+<p>Using the HQ/SQ these results suggest that we should make use of a VAR(1). We then need to estimate the reduced-form VAR to get an appropriate object that is to be manipulated into the structural-form of the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>var<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">VAR</span>(series, <span class="at">p =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"none"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(var<span class="fl">.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+VAR Estimation Results:
+========================= 
+Endogenous variables: TFP_dt, LS_Total_dm 
+Deterministic variables: none 
+Sample size: 203 
+Log Likelihood: 1546.808 
+Roots of the characteristic polynomial:
+0.9904 0.9592
+Call:
+VAR(y = series, p = 1, type = "none")
+
+
+Estimation results for equation TFP_dt: 
+======================================= 
+TFP_dt = TFP_dt.l1 + LS_Total_dm.l1 
+
+               Estimate Std. Error t value Pr(&gt;|t|)    
+TFP_dt.l1       0.99927    0.01735  57.594   &lt;2e-16 ***
+LS_Total_dm.l1  0.03433    0.06085   0.564    0.573    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+
+Residual standard error: 0.01021 on 201 degrees of freedom
+Multiple R-Squared: 0.9506, Adjusted R-squared: 0.9501 
+F-statistic:  1935 on 2 and 201 DF,  p-value: &lt; 2.2e-16 
+
+
+Estimation results for equation LS_Total_dm: 
+============================================ 
+LS_Total_dm = TFP_dt.l1 + LS_Total_dm.l1 
+
+                Estimate Std. Error t value Pr(&gt;|t|)    
+TFP_dt.l1      -0.010306   0.005177  -1.991   0.0479 *  
+LS_Total_dm.l1  0.950402   0.018155  52.350   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+
+Residual standard error: 0.003046 on 201 degrees of freedom
+Multiple R-Squared: 0.9429, Adjusted R-squared: 0.9424 
+F-statistic:  1660 on 2 and 201 DF,  p-value: &lt; 2.2e-16 
+
+
+
+Covariance matrix of residuals:
+               TFP_dt LS_Total_dm
+TFP_dt      1.036e-04   1.104e-05
+LS_Total_dm 1.104e-05   9.244e-06
+
+Correlation matrix of residuals:
+            TFP_dt LS_Total_dm
+TFP_dt      1.0000      0.3567
+LS_Total_dm 0.3567      1.0000</code></pre>
+</div>
+</div>
+<p>The VAR that we have estimated can be expressed compactly as:</p>
+<p><span class="math display">\[
+z_t  = \Gamma z_{t-1} + \varepsilon_t, \quad \varepsilon_t  \sim N(0,\Sigma)
+\]</span></p>
+<p>Or explicitly in matrix form as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\begin{bmatrix} z_{1,t}\\z_{2,t}\end{bmatrix} =
+\begin{bmatrix} \gamma_{1,1} &amp; \gamma_{1,2} \\ \gamma_{2,1} &amp; \gamma_{2,2} \end{bmatrix}
+\begin{bmatrix} z_{1,t-1}\\z_{2,t-1}\end{bmatrix}
++
+\begin{bmatrix} \varepsilon_{1,t}\\\varepsilon_{2,t}\end{bmatrix}
+\end{aligned}
+\]</span></p>
+<p>As we can see above, the results obtained are:</p>
+<p><span class="math display">\[
+\hat{\Gamma} = \begin{bmatrix} 0.999 &amp; 0.034 \\ (2e-16)  &amp;(0.579)\\-0.010 &amp; 0.950 \$0.047) &amp; (2e-16) \end{bmatrix}
+\]</span></p>
+<p>Nevertheless, the best way to interpret this matrix is to write the VAR as a <strong>seemingly unrelated regression equations.</strong></p>
+<p><span class="math display">\[
+z_{1,t}  = \gamma_{1,1} z_{1, t-1} + \gamma_{1,2} z_{2, t-1} + \varepsilon_{1,t} \\
+z_{2,t}  = \gamma_{11} z_{1, t-1} + \gamma_{2,2} z_{2, t-1} + +\varepsilon_{2,t}
+\]</span></p>
+<p>What do the coefficients mean? The first entry (0.999) is the coefficient ((_{1,1}$) of the lag of <span class="math inline">\(z_{1,t}\)</span> on the variable <span class="math inline">\(z_{1,t}\)</span>. Therefore is the autoregressive coefficient of TFP. The second entry (0.034) is the coefficient (<span class="math inline">\(\gamma_{1,2}\)</span>) of the lag of <span class="math inline">\(z_{2,t}\)</span> on <span class="math inline">\(z_{1,t}\)</span>. This is, the autoregressive coefficient (<span class="math inline">\(\gamma_{2,1}\)</span>) of Labor Share on the TFP. The entry on the second row and first column (-0.010) is the coefficient of TFP on Labor share, and the bottom corner right (0.950) is the autoregressive coefficient (<span class="math inline">\(\gamma_{2,2}\)</span>)of Labor share onto itself.</p>
+<p>The fact that <span class="math inline">\(\gamma_{1,2}\)</span> is not significantly different from zero implies that current shocks to labor share do not have an impact on future productivity</p>
+<p>This matrix matrix <span class="math inline">\(\hat{\Gamma}\)</span> can be recovered from the var.1 object thorough the coefficients as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>est_coefs <span class="ot">&lt;-</span> <span class="fu">coef</span>(var<span class="fl">.1</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>est_coefs <span class="ot">&lt;-</span> <span class="fu">rbind</span>(est_coefs[[<span class="dv">1</span>]][, <span class="dv">1</span>], est_coefs[[<span class="dv">2</span>]][, <span class="dv">1</span>]) </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(est_coefs, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     TFP_dt.l1 LS_Total_dm.l1
+[1,]     0.999          0.034
+[2,]    -0.010          0.950</code></pre>
+</div>
+</div>
+<p>Once we have recovered the coefficients, we are interested in the structure of the innovations . First we will take a look to the covariance matrix of residuals, this is <span class="math inline">\(\hat{\Sigma}\)</span>. As we can see below our innovations are contemporaneously correlated. This is an issue because we can not disentangle the effect of one shock in one variable and the effect of this shock onto the variable itself and the other variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(var<span class="fl">.1</span>)<span class="sc">$</span>covres</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  TFP_dt  LS_Total_dm
+TFP_dt      1.036306e-04 1.104107e-05
+LS_Total_dm 1.104107e-05 9.243735e-06</code></pre>
+</div>
+</div>
+<section id="from-var-to-svar" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="from-var-to-svar"><span class="header-section-number">1</span> From VAR to SVAR</h2>
+<p>To understand SVAR models, it is important to look more closely at the <em>variance-covariance matrix</em> . It contains the variances of the endogenous variable on its diagonal elements and covariances of the errors on the off-diagonal elements. The covariances contain information about contemporaneous effects each variable has on the others. The covariance matrices of standard VAR models is <em>symmetric</em>, i.e.&nbsp;the elements to the top-right of the diagonal (the “upper triangular”) mirror the elements to the bottom-left of the diagonal (the “lower triangular”). This reflects the idea that the relations between the endogenous variables only reflect correlations and do not allow to make statements about causal relationships.</p>
+<p>Contemporaneous causality or, more precisely, the structural relationships between the variables is analysed in the context of SVAR models, which impose special restrictions on the covariance matrix and – depending on the model – on other coefficient matrices as well. The drawback of this approach is that it depends on the more or less subjective assumptions made by the researcher. For many researchers this is too much subjectiv information, even if sound economic theory is used to justify them. However, they can be useful tools and that is why it is worth to look into them.</p>
+<p>To avoid this issue we have to follow and identification strategy and transform our VAR in a SVAR. Exploding the fact that <span class="math inline">\(\gamma_{1,2}\)</span>, this is, the effect of a lag of Labour Share on TFP is not significantly different from zero implies that current shocks to labor share do not have an impact on future productivity. Therefore the restriction that we are going to use, will make our matrix of VCV to look something like:</p>
+<p><span class="math display">\[
+\hat{\Omega} = \begin{bmatrix} \omega_{1,2}&amp; 0 \\ \omega_{2,1} &amp; \omega_{2,2} \\\end{bmatrix}
+\]</span></p>
+<p>To set-up the matrix for the contemporaneous coefficients, we need to make use of a matrix that has the appropriate dimensions. This is easily achieved with the aid of the <code>diagnol</code> matrix. To code this appropriately we need to insert zeros for restrictions and <code>NA</code> in all those places that would not pertain to a restriction.</p>
+<section id="the-b-model" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="the-b-model"><span class="header-section-number">1.1</span> The B Model</h3>
+<p>The B-model describes the structural relationships of the errors directly by adding a matrix <span class="math inline">\(B\)</span> to the error term and normalises the error variances to unity so that</p>
+<p><span class="math display">\[
+z_t  = \Gamma z_{t-1} + B\varepsilon_t
+\]</span></p>
+<p>Where</p>
+<p><span class="math display">\[
+u_t = B\varepsilon_t \quad \varepsilon_t \sim(0,I_k)
+\]</span> We then need to set-up the matrix for the identification of individual shocks. Once again starting with the diagonal matrix, we need to insert zeros into the covariance terms, while the variance for each of the individual shocks is to be retrieved. Hence</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>b.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data=</span><span class="cn">NA</span>,<span class="at">nrow=</span><span class="dv">2</span>,<span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>b.mat[<span class="fu">upper.tri</span>(b.mat)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(b.mat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,]   NA    0
+[2,]   NA   NA</code></pre>
+</div>
+</div>
+<p>This printout suggest that there will be no covariance terms for the residuals. We are finally at a point where we can estimate the SVAR(1) model. This is achieved by including the the above two matrices. The maximum number of iterations has also been obtained, and we are also going to populate values for the Hessian, which is useful when looking to trouble shoot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>svar<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">SVAR</span>(var<span class="fl">.1</span>,  <span class="at">estmethod =</span> <span class="st">"scoring"</span>, <span class="at">Amat =</span> <span class="cn">NULL</span>, <span class="at">Bmat =</span> b.mat, <span class="at">max.iter =</span> <span class="dv">10000</span>,<span class="at">hessian =</span> <span class="cn">TRUE</span>, <span class="at">lrtest =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(svar<span class="fl">.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+SVAR Estimation Results:
+======================== 
+
+Call:
+SVAR(x = var.1, estmethod = "scoring", Amat = NULL, Bmat = b.mat, 
+    max.iter = 10000, lrtest = FALSE, hessian = TRUE)
+
+Type: B-model 
+Sample size: 203 
+Log Likelihood: 1544.798 
+Method: scoring 
+Number of iterations: 9 
+
+Estimated A matrix:
+            TFP_dt LS_Total_dm
+TFP_dt           1           0
+LS_Total_dm      0           1
+
+Estimated B matrix:
+              TFP_dt LS_Total_dm
+TFP_dt      0.010208    0.000000
+LS_Total_dm 0.001095    0.002842
+
+Estimated standard errors for B matrix:
+               TFP_dt LS_Total_dm
+TFP_dt      0.0005066   0.0000000
+LS_Total_dm 0.0002068   0.0001411
+
+Covariance matrix of reduced form residuals (*100):
+              TFP_dt LS_Total_dm
+TFP_dt      0.010421   0.0011182
+LS_Total_dm 0.001118   0.0009278</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="irf" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="irf"><span class="header-section-number">2</span> IRF</h2>
+<p>Impulse response functions (IR) answer the question <em>What is the response of current and future values of each of the variables to a one-unit increase in the current value of one of the structural errors, assuming that this error returns to zero in subsequent periods and that all other errors are equal to zero</em> The implied thought experiment of changing one error while holding the others constant makes sense only when the errors are uncorrelated across equations. It is slower but more clear to keep each impulse reponse function separated to work with it latter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>TFP_on_LS <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar<span class="fl">.1</span>, <span class="at">impulse =</span> <span class="st">"TFP_dt"</span>,  <span class="at">response =</span> <span class="st">"LS_Total_dm"</span>, <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>TFP_on_TFP <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar<span class="fl">.1</span>, <span class="at">impulse =</span> <span class="st">"TFP_dt"</span>, <span class="at">response =</span> <span class="st">"TFP_dt"</span>,  <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>LS_on_LS <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar<span class="fl">.1</span>, <span class="at">impulse =</span> <span class="st">"LS_Total_dm"</span>, <span class="at">response =</span> <span class="st">"LS_Total_dm"</span>, <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>LS_on_TFP <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar<span class="fl">.1</span>, <span class="at">impulse =</span> <span class="st">"LS_Total_dm"</span>, <span class="at">response =</span> <span class="st">"TFP_dt"</span>,  <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, we plot the IRF’s. With a little help of <code>ggplot2</code> it is easier to plot nicely both IRF in the same graph. Do we know anything about the IRF in advance? Yes, we know.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>svar<span class="fl">.1</span><span class="sc">$</span>B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 TFP_dt LS_Total_dm
+TFP_dt      0.010208475 0.000000000
+LS_Total_dm 0.001095349 0.002842178</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(TFP_on_LS<span class="sc">$</span>irf) </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(TFP_on_TFP<span class="sc">$</span>irf) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>IRF_TFP <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(a,b)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IRF_TFP, <span class="fu">aes</span>(index)) <span class="sc">+</span>  <span class="co">#Plotting the series</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> TFP_dt, <span class="at">colour =</span> <span class="st">"TFP_dt"</span>)) <span class="sc">+</span> </span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Total_dm, <span class="at">colour =</span> <span class="st">"LS_Total_dm"</span>))<span class="sc">+</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"#296f96"</span>) <span class="sc">+</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Orthogonal Impulse Response to shock in TFP"</span>) <span class="sc">+</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(LS_on_TFP<span class="sc">$</span>irf) </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(LS_on_LS<span class="sc">$</span>irf) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>IRF_LS <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(a,b)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IRF_LS, <span class="fu">aes</span>(index)) <span class="sc">+</span>  <span class="co">#Plotting the series</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> TFP_dt, <span class="at">colour =</span> <span class="st">"TFP_dt"</span>)) <span class="sc">+</span> </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Total_dm, <span class="at">colour =</span> <span class="st">"LS_Total_dm"</span>))<span class="sc">+</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"#296f96"</span>) <span class="sc">+</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Orthogonal Impulse Response to shock in LS"</span>) <span class="sc">+</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="fevd" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="fevd"><span class="header-section-number">3</span> FEVD</h2>
+<p>To generate the forecast error variance decompositions we make use of the <code>fevd</code> command, where we set the number of steps ahead to ten. Note that these results suggest that output is largely determined by TFP shocks, while Labor share is influenced by both shocks.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>var.<span class="fl">1.</span>vd <span class="ot">&lt;-</span> <span class="fu">fevd</span>(var<span class="fl">.1</span>, <span class="at">n.ahead =</span> <span class="dv">10</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(var.<span class="fl">1.</span>vd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="what-happens-if-we-change-the-definition-of-labor-share" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="what-happens-if-we-change-the-definition-of-labor-share"><span class="header-section-number">4</span> What happens if we change the definition of Labor Share?</h2>
+<p>As the paper points out there are several ways to construct the Labor Share. Let’s see what happens if we use another definition of Labor Share. In this case we are using an accounting Labor Share of Income by legal form of organization isolating the corporate sector.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Data_PS2_Macro.xlsx"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"date"</span>, <span class="st">"LS_Total"</span>, <span class="st">"LS_Corp"</span>, <span class="st">"TFP"</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter to have the same time window as in the  paper</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>data  <span class="sc">%&lt;&gt;%</span>  <span class="fu">filter</span>(date <span class="sc">&gt;</span> <span class="st">"1954-03-01"</span> , date <span class="sc">&lt;</span>  <span class="st">"2005-03-01"</span>)  </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>data  <span class="sc">%&lt;&gt;%</span>  <span class="fu">mutate</span>(<span class="at">TFP_dt =</span>  <span class="fu">detrend</span>(TFP, <span class="at">tt =</span> <span class="st">'linear'</span>)) <span class="co">#Linear detrend</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>data  <span class="sc">%&lt;&gt;%</span>  <span class="fu">mutate</span>(<span class="at">LS_Corp_dm =</span> <span class="fu">mean</span>(LS_Corp) <span class="sc">-</span> LS_Corp) <span class="co">#Deviations from the mean</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>data  <span class="sc">%&lt;&gt;%</span>  <span class="fu">mutate</span>(<span class="at">LS_Total_dm =</span> <span class="fu">mean</span>(LS_Total) <span class="sc">-</span> LS_Total)</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(date)) <span class="sc">+</span>  <span class="co">#Plotting the series</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> TFP_dt, <span class="at">colour =</span> <span class="st">"TFP_dt"</span>)) <span class="sc">+</span> </span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Corp_dm, <span class="at">colour =</span> <span class="st">"LS_Corp_dm"</span>))<span class="sc">+</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Total_dm, <span class="at">colour =</span> <span class="st">"LS_Total_dm"</span>))<span class="sc">+</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Linearly detrended TFP two definitions of labor share"</span>) <span class="sc">+</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(date)) <span class="sc">+</span>  <span class="co">#Plotting the series</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Corp, <span class="at">colour =</span> <span class="st">"LS_Corp"</span>))<span class="sc">+</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Total, <span class="at">colour =</span> <span class="st">"LS_Total"</span>))<span class="sc">+</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggtitle</span>(<span class="st">"Both definitions of Labor Share in levels"</span>) <span class="sc">+</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see that both Labor Share definitions are pretty similar. However, we are going to check the correlation matrix. We can easily see that the Labor Share defined by corporate sector is less correlated with the TFP than the previous definition of Labor Share.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>series_m <span class="ot">&lt;-</span> <span class="fu">subset</span>(data, <span class="at">select=</span><span class="fu">c</span>(<span class="st">"TFP_dt"</span>, <span class="st">"LS_Total_dm"</span>,<span class="st">"LS_Corp_dm"</span>))</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>series_m <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(series_m)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>M<span class="ot">&lt;-</span><span class="fu">cor</span>(series_m)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">round</span>(M,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            TFP_dt LS_Total_dm LS_Corp_dm
+TFP_dt        1.00       -0.36       0.17
+LS_Total_dm  -0.36        1.00       0.58
+LS_Corp_dm    0.17        0.58       1.00</code></pre>
+</div>
+</div>
+<p>Now we are going to re run the VAR(1) with the new definition.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>series <span class="ot">&lt;-</span> <span class="fu">subset</span>(data, <span class="at">select=</span><span class="fu">c</span>(<span class="st">"TFP_dt"</span>, <span class="st">"LS_Corp_dm"</span>))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>var.<span class="fl">1.</span>alt <span class="ot">&lt;-</span> <span class="fu">VAR</span>(series, <span class="at">p =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"none"</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(var.<span class="fl">1.</span>alt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+VAR Estimation Results:
+========================= 
+Endogenous variables: TFP_dt, LS_Corp_dm 
+Deterministic variables: none 
+Sample size: 203 
+Log Likelihood: 1486.499 
+Roots of the characteristic polynomial:
+0.9904 0.9253
+Call:
+VAR(y = series, p = 1, type = "none")
+
+
+Estimation results for equation TFP_dt: 
+======================================= 
+TFP_dt = TFP_dt.l1 + LS_Corp_dm.l1 
+
+              Estimate Std. Error t value Pr(&gt;|t|)    
+TFP_dt.l1      0.99310    0.01614  61.511   &lt;2e-16 ***
+LS_Corp_dm.l1  0.07173    0.07018   1.022    0.308    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+
+Residual standard error: 0.01019 on 201 degrees of freedom
+Multiple R-Squared: 0.9508, Adjusted R-squared: 0.9503 
+F-statistic:  1942 on 2 and 201 DF,  p-value: &lt; 2.2e-16 
+
+
+Estimation results for equation LS_Corp_dm: 
+=========================================== 
+LS_Corp_dm = TFP_dt.l1 + LS_Corp_dm.l1 
+
+               Estimate Std. Error t value Pr(&gt;|t|)    
+TFP_dt.l1     -0.002588   0.006664  -0.388    0.698    
+LS_Corp_dm.l1  0.922569   0.028968  31.848   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+
+Residual standard error: 0.004206 on 201 degrees of freedom
+Multiple R-Squared: 0.8371, Adjusted R-squared: 0.8354 
+F-statistic: 516.3 on 2 and 201 DF,  p-value: &lt; 2.2e-16 
+
+
+
+Covariance matrix of residuals:
+              TFP_dt LS_Corp_dm
+TFP_dt     1.033e-04  1.752e-05
+LS_Corp_dm 1.752e-05  1.765e-05
+
+Correlation matrix of residuals:
+           TFP_dt LS_Corp_dm
+TFP_dt     1.0000     0.4103
+LS_Corp_dm 0.4103     1.0000</code></pre>
+</div>
+</div>
+<p>As we can see, the low correlation of the new definition of labor share is confirmed in the non significance (at the usual levels) of the lags of one variable onto another. This means, the lag of TFP does not explain the developments of labor share and neither the lag of labor share explains the developments of TFP. For comparison we will impose the same restrictions as before and check the IRFs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>b.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data=</span><span class="cn">NA</span>,<span class="at">nrow=</span><span class="dv">2</span>,<span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>b.mat[<span class="fu">upper.tri</span>(b.mat)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(b.mat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,]   NA    0
+[2,]   NA   NA</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>svar.<span class="fl">1.</span>alt <span class="ot">&lt;-</span> <span class="fu">SVAR</span>(var.<span class="fl">1.</span>alt,  <span class="at">estmethod =</span> <span class="st">"scoring"</span>, <span class="at">Amat =</span> <span class="cn">NULL</span>, <span class="at">Bmat =</span> b.mat, <span class="at">max.iter =</span> <span class="dv">10000</span>,<span class="at">hessian =</span> <span class="cn">TRUE</span>, <span class="at">lrtest =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(svar.<span class="fl">1.</span>alt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+SVAR Estimation Results:
+======================== 
+
+Call:
+SVAR(x = var.1.alt, estmethod = "scoring", Amat = NULL, Bmat = b.mat, 
+    max.iter = 10000, lrtest = FALSE, hessian = TRUE)
+
+Type: B-model 
+Sample size: 203 
+Log Likelihood: 1484.489 
+Method: scoring 
+Number of iterations: 8 
+
+Estimated A matrix:
+           TFP_dt LS_Corp_dm
+TFP_dt          1          0
+LS_Corp_dm      0          1
+
+Estimated B matrix:
+             TFP_dt LS_Corp_dm
+TFP_dt     0.010190   0.000000
+LS_Corp_dm 0.001733   0.003832
+
+Estimated standard errors for B matrix:
+              TFP_dt LS_Corp_dm
+TFP_dt     0.0005057  0.0000000
+LS_Corp_dm 0.0002824  0.0001902
+
+Covariance matrix of reduced form residuals (*100):
+             TFP_dt LS_Corp_dm
+TFP_dt     0.010384   0.001766
+LS_Corp_dm 0.001766   0.001769</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(svar<span class="fl">.1</span>) <span class="co">#Print the previous VAR summary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+SVAR Estimation Results:
+======================== 
+
+Call:
+SVAR(x = var.1, estmethod = "scoring", Amat = NULL, Bmat = b.mat, 
+    max.iter = 10000, lrtest = FALSE, hessian = TRUE)
+
+Type: B-model 
+Sample size: 203 
+Log Likelihood: 1544.798 
+Method: scoring 
+Number of iterations: 9 
+
+Estimated A matrix:
+            TFP_dt LS_Total_dm
+TFP_dt           1           0
+LS_Total_dm      0           1
+
+Estimated B matrix:
+              TFP_dt LS_Total_dm
+TFP_dt      0.010208    0.000000
+LS_Total_dm 0.001095    0.002842
+
+Estimated standard errors for B matrix:
+               TFP_dt LS_Total_dm
+TFP_dt      0.0005066   0.0000000
+LS_Total_dm 0.0002068   0.0001411
+
+Covariance matrix of reduced form residuals (*100):
+              TFP_dt LS_Total_dm
+TFP_dt      0.010421   0.0011182
+LS_Total_dm 0.001118   0.0009278</code></pre>
+</div>
+</div>
+<p>Despite the non significance of the crossed lags the decomposition of the matrix of residuals yields a similar result.</p>
+<p>Now plotting the IRFfs, we see the profile is very similar because the matrix B, decompistion of residuals is also very similar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>TFP_on_LS <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar.<span class="fl">1.</span>alt, <span class="at">impulse =</span> <span class="st">"TFP_dt"</span>,  <span class="at">response =</span> <span class="st">"LS_Corp_dm"</span>, <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>TFP_on_TFP <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar.<span class="fl">1.</span>alt, <span class="at">impulse =</span> <span class="st">"TFP_dt"</span>, <span class="at">response =</span> <span class="st">"TFP_dt"</span>,  <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>LS_on_LS <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar.<span class="fl">1.</span>alt, <span class="at">impulse =</span> <span class="st">"LS_Corp_dm"</span>, <span class="at">response =</span> <span class="st">"LS_Corp_dm"</span>, <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>LS_on_TFP <span class="ot">&lt;-</span> <span class="fu">irf</span>(svar.<span class="fl">1.</span>alt, <span class="at">impulse =</span> <span class="st">"LS_Corp_dm"</span>, <span class="at">response =</span> <span class="st">"TFP_dt"</span>,  <span class="at">n.ahead =</span> <span class="dv">40</span>, <span class="at">ortho =</span> F, <span class="at">boot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(TFP_on_LS<span class="sc">$</span>irf) </span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(TFP_on_TFP<span class="sc">$</span>irf) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())</span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>IRF_TFP <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(a,b)</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IRF_TFP, <span class="fu">aes</span>(index)) <span class="sc">+</span>  <span class="co">#Plotting the series</span></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> TFP_dt, <span class="at">colour =</span> <span class="st">"TFP_dt"</span>)) <span class="sc">+</span> </span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Corp_dm, <span class="at">colour =</span> <span class="st">"LS_Corp_dm"</span>))<span class="sc">+</span></span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"#296f96"</span>) <span class="sc">+</span></span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Orthogonal Impulse Response to shock in TFP"</span>) <span class="sc">+</span></span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(LS_on_TFP<span class="sc">$</span>irf) </span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(LS_on_LS<span class="sc">$</span>irf) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>IRF_LS <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(a,b)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IRF_LS, <span class="fu">aes</span>(index)) <span class="sc">+</span>  <span class="co">#Plotting the series</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> TFP_dt, <span class="at">colour =</span> <span class="st">"TFP_dt"</span>)) <span class="sc">+</span> </span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> LS_Corp_dm, <span class="at">colour =</span> <span class="st">"LS_Corp_dm"</span>))<span class="sc">+</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"#296f96"</span>) <span class="sc">+</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Orthogonal Impulse Response to shock in LS"</span>) <span class="sc">+</span></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>And finally the FEVD. Which again yields very similar results as the previous VAR specification.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>var.<span class="fl">1.</span>alt.vd <span class="ot">&lt;-</span> <span class="fu">fevd</span>(var.<span class="fl">1.</span>alt, <span class="at">n.ahead =</span> <span class="dv">10</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(var.<span class="fl">1.</span>alt.vd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/andresmtnezglez\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Andrés Martínez Glez · Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
