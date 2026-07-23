@@ -1,6 +1,8 @@
 ---
 title: "Curriculum Vitae"
-description: "CV of Andres Martinez Gonzalez, economist at AIReF, Madrid. Fiscal policy, macroeconometrics and EU economic governance."
+description: |
+  CV of Andres Martinez Gonzalez, economist at AIReF, Madrid.
+  Fiscal policy, macroeconometrics and EU economic governance.
 toc: true
 toc-depth: 2
 ---
@@ -10,11 +12,11 @@ toc-depth: 2
 **Economist** — AIReF, Madrid  
 *2021 – present*
 
--My work spans quantitative economic research and institutional policy analysis. On the empirical side, I have estimated structural models to determine the heterogeneity of public debt anchors across countries, analysed the elasticity of economic activity and the energy market, and built a long-term growth model in R implementing the European Commission's EUCAM methodology for potential output and long-run projections. I also work on applied microdata analysis of the labour market.
+- My work spans quantitative economic research and institutional policy analysis. On the empirical side, I have estimated structural models to determine the heterogeneity of public debt anchors across countries, analysed the elasticity of economic activity and the energy market, and built a long-term growth model in R implementing the European Commission's EUCAM methodology for potential output and long-run projections. I also work on applied microdata analysis of the labour market.
 
--A second strand of my work concerns the fiscal governance framework itself: the net expenditure path, the control account, and the implications of the reformed EU economic governance rules for the Spanish framework. I contribute to the production of the institution's reports and opinions.
+- A second strand of my work concerns the fiscal governance framework itself: the net expenditure path, the control account, and the implications of the reformed EU economic governance rules for the Spanish framework. I contribute to the production of the institution's reports and opinions.
 
--I am also hounored to be Co-Chair of the Economic Governance Working Group of the [Network of EU Independent Fiscal Institutions](https://www.euifis.eu/) (EUNIFI). 
+- I am also honoured to be Co-Chair of the **Economic Governance Working Group** of the [Network of EU Independent Fiscal Institutions](https://www.euifis.eu/) (EUNIFI).  
 
 **Economist**, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid  
 *2017 – 2020*
