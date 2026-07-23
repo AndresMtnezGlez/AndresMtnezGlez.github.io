@@ -15,19 +15,15 @@ about:
       href: https://rpubs.com/andresmtnezglez
     - icon: linkedin
       text: LinkedIn
-      href: https://www.linkedin.com/in/YOUR-LINKEDIN
+      href: https://www.linkedin.com/in/andr%C3%A9s-mart%C3%ADnez-8a034bba/
     - icon: envelope
       text: Email
-      href: mailto:YOUR@EMAIL
+      href: mailto: andres.mtnez.glez [at] gmail [.com]
 ---
 
 I am an economist at the **Autoridad Independiente de Responsabilidad Fiscal (AIReF)**, Spain's independent fiscal institution, based in Madrid.
 
-My work sits at the intersection of applied fiscal policy, econometrics, and institutional analysis. I work on EU and Spanish fiscal governance — the net expenditure path, the control account, and the reformed economic governance framework — as well as macroeconomic forecast endorsements, long-term growth modelling, and the labour-market effects of regulatory reform.
-
-I currently lead the project on external reviews of independent fiscal institutions within the Economic Governance Reform Working Group of the Network of EU Independent Fiscal Institutions (EUNIFI).
-
-Most of my applied work is in **R**: time-series and VAR estimation, forecasting, and reproducible reporting.
+I work on applied fiscal policy and macroeconomic analysis, at the intersection of econometrics, EU fiscal governance, and long-run growth modelling. This page collects a set of technical notes and small projects in R that I wrote during my master's and the years after; mostly working through methods in time series, Bayesian computation, and statistical learning.
 
 ::: {.callout-note appearance="simple"}
 Views expressed on this site are my own and do not represent those of AIReF.
