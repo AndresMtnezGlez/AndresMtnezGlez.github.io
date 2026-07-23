@@ -1,24 +1,23 @@
 ---
 title: "Curriculum Vitae"
-description: "CV of Andrés Martínez González, economist at AIReF, Madrid. Fiscal policy, macroeconometrics and EU economic governance."
+description: "CV of Andres Martinez Gonzalez, economist at AIReF, Madrid. Fiscal policy and EU economic governance."
 toc: true
 toc-depth: 2
 ---
 
-[Download PDF](cv.pdf)
+[Download PDF](cv.pdf){.download-link}
 
 ## Professional experience
 
-**Economist** — Independent Authority for Fiscal Responsibility (AIReF), Madrid  
+**Economist / Analyst** — Independent Authority for Fiscal Responsibility (AIReF), Madrid  
 *2021 – present*
 
 - Quantitative analysis of fiscal policy and macroeconomic imbalances. Estimation of structural models for public debt anchor heterogeneity across countries; elasticity analysis of economic activity and the energy market.
 - Analysis of EU and Spanish fiscal governance: the net expenditure path, the control account, and the reformed economic governance framework.
-- Endorsement (*aval*) of the government's macroeconomic forecasts.
 - Long-term growth modelling in R following the European Commission's EUCAM methodology.
 - Lead of the project on external reviews of independent fiscal institutions, Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI).
 
-**Economist**, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid  
+**Technical Advisor**, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid  
 *2017 – 2020*
 
 - Spain's deputy head of delegation to the Ecofin **Output Gaps Working Group**: improvement of the common methodology used to estimate potential output, output gap indicators and cyclically adjusted budget balances, a cornerstone of the surveillance of member states' fiscal policy within the Stability and Growth Pact.
@@ -26,15 +25,23 @@ toc-depth: 2
 - Applied analysis on deterministic and stochastic public debt sustainability, government forecast biases, benchmarking of the Spanish housing market, the EU fiscal framework, household financial conditions, non-linear Okun's Law estimated with MARS, and exogenous and endogenous policy shocks with the in-house DSGE model EREMS.
 - Participation in the elaboration of the Government's official medium-term forecasts: maintenance and development of over nineteen error correction models for real and nominal variables, used to draw the official medium-term macroeconomic outlook in the Stability Programmes, Draft Budget Laws and Draft Budgetary Plans.
 
-**Instructor** — ICEX | CECO, Madrid  
-*2017 – 2020*
-
-- Economic theory, statistics and the international institutional framework, taught to small groups of economics graduates. Classroom and e-learning.
-
 **Trainee** — Caser Insurance, Madrid  
 *2015*
 
 - Market analysis and data analysis to identify profitable market segments and provide early warning of possible fraud in the vehicle and real estate branches.
+
+## Academic experience
+
+**Lecturer, *Advanced Analytics*** — Universidad Pontificia Comillas (ICADE), Madrid  
+*2022*
+
+- Master's level course introducing students to data analysis in R
+- Practice-oriented methodology: short theoretical introduction followed by hands-on programming in RStudio, supported by technical notes, R scripts and datasets.
+
+**Instructor** — ICEX | CECO, Madrid  
+*2017 – 2020*
+
+- Economic theory, statistics and the international institutional framework, taught to small groups of economics graduates. Classroom and e-learning.
 
 ## Education
 
@@ -63,9 +70,20 @@ Average grade 8.4/10 over 240 ECTS. Second prize, College Economics Olympic Game
 
 **Languages** — Spanish (native), English (proficient), Portuguese (proficient).
 
-## Short courses
+## Courses and certifications
 
-Text mining and web scraping (BSE) · National Accounts (Institute for Fiscal Studies) · Data Analysis in Social Science (MIT) · Python (IFS) · Econometrics with Gretl (Ministry of Economy) · Panel Data Models (IFS) · VBA/Excel programming (National Statistics Institute) · Quantitative Methods in R (IFS) · Time Series Analysis in Tramo/Seats (Ministry of Economy) · Time Series Forecasting Methods (IFS)
+- [Machine Learning with Python: from Linear Models to Deep Learning](https://courses.edx.org/certificates/8c0af874c99b40f48f445b8ecc7e12e1) (6.86x) — MITx, 2023. *Verified certificate.*
+- [Probability: the Science of Uncertainty and Data](https://courses.edx.org/certificates/15b46d5deb2a4443b51d66640103cbf5) (6.431x) — MITx, 2020. *Verified certificate.*
+- [Data Analysis in Social Science](https://courses.edx.org/certificates/42602f3b9ee245e28f2336224db926cb) (14.310Fx) — MITx, 2019. *Verified certificate.*
+- Text mining and web scraping — Barcelona School of Economics
+- National Accounts — Institute for Fiscal Studies
+- Panel Data Models — Institute for Fiscal Studies
+- Quantitative Methods in R — Institute for Fiscal Studies
+- Time Series: Forecasting Methods — Institute for Fiscal Studies
+- Python — Institute for Fiscal Studies
+- Econometrics with Gretl — Ministry of Economy and Competitiveness
+- Time Series Analysis in Tramo/Seats — Ministry of Economy and Competitiveness
+- VBA/Excel Programming — National Statistics Institute
 
 ## Professional activity
 
