@@ -5,7 +5,7 @@ listing:
   - id: var-macro
     contents: posts
     include:
-      categories: "{VAR,SVAR,FAVAR}"
+      categories: false
     sort: "date desc"
     type: default
     fields: [date, title, description]
@@ -13,7 +13,7 @@ listing:
   - id: bayesian-computational
     contents: posts
     include:
-      categories: "{Bayesian,MCMC,Markov chains,Tauchen,numerical methods}"
+      categories: false
     sort: "date desc"
     type: default
     fields: [date, title, description]
@@ -21,7 +21,7 @@ listing:
   - id: statistical-methods
     contents: posts
     include:
-      categories: "{PCA,dimensionality reduction,linear algebra}"
+      categories: false
     sort: "date desc"
     type: default
     fields: [date, title, description]
@@ -29,9 +29,9 @@ listing:
   - id: all-posts
     contents: posts
     sort: "date desc"
-    type: table
+    type: default
     table-hover: true
-    categories: true
+    categories: false
     fields: [date, title, categories]
     feed: true
 ---

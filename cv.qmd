@@ -1,46 +1,91 @@
 ---
 title: "Curriculum Vitae"
-description: "CV of Andrés Martínez Glez, economist at AIReF, Madrid."
+description: "CV of Andrés Martínez González, economist at AIReF (Spanish Independent Authority for Fiscal Responsibility), Madrid. Fiscal policy, macroeconometrics and EU economic governance."
 toc: true
+toc-depth: 2
 ---
 
-[Download PDF version](cv.pdf){.btn .btn-outline-primary}
+[Download PDF](cv.pdf)
 
-## Current position
+## Professional experience
 
-**Economist**, Autoridad Independiente de Responsabilidad Fiscal (AIReF) — Madrid, Spain
-*[Start year] – present*
+**Economist / Analyst** — Independent Authority for Fiscal Responsibility (AIReF), Madrid  
+*2021 – present*
 
-Quantitative economic research and institutional policy analysis on fiscal rules, macroeconomic forecast endorsement, labour market impacts, and long-term growth modelling.
+- Quantitative analysis of fiscal policy and macroeconomic imbalances. Estimation of structural models for public debt anchor heterogeneity across countries; elasticity analysis of economic activity and the energy market.
+- Analysis of EU and Spanish fiscal governance: the net expenditure path, the control account, and the reformed economic governance framework.
+- Endorsement (*aval*) of the government's macroeconomic forecasts.
+- Long-term growth modelling in R following the European Commission's EUCAM methodology.
+- Lead of the project on external reviews of independent fiscal institutions, Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI).
 
-- Lead, project on external reviews of IFIs — Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI)
-- [Add 2–4 more bullets: reports authored, models built, files owned]
+**Technical Advisor**, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid  
+*2017 – 2020*
+
+- Spain's deputy head of delegation to the Ecofin **Output Gaps Working Group**: improvement of the common methodology used to estimate potential output, output gap indicators and cyclically adjusted budget balances, a cornerstone of the surveillance of member states' fiscal policy within the Stability and Growth Pact.
+- Spain's deputy head of delegation to the Ecofin **LIME Working Group**: analytical tools to assess structural reforms within the Macroeconomic Imbalances Procedure; benchmark models for imbalances related to the external sector, private sector balance sheet positions and public debt; contribution to the definition of Spain's economic policy priorities within the European Semester.
+- Applied analysis on deterministic and stochastic public debt sustainability, government forecast biases, benchmarking of the Spanish housing market, the EU fiscal framework, household financial conditions, non-linear Okun's Law estimated with MARS, and exogenous and endogenous policy shocks with the in-house DSGE model EREMS.
+- Participation in the elaboration of the Government's official medium-term forecasts: maintenance and development of over nineteen error correction models for real and nominal variables, used to draw the official medium-term macroeconomic outlook in the Stability Programmes, Draft Budget Laws and Draft Budgetary Plans.
+
+**Instructor** — ICEX | CECO, Madrid  
+*2017 – present*
+
+- Economic theory, statistics and the international institutional framework, taught to small groups of economics graduates. Classroom and e-learning.
+
+**Trainee** — Caser Insurance, Madrid  
+*2015*
+
+- Market analysis and data analysis to identify profitable market segments and provide early warning of possible fraud in the vehicle and real estate branches.
 
 ## Education
 
-**MSc in Economics** — [Institution], [Year]
-Thesis: *[Title]*
+**MSc in Specialized Economic Analysis: Macroeconomic Policy** — Barcelona School of Economics  
+*2020 – 2021*  
+Quantitative and statistical methods, fiscal policy, advanced time series and computational methods. Data science specialisation: applied machine learning, nowcasting, web scraping and unsupervised learning.
 
-**BSc in Economics** — [Institution], [Year]
+**Preparation for the High Corps of Spanish State Economics and Trade Experts**  
+*2015 – 2017*  
+Microeconomics, macroeconomics, international trade, international organisations, economics of the EU, public policy and the Spanish economy. Ranked 3rd among 24 successful candidates out of more than 200 initial candidates.
+
+**Bachelor of Business** — Dundalk Institute of Technology, Ireland  
+*2013 – 2014*  
+Erasmus programme. International business: supply chain management, consumer psychology, statistical methods.
+
+**Degree in Economics (Honours)** — Universidad de León  
+*2011 – 2015*  
+Average grade 8.4/10 over 240 ECTS. Second prize, College Economics Olympic Games, 2012. Full merit scholarship, 2011–2012. Final thesis: *Income Inequality: a Political Economy Approach*.
 
 ## Selected work
 
-- **[Report / analysis title]** — [one line on what it did and the method]
-- **Long-term growth model (R)** — implementation of the European Commission's EUCAM methodology
-- **[Royal Decree analysis]** — interrupted time-series analysis of the effect on Social Security affiliation
+- **Long-term growth model in R** — implementation of the European Commission's EUCAM methodology for potential output and long-run growth projections.
+- **Interrupted time-series analysis of Royal Decree 316/2026** — estimation of the impact on Social Security affiliation figures.
+- **Error Correction Model package** (with J. Sansa) — econometric package written in Hansl to perform ECM estimation and diagnostics and to automate output presentation, built to achieve a pseudo general equilibrium. Main tool for forecasting the medium-term macroeconomic scenario.
 
-See [Research & Notes](research.qmd) for code and technical write-ups.
+Technical notes and code are collected under [Research & Notes](research.qmd).
 
 ## Skills
 
-**Econometrics** — time series, VAR/SVAR, forecasting, interrupted time series, panel methods
-**Software** — R (tidyverse, data.table, vars, forecast), Quarto/R Markdown, Git, [add Stata/MATLAB/Python if relevant]
-**Languages** — Spanish (native), English ([level]), [others]
+**Econometrics** — time series, VAR and structural VAR, forecasting and error correction models, interrupted time series, panel data, potential output and output gap estimation.
 
-## Presentations & professional activity
+**Programming** — R (advanced), Hansl/Gretl, Python (NumPy, Pandas, Matplotlib), VBA/Excel, MATLAB, Git, Quarto.
 
-- [Item]
+**Languages** — Spanish (native), English (proficient), Portuguese (proficient).
+
+## Short courses
+
+Text mining and web scraping (BSE) · National Accounts (Institute for Fiscal Studies) · Data Analysis in Social Science (MIT) · Python (IFS) · Econometrics with Gretl (Ministry of Economy) · Panel Data Models (IFS) · VBA/Excel programming (National Statistics Institute) · Quantitative Methods in R (IFS) · Time Series Analysis in Tramo/Seats (Ministry of Economy) · Time Series Forecasting Methods (IFS)
+
+## Professional activity
+
+| | |
+|---|---|
+| 2017–2018 | Secretary, State Economists Association (ATCEE) |
+| 2017 | Dean of Financial Affairs, Residencia César Carlos, Madrid |
+| 2014–2015 | Secretary, Students' Committee, Faculty of Business, Universidad de León |
+| 2011–2015 | Head of the Economics Students' Union, Universidad de León |
+| 2012–2013 | Event organisation, Dundalk Institute of Technology |
+| 2011–2013 | Member, Business Faculty Commission, Universidad de León |
 
 ## Contact
 
-[YOUR@EMAIL](mailto:YOUR@EMAIL) · [GitHub](https://github.com/AndresMtnezGlez) · [LinkedIn](https://www.linkedin.com/in/YOUR-LINKEDIN)
+[andres.mtnez.glez@gmail.com](mailto:andres.mtnez.glez@gmail.com)  
+[GitHub](https://github.com/AndresMtnezGlez) · [LinkedIn](https://www.linkedin.com/in/andrés-martínez-8a034bba/) · [RPubs](https://rpubs.com/andresmtnezglez)

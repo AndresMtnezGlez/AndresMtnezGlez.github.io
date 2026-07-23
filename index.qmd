@@ -18,7 +18,7 @@ about:
       href: https://www.linkedin.com/in/andr%C3%A9s-mart%C3%ADnez-8a034bba/
     - icon: envelope
       text: Email
-      href: mailto: andres.mtnez.glez [at] gmail [.com]
+      href: mailto:andres.mtnez.glez[at]gmail[.com]
 ---
 
 I am an economist at the **Autoridad Independiente de Responsabilidad Fiscal (AIReF)**, Spain's independent fiscal institution, based in Madrid.

@@ -5,7 +5,7 @@ project:
 website:
   title: "Andrés Martínez Glez"
   site-url: "https://andresmtnezglez.github.io"
-  description: "Economist at AIReF (Spanish Independent Authority for Fiscal Responsibility). Fiscal governance, macroeconometrics, VAR models, and long-term growth."
+  description: "Economist at AIReF (Spanish Independent Authority for Fiscal Responsibility). Fiscal governance & macroeconometrics"
   favicon: favicon.png
   open-graph: true
   twitter-card: true
@@ -35,7 +35,11 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+    toc-depth: 3
     include-in-header: schema.html
+    anchor-sections: false
+    smooth-scroll: true
+    link-external-newwindow: true
 
 execute:
   freeze: auto
