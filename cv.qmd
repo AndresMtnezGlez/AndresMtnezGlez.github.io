@@ -1,6 +1,6 @@
 ---
 title: "Curriculum Vitae"
-description: "CV of Andrés Martínez González, economist at AIReF (Spanish Independent Authority for Fiscal Responsibility), Madrid. Fiscal policy, macroeconometrics and EU economic governance."
+description: "CV of Andrés Martínez González, economist at AIReF, Madrid. Fiscal policy, macroeconometrics and EU economic governance."
 toc: true
 toc-depth: 2
 ---
@@ -9,7 +9,7 @@ toc-depth: 2
 
 ## Professional experience
 
-**Economist / Analyst** — Independent Authority for Fiscal Responsibility (AIReF), Madrid  
+**Economist** — Independent Authority for Fiscal Responsibility (AIReF), Madrid  
 *2021 – present*
 
 - Quantitative analysis of fiscal policy and macroeconomic imbalances. Estimation of structural models for public debt anchor heterogeneity across countries; elasticity analysis of economic activity and the energy market.
@@ -18,7 +18,7 @@ toc-depth: 2
 - Long-term growth modelling in R following the European Commission's EUCAM methodology.
 - Lead of the project on external reviews of independent fiscal institutions, Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI).
 
-**Technical Advisor**, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid  
+**Economist**, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid  
 *2017 – 2020*
 
 - Spain's deputy head of delegation to the Ecofin **Output Gaps Working Group**: improvement of the common methodology used to estimate potential output, output gap indicators and cyclically adjusted budget balances, a cornerstone of the surveillance of member states' fiscal policy within the Stability and Growth Pact.
@@ -27,7 +27,7 @@ toc-depth: 2
 - Participation in the elaboration of the Government's official medium-term forecasts: maintenance and development of over nineteen error correction models for real and nominal variables, used to draw the official medium-term macroeconomic outlook in the Stability Programmes, Draft Budget Laws and Draft Budgetary Plans.
 
 **Instructor** — ICEX | CECO, Madrid  
-*2017 – present*
+*2017 – 2020*
 
 - Economic theory, statistics and the international institutional framework, taught to small groups of economics graduates. Classroom and e-learning.
 
@@ -54,13 +54,6 @@ Erasmus programme. International business: supply chain management, consumer psy
 *2011 – 2015*  
 Average grade 8.4/10 over 240 ECTS. Second prize, College Economics Olympic Games, 2012. Full merit scholarship, 2011–2012. Final thesis: *Income Inequality: a Political Economy Approach*.
 
-## Selected work
-
-- **Long-term growth model in R** — implementation of the European Commission's EUCAM methodology for potential output and long-run growth projections.
-- **Interrupted time-series analysis of Royal Decree 316/2026** — estimation of the impact on Social Security affiliation figures.
-- **Error Correction Model package** (with J. Sansa) — econometric package written in Hansl to perform ECM estimation and diagnostics and to automate output presentation, built to achieve a pseudo general equilibrium. Main tool for forecasting the medium-term macroeconomic scenario.
-
-Technical notes and code are collected under [Research & Notes](research.qmd).
 
 ## Skills
 
@@ -87,5 +80,4 @@ Text mining and web scraping (BSE) · National Accounts (Institute for Fiscal St
 
 ## Contact
 
-[andres.mtnez.glez@gmail.com](mailto:andres.mtnez.glez@gmail.com)  
-[GitHub](https://github.com/AndresMtnezGlez) · [LinkedIn](https://www.linkedin.com/in/andrés-martínez-8a034bba/) · [RPubs](https://rpubs.com/andresmtnezglez)
+andres.mtnez.glez[at]gmail[.com]

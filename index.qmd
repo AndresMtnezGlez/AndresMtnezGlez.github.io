@@ -1,37 +1,25 @@
 ---
-title: "Andrés Martínez Glez"
-subtitle: "Economist · AIReF · Madrid"
-image: profile.jpg
+title: "Andres Martinez Gonzalez"
+subtitle: "Economist"
+toc: false
 about:
   template: trestles
   image-width: 12em
   image-shape: rounded
-  links:
-    - icon: github
-      text: GitHub
-      href: https://github.com/AndresMtnezGlez
-    - icon: file-earmark-text
-      text: RPubs
-      href: https://rpubs.com/andresmtnezglez
-    - icon: linkedin
-      text: LinkedIn
-      href: https://www.linkedin.com/in/andr%C3%A9s-mart%C3%ADnez-8a034bba/
-    - icon: envelope
-      text: Email
-      href: mailto:andres.mtnez.glez[at]gmail[.com]
 ---
 
-I am an economist at the **Autoridad Independiente de Responsabilidad Fiscal (AIReF)**, Spain's independent fiscal institution, based in Madrid.
+I am an economist at the Autoridad Independiente de Responsabilidad Fiscal (AIReF), Spain’s independent fiscal institution, based in Madrid.
 
-I work on applied fiscal policy and macroeconomic analysis, at the intersection of econometrics, EU fiscal governance, and long-run growth modelling. This page collects a set of technical notes and small projects in R that I wrote during my master's and the years after; mostly working through methods in time series, Bayesian computation, and statistical learning.
+I work on applied fiscal policy and macroeconomic analysis, at the intersection of econometrics, EU fiscal governance, and long-run growth modelling. 
 
-::: {.callout-note appearance="simple"}
-Views expressed on this site are my own and do not represent those of AIReF.
-:::
+This page collects a set of technical notes and small projects in R that I wrote during my master’s and the years after; mostly working through methods in time series, Bayesian computation, and statistical learning.
+
+andres.mtnez.glez[at]gmail[.com]
+
 
 ## Research interests
 
-- EU fiscal governance and the reformed fiscal rules
-- Macroeconometrics: VAR and structural VAR models, time-series forecasting
+- EU fiscal governance
+- Macroeconomics, SVARs and Local Projections 
 - Long-term growth and potential output modelling
-- Labour market and social security microdata analysis
+- Independent Fiscal Institutions

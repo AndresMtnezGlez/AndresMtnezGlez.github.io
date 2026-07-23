@@ -1,65 +1,59 @@
 ---
 title: "Research & Notes"
-description: "Technical notes and code on VAR models, structural macroeconometrics, Bayesian methods and statistical techniques, by Andrés Martínez González."
+description: "Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical techniques, by Andres Martinez Gonzalez, economist at AIReF."
+toc: true
+toc-depth: 2
 listing:
   - id: var-macro
     contents: posts
     include:
-      categories: false
+      categories: "{VAR,SVAR,FAVAR}"
     sort: "date desc"
     type: default
+    categories: false
     fields: [date, title, description]
     feed: false
   - id: bayesian-computational
     contents: posts
     include:
-      categories: false
+      categories: "{Bayesian,MCMC,Markov chains,Tauchen,numerical methods}"
     sort: "date desc"
     type: default
+    categories: false
     fields: [date, title, description]
     feed: false
   - id: statistical-methods
     contents: posts
     include:
-      categories: false
+      categories: "{PCA,dimensionality reduction,linear algebra}"
     sort: "date desc"
     type: default
-    fields: [date, title, description]
-    feed: false
-  - id: all-posts
-    contents: posts
-    sort: "date desc"
-    type: default
-    table-hover: true
     categories: false
-    fields: [date, title, categories]
+    fields: [date, title, description]
     feed: true
 ---
 
-Technical notes, replications, and code on applied macroeconometrics and statistical methods. Source for everything is on [GitHub](https://github.com/AndresMtnezGlez); older versions of some notes remain on [RPubs](https://rpubs.com/andresmtnezglez).
+A working collection of technical notes on the econometric methods I use. Most began as graduate coursework or as replications of papers I wanted to understand properly, and each one is a self-contained document: the theory, the code, and the output in one place, so the results can be reproduced by running the file.
 
-## VAR and structural macroeconometrics
+All source is written in Quarto and available on [GitHub](https://github.com/AndresMtnezGlez). 
 
-Estimation and identification of vector autoregressions, impulse response analysis, and replications of classic papers in empirical monetary and business-cycle macroeconomics.
+## Vector autoregressions and structural identification
+
+How VAR models are estimated, identified and read. These notes cover the Wold representation and impulse response functions, structural identification through Cholesky and A/B models, and replications of two papers that shaped how monetary policy shocks are measured — Christiano, Eichenbaum and Evans (1998) and Bernanke, Boivin and Eliasz (2005) — alongside an application to the response of the labour share to productivity shocks.
 
 :::{#var-macro}
 :::
 
-## Bayesian and computational methods
+## Bayesian and simulation methods
 
-Simulation-based estimation, Markov chain methods, and numerical techniques for discretising stochastic processes.
+Estimating posterior distributions when there is no analytical solution. These notes build the Gibbs sampler and the Metropolis-Hastings algorithm from scratch in R, and cover discrete-time Markov chains and the Tauchen method for discretising an AR(1) process.
 
 :::{#bayesian-computational}
 :::
 
 ## Statistical methods
 
-Dimensionality reduction and the linear algebra behind it.
+Notes on techniques that show up across applied work.
 
 :::{#statistical-methods}
-:::
-
-## All notes
-
-:::{#all-posts}
 :::
