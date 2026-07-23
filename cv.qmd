@@ -7,16 +7,19 @@ toc-depth: 2
 
 ## Professional experience
 
-**Economist / Analyst** — Independent Authority for Fiscal Responsibility (AIReF), Madrid  
+**Economist** — Independent Authority for Fiscal Responsibility (AIReF), Madrid  
 *2021 – present*
 
-- Quantitative analysis of fiscal policy and macroeconomic imbalances. Estimation of structural models for public debt anchor heterogeneity across countries; elasticity analysis of economic activity and the energy market.
-- Analysis of EU and Spanish fiscal governance: the net expenditure path, the control account, and the reformed economic governance framework.
-- Endorsement (*aval*) of the government's macroeconomic forecasts.
-- Long-term growth modelling in R following the European Commission's EUCAM methodology.
-- Lead of the project on external reviews of independent fiscal institutions, Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI).
+**Economist / Analyst**, Economic Analysis Division — Independent Authority for Fiscal Responsibility (AIReF), Madrid  
+*2021 – present*
 
-**Technical Advisor**, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid  
+-My work spans quantitative economic research and institutional policy analysis. On the empirical side, I have estimated structural models to determine the heterogeneity of public debt anchors across countries, analysed the elasticity of economic activity and the energy market, and built a long-term growth model in R implementing the European Commission's EUCAM methodology for potential output and long-run projections. I also work on applied microdata analysis of the labour market.
+
+-A second strand of my work concerns the fiscal governance framework itself: the net expenditure path, the control account, and the implications of the reformed EU economic governance rules for the Spanish framework. I contribute to the production of the institution's reports and opinions.
+
+-I am also hounored to be Co-Chair of the Economic Governance Working Group of the [Network of EU Independent Fiscal Institutions](https://www.euifis.eu/) (EUNIFI). 
+
+**Economist**, Unit for Macroeconomic Analysis — Ministry of Economy and Business, Madrid  
 *2017 – 2020*
 
 - Spain's deputy head of delegation to the Ecofin **Output Gaps Working Group**: improvement of the common methodology used to estimate potential output, output gap indicators and cyclically adjusted budget balances, a cornerstone of the surveillance of member states' fiscal policy within the Stability and Growth Pact.
@@ -34,12 +37,11 @@ toc-depth: 2
 **Lecturer, *Advanced Analytics*** — Universidad Pontificia Comillas (ICADE), Madrid  
 *2022*
 
-- Master's level course introducing students to data analysis in R, structured in six five-hour sessions.
-- Modules taught: introduction to R and RStudio, exploratory analysis of categorical and numerical variables, web scraping, and hypothesis testing.
+- Master's level course introducing students to data analysis in R. 
 - Practice-oriented methodology: short theoretical introduction followed by hands-on programming in RStudio, supported by technical notes, R scripts and datasets.
 
 **Instructor** — ICEX | CECO, Madrid  
-*2017 – present*
+*2017 - 2020*
 
 - Economic theory, statistics and the international institutional framework, taught to small groups of economics graduates. Classroom and e-learning.
 
@@ -115,5 +117,5 @@ Average grade 8.4/10 over 240 ECTS. Second prize, College Economics Olympic Game
 
 ## Contact
 
-[andres.mtnez.glez@gmail.com](mailto:andres.mtnez.glez@gmail.com)  
-[GitHub](https://github.com/AndresMtnezGlez) · [LinkedIn](https://www.linkedin.com/in/andrés-martínez-8a034bba/) · [RPubs](https://rpubs.com/andresmtnezglez)
+andres.mtnez.glez[at]gmail[.com]
+
