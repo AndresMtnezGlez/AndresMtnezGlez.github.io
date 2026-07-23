@@ -2,14 +2,14 @@
   {
     "listing": "/research.html",
     "items": [
-      "/posts/gibbs-sampler/index.html",
-      "/posts/pca-eigenvectors/index.html",
-      "/posts/metropolis-hastings-ar1/index.html",
       "/posts/favar-bernanke-boivin-eliasz/index.html",
       "/posts/cee-var-monetary-shocks/index.html",
-      "/posts/markov-chains-tauchen/index.html",
       "/posts/redistributive-shocks-labour-share/index.html",
-      "/posts/var-notebook/index.html"
+      "/posts/var-notebook/index.html",
+      "/posts/gibbs-sampler/index.html",
+      "/posts/metropolis-hastings-ar1/index.html",
+      "/posts/markov-chains-tauchen/index.html",
+      "/posts/pca-eigenvectors/index.html"
     ]
   }
 ]
