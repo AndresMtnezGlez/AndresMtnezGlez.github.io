@@ -1,6 +1,6 @@
 ---
 title: "Research & Notes"
-description: "Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical techniques, by Andres Martinez Gonzalez, economist at AIReF."
+description: "Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical learning, by Andres Martinez Gonzalez, economist at AIReF."
 toc: true
 toc-depth: 2
 listing:
@@ -22,10 +22,10 @@ listing:
     categories: false
     fields: [date, title, description]
     feed: false
-  - id: statistical-methods
+  - id: statistical-learning
     contents: posts
     include:
-      categories: "{PCA,dimensionality reduction,linear algebra}"
+      categories: "{PCA,dimensionality reduction,linear algebra,classification,machine learning,statistical learning}"
     sort: "date desc"
     type: default
     categories: false
@@ -51,9 +51,9 @@ Estimating posterior distributions when there is no analytical solution. These n
 :::{#bayesian-computational}
 :::
 
-## Statistical methods
+## Statistical learning
 
-Notes on techniques that show up across applied work.
+Methods for finding structure in data and predicting from it. These notes cover principal component analysis and the linear algebra it rests on, and a full classification workflow: imputation, encoding, scaling, class imbalance and penalised regression, applied to predicting ICU mortality.
 
-:::{#statistical-methods}
+:::{#statistical-learning}
 :::

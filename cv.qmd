@@ -1,11 +1,9 @@
 ---
 title: "Curriculum Vitae"
-description: "CV of Andres Martinez Gonzalez, economist at AIReF, Madrid. Fiscal policy and EU economic governance."
+description: "CV of Andres Martinez Gonzalez, economist at AIReF (Spanish Independent Authority for Fiscal Responsibility), Madrid. Fiscal policy, macroeconometrics and EU economic governance."
 toc: true
 toc-depth: 2
 ---
-
-[Download PDF](cv.pdf){.download-link}
 
 ## Professional experience
 
@@ -14,6 +12,7 @@ toc-depth: 2
 
 - Quantitative analysis of fiscal policy and macroeconomic imbalances. Estimation of structural models for public debt anchor heterogeneity across countries; elasticity analysis of economic activity and the energy market.
 - Analysis of EU and Spanish fiscal governance: the net expenditure path, the control account, and the reformed economic governance framework.
+- Endorsement (*aval*) of the government's macroeconomic forecasts.
 - Long-term growth modelling in R following the European Commission's EUCAM methodology.
 - Lead of the project on external reviews of independent fiscal institutions, Economic Governance Reform Working Group, Network of EU Independent Fiscal Institutions (EUNIFI).
 
@@ -35,11 +34,12 @@ toc-depth: 2
 **Lecturer, *Advanced Analytics*** — Universidad Pontificia Comillas (ICADE), Madrid  
 *2022*
 
-- Master's level course introducing students to data analysis in R
+- Master's level course introducing students to data analysis in R, structured in six five-hour sessions.
+- Modules taught: introduction to R and RStudio, exploratory analysis of categorical and numerical variables, web scraping, and hypothesis testing.
 - Practice-oriented methodology: short theoretical introduction followed by hands-on programming in RStudio, supported by technical notes, R scripts and datasets.
 
 **Instructor** — ICEX | CECO, Madrid  
-*2017 – 2020*
+*2017 – present*
 
 - Economic theory, statistics and the international institutional framework, taught to small groups of economics graduates. Classroom and e-learning.
 
@@ -61,7 +61,6 @@ Erasmus programme. International business: supply chain management, consumer psy
 *2011 – 2015*  
 Average grade 8.4/10 over 240 ECTS. Second prize, College Economics Olympic Games, 2012. Full merit scholarship, 2011–2012. Final thesis: *Income Inequality: a Political Economy Approach*.
 
-
 ## Skills
 
 **Econometrics** — time series, VAR and structural VAR, forecasting and error correction models, interrupted time series, panel data, potential output and output gap estimation.
@@ -72,18 +71,36 @@ Average grade 8.4/10 over 240 ECTS. Second prize, College Economics Olympic Game
 
 ## Courses and certifications
 
-- [Machine Learning with Python: from Linear Models to Deep Learning](https://courses.edx.org/certificates/8c0af874c99b40f48f445b8ecc7e12e1) (6.86x) — MITx, 2023. *Verified certificate.*
-- [Probability: the Science of Uncertainty and Data](https://courses.edx.org/certificates/15b46d5deb2a4443b51d66640103cbf5) (6.431x) — MITx, 2020. *Verified certificate.*
-- [Data Analysis in Social Science](https://courses.edx.org/certificates/42602f3b9ee245e28f2336224db926cb) (14.310Fx) — MITx, 2019. *Verified certificate.*
-- Text mining and web scraping — Barcelona School of Economics
-- National Accounts — Institute for Fiscal Studies
-- Panel Data Models — Institute for Fiscal Studies
-- Quantitative Methods in R — Institute for Fiscal Studies
-- Time Series: Forecasting Methods — Institute for Fiscal Studies
-- Python — Institute for Fiscal Studies
-- Econometrics with Gretl — Ministry of Economy and Competitiveness
-- Time Series Analysis in Tramo/Seats — Ministry of Economy and Competitiveness
+### Machine learning and statistics
+
+- [Machine Learning with Python: from Linear Models to Deep Learning](https://courses.edx.org/certificates/8c0af874c99b40f48f445b8ecc7e12e1) (6.86x) — MITx, 2023
+- [Probability: the Science of Uncertainty and Data](https://courses.edx.org/certificates/15b46d5deb2a4443b51d66640103cbf5) (6.431x) — MITx, 2020
+- [Data Analysis in Social Science](https://courses.edx.org/certificates/42602f3b9ee245e28f2336224db926cb) (14.310Fx) — MITx, 2019
+- Text Mining and Web Scraping — Barcelona School of Economics, 2021
+
+### Econometrics and forecasting
+
+- Panel Data Models — Institute for Fiscal Studies, 2018 
+- Dynamic Models for Forecasting and Business Cycle Analysis — Institute for Fiscal Studies, 2018 
+- National Accounts: Theory, Analysis and Applications — Institute for Fiscal Studies, 2019 
+- Time Series Analysis: Forecasting Tools — Institute for Fiscal Studies, 2018 
+- Introduction to Econometrics — Institute for Fiscal Studies, 2018 
+- Time Series Analysis in Tramo/Seats — Ministry of Economy and Competitiveness, 2019 
+- Econometrics with Gretl — Ministry of Economy and Competitiveness, 2019 
+
+### Programming and data science
+
+- Data Science with Python — Institute for Fiscal Studies, 2018 
+- Quantitative Methods with R — Institute for Fiscal Studies, 2018 
 - VBA/Excel Programming — National Statistics Institute
+
+### Climate and energy economics
+
+- [Macroeconomics of Climate Change: Science, Economics and Policies](https://courses.edx.org/certificates/3af7c9c486724f7a9fbd513d6435bdc8) (MCCx-SEP) — IMFx, International Monetary Fund, 2022
+- [Climate Change and Sovereign Risk](https://elearning-adbi.org/certificate-verifier/?&code=63452-164-250-8684) — Asian Development Bank Institute, 2022
+- The Energy Transition: Economics and Policy — Barcelona School of Economics, 2022 (11h)
+
+
 
 ## Professional activity
 
@@ -98,4 +115,5 @@ Average grade 8.4/10 over 240 ECTS. Second prize, College Economics Olympic Game
 
 ## Contact
 
-andres.mtnez.glez[at]gmail[.com]
+[andres.mtnez.glez@gmail.com](mailto:andres.mtnez.glez@gmail.com)  
+[GitHub](https://github.com/AndresMtnezGlez) · [LinkedIn](https://www.linkedin.com/in/andrés-martínez-8a034bba/) · [RPubs](https://rpubs.com/andresmtnezglez)
