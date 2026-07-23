@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical techniques, by Andres Martinez Gonzalez, economist at AIReF.">
+<meta name="description" content="Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical learning, by Andres Martinez Gonzalez, economist at AIReF.">
 
 <title>Research &amp; Notes – Andres Martinez Gonzalez</title>
 <style>
@@ -129,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
   
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-statistical-methods .list');
+    const listingTargetEl = window.document.querySelector('#listing-statistical-learning .list');
     if (!listingTargetEl) {
       // No listing discovered, do not attach.
       return; 
@@ -142,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-statistical-methods'] = new List('listing-statistical-methods', options);
+    window['quarto-listings']['listing-statistical-learning'] = new List('listing-statistical-learning', options);
 
     if (window['quarto-listing-loaded']) {
       window['quarto-listing-loaded']();
@@ -266,10 +266,10 @@ window.Quarto = {
 
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Research &amp; Notes – Andres Martinez Gonzalez">
-<meta property="og:description" content="Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical techniques, by Andres Martinez Gonzalez, economist at AIReF.">
+<meta property="og:description" content="Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical learning, by Andres Martinez Gonzalez, economist at AIReF.">
 <meta property="og:site_name" content="Andres Martinez Gonzalez">
 <meta name="twitter:title" content="Research &amp; Notes – Andres Martinez Gonzalez">
-<meta name="twitter:description" content="Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical techniques, by Andres Martinez Gonzalez, economist at AIReF.">
+<meta name="twitter:description" content="Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical learning, by Andres Martinez Gonzalez, economist at AIReF.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -332,7 +332,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#vector-autoregressions-and-structural-identification" id="toc-vector-autoregressions-and-structural-identification" class="nav-link active" data-scroll-target="#vector-autoregressions-and-structural-identification">Vector autoregressions and structural identification</a></li>
   <li><a href="#bayesian-and-simulation-methods" id="toc-bayesian-and-simulation-methods" class="nav-link" data-scroll-target="#bayesian-and-simulation-methods">Bayesian and simulation methods</a></li>
-  <li><a href="#statistical-methods" id="toc-statistical-methods" class="nav-link" data-scroll-target="#statistical-methods">Statistical methods</a></li>
+  <li><a href="#statistical-learning" id="toc-statistical-learning" class="nav-link" data-scroll-target="#statistical-learning">Statistical learning</a></li>
   </ul>
 </nav>
     </div>
@@ -346,7 +346,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical techniques, by Andres Martinez Gonzalez, economist at AIReF.
+    Technical notes, replications and R code on macroeconometrics, Bayesian methods and statistical learning, by Andres Martinez Gonzalez, economist at AIReF.
   </div>
 </div>
 
@@ -502,10 +502,10 @@ Nov 20, 2020
 <div class="listing-no-matching d-none">No matching items</div>
 </div>
 </section>
-<section id="statistical-methods" class="level2">
-<h2 data-anchor-id="statistical-methods">Statistical methods</h2>
-<p>Notes on techniques that show up across applied work.</p>
-<div id="listing-statistical-methods" class="quarto-listing quarto-listing-container-default">
+<section id="statistical-learning" class="level2">
+<h2 data-anchor-id="statistical-learning">Statistical learning</h2>
+<p>Methods for finding structure in data and predicting from it. These notes cover principal component analysis and the linear algebra it rests on, and a full classification workflow: imputation, encoding, scaling, class imbalance and penalised regression, applied to predicting ICU mortality.</p>
+<div id="listing-statistical-learning" class="quarto-listing quarto-listing-container-default">
 <div class="list quarto-listing-default">
 <div class="quarto-post image-right" data-index="0" data-categories="UENBJTJDZGltZW5zaW9uYWxpdHklMjByZWR1Y3Rpb24lMkNsaW5lYXIlMjBhbGdlYnJhJTJDZWlnZW52ZWN0b3JzJTJDc3RhdGlzdGljcw==" data-listing-date-sort="1637881200000" data-listing-file-modified-sort="1784721500553" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1381">
 <div class="body">
@@ -520,6 +520,23 @@ Nov 20, 2020
 <a href="./posts/pca-eigenvectors/index.html" class="no-external">
 <div class="listing-date">
 Nov 26, 2021
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="Y2xhc3NpZmljYXRpb24lMkNtYWNoaW5lJTIwbGVhcm5pbmclMkNzdGF0aXN0aWNhbCUyMGxlYXJuaW5nJTJDbG9naXN0aWMlMjByZWdyZXNzaW9uJTJDcmlkZ2UlMkNsYXNzbyUyQ01JQ0UlMkNS" data-listing-date-sort="1610751600000" data-listing-file-modified-sort="1784805100697" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3023">
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/icu-mortality-classification/index.html" class="no-external">Predicting ICU Mortality: A Classification Workflow in R</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/icu-mortality-classification/index.html" class="no-external">
+<p>An end-to-end classification project in R predicting in-hospital mortality from vital signs recorded in the first hours of an ICU stay. Covers missing-value imputation with MICE, encoding of categorical variables, feature scaling, class weighting for imbalanced outcomes, and penalised logistic regression with ridge and lasso, evaluated by AUC.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/icu-mortality-classification/index.html" class="no-external">
+<div class="listing-date">
+Jan 16, 2021
 </div>
 </a>
 </div>
